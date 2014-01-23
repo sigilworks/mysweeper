@@ -1,81 +1,22 @@
-var Multimap = (function() {
-
-    function Multimap(equalsPredicateFn) {
-        this._table = {};
-        this._size = 0;
-        this.equalsFn = equalsPredicateFn || function(a, b) { return a == b; };
-    }
-
-    function containsEqual(array, item, equalsFn) { return !!~indexOfEqual(array, item, equalsFn); }
-
-    function removeIfEqual(array, item, equalsFn) {
-        var index = indexOfEqual(array, item, equalsFn);
-        return (!!~index) ? array.splice(index, 1) : false;
-    }
-
-    function indexOfEqual(array, item, equalsFn) {
-        for (var i=0, len=array.length >>> 0; i < len; ++i)
-            if (equalsFn(array[i], item)) return i;
-        return -1;
-    }
-
-    function isNumeric(val) { return String(val).replace(/,/g, ''), (val.length !== 0 && !isNaN(+val) && isFinite(+val)); }
-
-    Multimap.prototype = {
-        get: function(key) {
-            var entry = this._table[key];
-            if (!entry) return;
-            return !entry.value ? [] : entry.value.slice();
-        },
-        set: function(key, value) {
-            if (isNumeric(key)) key = String(key);
-            if (!(key && value)) return false;
-            if (!this.containsKey(key))
-                return this._table[key] || this._size++, !!(this._table[key] = { key: key, value: [ value ] });
-            var array = this._table[key].value;
-            return containsEqual(array, value, this.equalsFn) ? false : (array.push(value), true);
-        },
-        _remove: function(key) {
-            var prev = this._table[key];
-            if (prev) return delete this._table[key], this._size--, prev.value;
-        },
-        remove: function(key, value) {
-            if (!value) return !!this._remove(key);
-            var array = this.get(key);
-            return removeIfEqual(array, value, this.equalsFn) ? (array.length || this._remove(key), true) : false;
-        },
-        forEach: function(callback) {
-            for (var name in this._table)
-                if (this._table.hasOwnProperty(name))
-                    if (false === callback.call(this, this._table[name].key, this._table[name].value, this._table[name]))
-                        break;
-        },
-        keys: function() {
-            var _this = this;
-            return Object.keys(this._table).map(function(entry) { return _this._table[entry].key; });
-        },
-        values: function() {
-            var _this = this;
-            return Object.keys(this._table)
-                .map(function(entry) { return _this._table[entry].value; })
-                .reduce(function(acc, item) { return acc.concat(item); }, []);
-        },
-        containsKey: function(key) { return !!this.get(key); },
-        clear: function() { this._table = {}; this._size = 0; },
-        size: function() { return this._size; },
-        isEmpty: function() { return this._size <= 0; }
-    };
-
-    return Multimap;
-})();
-
-/*  -------------------------------------------------------------------------------------------  */
-
 
 var Gameboard = (function(){
 
     function Gameboard(options) {
-        this.board = new Multimap;
+        // this.board = new Multimap;
+        this.board = {
+            _table: [],
+            get: function(row) { return this._table[row]; },
+            set: function(row, val) { (this._table[row] || (this._table[row] = [])).push(val); },
+            forEach: function(fn) { /* or optimize with for-comprehension... */ return [].forEach.call(this.values(), fn); },
+            values: function() {
+                var _this = this;
+                return Object.keys(this._table)
+                             .map(function(row) { return _this._table[row]; })
+                             .reduce(function(acc, item) { return acc.concat(item); }, []);
+            },
+            clear: function() { this._table = {}; },
+            size: function() { return Object.keys(this._table).length; }
+        };
         this.dimensions = +options.dimensions;
         this.mines = +options.mines;
         this.$el = $(options.board || "#board");
@@ -321,17 +262,6 @@ function DangerCalculator(gameboard) {
 
 $(function(){
 
-    window.gameboard = new Gameboard({ dimensions: 9, mines: 15 }).render();
+    window.gameboard = new Gameboard({ dimensions: 9, mines: 20 }).render();
 
 });
-
-// REPLACE MULTIMAP WITH THIS:
-this.board = {
-    _table: [],
-    get: function(row) { return this._table[row]; },
-    set: function(row, val) { (this._table[row] || (this._table[row] = [])).push(val); },
-    forEach: function(fn) { /* or optimize with for-comprehension... */ return [].forEach.call(Object.keys(this._table), fn); },
-    values: function() { var _this = this; return Object.keys(this._table).map(function(row) { return _this._table[row]; }); },
-    clear: function() { this._table = {}; },
-    size: function() { return Object.keys(this._table).length; }
-};
