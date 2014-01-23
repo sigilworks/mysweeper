@@ -21,8 +21,9 @@ var Gameboard = (function(){
         this.mines = +options.mines;
         this.$el = $(options.board || "#board");
         this.dangerCalc = new DangerCalculator(this);
-
+        // create the board in memory and assign values to the squares
         this._loadBoard();
+        // render the HTML to match the board in memory
         this._renderGrid();
     }
 
@@ -30,20 +31,20 @@ var Gameboard = (function(){
         _loadBoard: function() {
             // 1. prefill squares to required dimensions...
             var _this = this,
-                dimLimit = this.dimensions,
+                dimensions = this.dimensions,
                 mines = this.mines,
                 fillRow = function(row, squares) {
                     var ret = [];
                     for (var i=0; i < squares; ++i)
-                        ret[i] = new Square(row, i); // Square.States.CLOSED);
+                        ret[i] = new Square(row, i);
                     return ret;
                 };
 
-            for (var i=0; i < dimLimit; ++i)
-                this.board.set(i, fillRow(i, dimLimit));
+            for (var i=0; i < dimensions; ++i)
+                this.board.set(i, fillRow(i, dimensions));
 
             // 2. determine random positions of mined squares...
-            this._determineMineLocations(dimLimit, mines);
+            this._determineMineLocations(dimensions, mines);
 
             // 3. pre-calculate the danger index of each non-mined square...
             this._precalcDangerIndices();
@@ -54,13 +55,22 @@ var Gameboard = (function(){
         _renderGrid: function() {
             // 1. layout the HTML <table> rows...
             this._createHTMLGrid(this.dimensions);
-
             // 2. setup event listeners to listen for user clicks
             this._setupEventListeners();
         },
         _determineMineLocations: function(dimensions, mines) {
+            var LinearCongruentialGenerator = new function() {
+              var m = 4294967296, a = 1664525, c = 1013904223, seed, z;
+              return {
+                setSeed: function(val) { z = seed = val || Math.round(Math.random() * m); },
+                getSeed: function() { return seed; },
+                rand: function() { z = (a * z + c) % m; return z / m; }
+              };
+            }();
+            LinearCongruentialGenerator.setSeed();
+
             for (var i=0; i < mines; ++i) {
-                var rnd = Math.random() * (Math.pow(dimensions, 2)) | 0,
+                var rnd = /*LinearCongruentialGenerator.rand() * (Math.pow(dimensions, 2)) | 0, */Math.random() * (Math.pow(dimensions, 2)) | 0,
                     row = ~~(rnd / dimensions),
                     cell = rnd % dimensions,
                     square = this.getSquareAt(row, cell);
@@ -204,8 +214,11 @@ var Square = (function(){
         getRow: function() { return this.row; },
         getCell: function() { return this.cell; },
         getDanger: function() { return this.danger; },
-        getState: function() { var _this = this; return Object.keys(this.States).filter(function(key) { return _this.States[key] === _this.state; })[0]; },
-
+        getState: function() {
+            var _this = this;
+            return Object.keys(this.States)
+                         .filter(function(key) { return _this.States[key] === _this.state; })[0];
+        },
         close: function() { this.state = this.States.CLOSED; },
         open: function() { this.state = this.States.OPENED; },
         flag: function() { this.state = this.States.FLAGGED; },
@@ -262,9 +275,9 @@ function DangerCalculator(gameboard) {
 
 $(function(){
 
-    window.gameboard = new Gameboard({ dimensions: 18, mines: 30 }).render();
+    window.gameboard = new Gameboard({ dimensions: 10, mines: 30 }).render();
 
-    var newDim = ((0.95 * $(window).height()) + 66) / 18;im)
+    var newDim = ((0.95 * $(window).height()) + 66) / 20;
     $('.square').css({ height: newDim, width: newDim });
 });
 
