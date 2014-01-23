@@ -1,38 +1,38 @@
 <!doctype html>
 <html>
 <head>
-	<title>mysweeper</title>
-	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-	<script type="text/javascript" src="js/mysweeper.js"></script>
-	<link rel="stylesheet" type="text/css" href="css/styles.css" />
+    <title>mysweeper</title>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script type="text/javascript" src="js/mysweeper.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/styles.css" />
 </head>
 <body>
 
-	<section id="options-card" class="card">
-		<form>
-			<ul>
-				<li>
-					<p><strong>Choose your desired board size:</strong></p>
-					<label for="board9x9">9 x 9<input type="radio" id="board9x9" name="board-size" /></label>
-					<label for="board18x18">18 x 18<input type="radio" id="board18x18" name="board-size" /></label>
-					<label for="board36x36">36 x 36<input type="radio" id="board36x36" name="board-size" /></label>
-				</li>
-				<li>
-					<p><strong>How many mines? </strong><span class="advice">NB: You cannot hide more mines than there are spaces in the board you chose above!</span></p>
-					<input id="mine-count" name="mine-count" placeholder="1" />
-				</li>
-				<li><input id="submit" type="submit" value="Let's Play!" /></li>
-			</ul>
-		</form>
-	</section>
+    <section id="options-card" class="card">
+        <form>
+            <ul>
+                <li>
+                    <p><strong>Choose your desired board size:</strong></p>
+                    <label for="board9x9">9 x 9<input type="radio" id="board9x9" name="board-size" /></label>
+                    <label for="board18x18">18 x 18<input type="radio" id="board18x18" name="board-size" /></label>
+                    <label for="board36x36">36 x 36<input type="radio" id="board36x36" name="board-size" /></label>
+                </li>
+                <li>
+                    <p><strong>How many mines? </strong><span class="advice">NB: You cannot hide more mines than there are spaces in the board you chose above!</span></p>
+                    <input id="mine-count" name="mine-count" placeholder="1" />
+                </li>
+                <li><input id="submit" type="submit" value="Let's Play!" /></li>
+            </ul>
+        </form>
+    </section>
 
-	<!-- ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| -->
+    <!-- ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| -->
 
-	<section id="board-card" class="card">
+    <section id="board-card" class="card">
 
-		<table id="board"></table>
+        <table id="board"></table>
 
-	</section>
+    </section>
 
 </body>
 </html>
