@@ -1,0 +1,34 @@
+
+body 					{ font-family: 'Droid Sans'; font-size: 14px; color: #333; }
+section 				{}
+
+section.card 			{ border: 3px solid rgba(0,0,0,0.15); border-radius: 7px; padding: 10px 15px; margin: 0 auto; }
+
+#options-card 			{ display: none; width: 55%; }
+#options-card ul  		{ list-style: none; }
+#options-card li 		{}
+#options-card label 	{}
+#options-card input 	{}
+
+.advice					{ font-variant: small-caps; color: #AAA; }
+
+#board-card 			{ display: block; margin: 0 auto; text-align: center; }
+
+#board 					{ display: inline-block; }
+
+.square					{ border: 1px solid #333; padding: 5px; height: 75px; width: 75px; }
+
+
+.closed					{ background: #ECEAEE; }
+.closed .danger,
+.mined .danger 			{ display: none; }
+
+.open 					{ background: #FFF; }
+.open .danger			{ display: block; color: #555; font-weight: bold; font-size: 20px; margin-top: 50px; }
+
+.flagged 				{ background: #FCE9A5; }
+.flagged .danger 		{ display: block; color: #555; font-size: 28px; margin-top: 0px; text-shadow: 1px 1px 2px rgba(0,0,0,0.45); }
+
+.mined 					{ background: #ECEAEE; }
+.mined.revealed 		{ background: #DC0000; }
+.mined.revealed .danger { display: block; color: #FFF; font-size: 36px; text-shadow: 2px 1px 2px #333; }
