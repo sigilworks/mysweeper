@@ -2,7 +2,7 @@
 body                    { font-family: 'Droid Sans'; font-size: 14px; color: #333; }
 section                 {}
 
-section.card            { border: 3px solid rgba(0,0,0,0.15); border-radius: 7px; padding: 10px 15px; margin: 0 auto; }
+section.card            { border: 1px dashed rgba(0,0,0,0.15); padding: 10px 15px; margin: 0 auto; }
 
 #options-card           { display: none; width: 55%; }
 #options-card ul        { list-style: none; }

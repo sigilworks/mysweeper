@@ -137,7 +137,6 @@ var Gameboard = (function(){
                 }
             });
         },
-        getGridCell: function(square) { return this.$el.find('#row' + square.getRow()).find('td').eq(square.getCell()); },
         _renderSquare: function(square) {
             var $cell = this.getGridCell(square),
                 $dangerSpan = $('<span />', { 'class': 'danger', html: (!square.isMined()) ? (square.isFlagged()) ? '&#9873;' : square.getDanger() : '&#9881;' });
@@ -154,6 +153,7 @@ var Gameboard = (function(){
             this.getSquares().forEach(this._renderSquare.bind(this));
             return this;
         },
+        getGridCell: function(square) { return this.$el.find('#row' + square.getRow()).find('td').eq(square.getCell()); },
         getSquareAt: function(row, cell) {
             var row = this.board.get(row);
             return (row && row[0] && row[0][cell]) ? row[0][cell] : null;
@@ -262,6 +262,11 @@ function DangerCalculator(gameboard) {
 
 $(function(){
 
-    window.gameboard = new Gameboard({ dimensions: 9, mines: 20 }).render();
+    window.gameboard = new Gameboard({ dimensions: 18, mines: 30 }).render();
 
+    var newDim = ((0.95 * $(window).height()) + 66) / 18;im)
+    $('.square').css({ height: newDim, width: newDim });
 });
+
+// set width/height of .square:
+// (0.95 * $(window).height() + 66) / this.dimensions
