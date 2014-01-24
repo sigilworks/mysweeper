@@ -2,12 +2,12 @@
 var Gameboard = (function(){
 
     function Gameboard(options) {
-        // this.board = new Multimap;
+        // the map, serving as the internal represenation of the gameboard
         this.board = {
             _table: [],
             get: function(row) { return this._table[row]; },
             set: function(row, val) { (this._table[row] || (this._table[row] = [])).push(val); },
-            forEach: function(fn) { /* or optimize with for-comprehension... */ return [].forEach.call(this.values(), fn); },
+            forEach: function(fn) { return [].forEach.call(this.values(), fn); },
             values: function() {
                 var _this = this;
                 return Object.keys(this._table)
@@ -17,9 +17,13 @@ var Gameboard = (function(){
             clear: function() { this._table = {}; },
             size: function() { return Object.keys(this._table).length; }
         };
+        // the dimensions of the board when rendered
         this.dimensions = +options.dimensions;
+        // the number of mines the user has selected
         this.mines = +options.mines;
+        // the DOM element of the table serving as the board
         this.$el = $(options.board || "#board");
+        // the object that calculates the number of surrounding mines at any square
         this.dangerCalc = new DangerCalculator(this);
         // create the board in memory and assign values to the squares
         this._loadBoard();
@@ -30,6 +34,8 @@ var Gameboard = (function(){
     }
 
     Gameboard.prototype = {
+
+        // "PRIVATE" METHODS:
         _loadBoard: function() {
             // 1. prefill squares to required dimensions...
             var _this = this,
@@ -61,18 +67,8 @@ var Gameboard = (function(){
             this._setupEventListeners();
         },
         _determineMineLocations: function(dimensions, mines) {
-            var LinearCongruentialGenerator = new function() {
-              var m = 4294967296, a = 1664525, c = 1013904223, seed, z;
-              return {
-                setSeed: function(val) { z = seed = val || Math.round(Math.random() * m); },
-                getSeed: function() { return seed; },
-                rand: function() { z = (a * z + c) % m; return z / m; }
-              };
-            }();
-            LinearCongruentialGenerator.setSeed();
-
             for (var i=0; i < mines; ++i) {
-                var rnd = /*LinearCongruentialGenerator.rand() * (Math.pow(dimensions, 2)) | 0, */Math.random() * (Math.pow(dimensions, 2)) | 0,
+                var rnd = Math.random() * (Math.pow(dimensions, 2)) | 0,
                     row = ~~(rnd / dimensions),
                     cell = rnd % dimensions,
                     square = this.getSquareAt(row, cell);
@@ -86,19 +82,20 @@ var Gameboard = (function(){
                 .forEach(function(safe) { safe.danger = _this.dangerCalc.forSquare(safe.getRow(), safe.getCell()); });
         },
         _setupEventListeners: function() {
-            this.$el.on('click', 'td, td > span', this._handleClick.bind(this));
-            this.$el.on('contextmenu', 'td, td > span', this._handleRightClick.bind(this));
+            this.$el.on({
+                click: this._handleClick.bind(this),
+                contextmenu: this._handleRightClick.bind(this)
+            }, 'td, td > span');
         },
         _removeEventListeners: function() {
-            this.$el.off('click', 'td, td > span');
-            this.$el.off('contextmenu', 'td, td > span');
+            this.$el.off('click, contextmenu', 'td, td > span');
         },
         _createHTMLGrid: function(dimensions) {
             var grid = '';
             for (var i=0; i < dimensions; ++i) {
-                grid += "<tr id='row" + i + "'>";
-                grid += [].join.call({ length: dimensions + 1 }, "<td></td>");
-                grid += "</tr>";
+                grid += "<tr id='row" + i + "'>"
+                     +  [].join.call({ length: dimensions + 1 }, "<td></td>")
+                     +  "</tr>";
             }
             this.$el.append(grid);
         },
@@ -113,10 +110,12 @@ var Gameboard = (function(){
                 square.open();
                 $cell.removeClass('closed').addClass('open');
                 this._recursiveReveal(square);
+
             } else if (square.isFlagged())
                 console.log("handle flagged situation...")
+
             else if (square.isMined())
-                this._gameOver();
+                return this._gameOver();
 
             if ($('.closed').length === 0)
                 this._gameWin();
@@ -133,6 +132,7 @@ var Gameboard = (function(){
                 square.flag();
                 this._renderSquare(square);
                 $cell.removeClass('closed').addClass('flagged');
+
             } else if (square.isFlagged()) {
                 square.close();
                 $cell.removeClass('flagged').addClass('closed');
@@ -159,29 +159,13 @@ var Gameboard = (function(){
                 }
             });
         },
-        _renderSquare: function(square) {
-            var $cell = this.getGridCell(square),
-                $dangerSpan = $('<span />', { 'class': 'danger', html: (!square.isMined()) ? (square.isFlagged()) ? '&#9873;' : square.getDanger() : '&#9881;' });
-            // decorate <td> with CSS classes appropriate to square's state
-            $cell.removeClass().addClass('square').addClass(square.getState().toLowerCase());
-            // insert a span with the danger index
-            $cell.find('.danger').remove().end().append($dangerSpan);
-            // add some data-* attributes to pass along on click events
-            $cell.data('row', square.getRow());
-            $cell.data('cell', square.getCell());
-            $cell.data('square', square);
+        _gameWin: function () {
+            this._removeEventListeners();
+            this.$el.addClass('game-win');
+
+            console.log("G A M E  W I N !!!");
+            console.log("User moves: %o", this.userMoves)
         },
-        render: function() {
-            this.getSquares().forEach(this._renderSquare.bind(this));
-            return this;
-        },
-        getGridCell: function(square) { return this.$el.find('#row' + square.getRow()).find('td').eq(square.getCell()); },
-        getSquareAt: function(row, cell) {
-            var row = this.board.get(row);
-            return (row && row[0] && row[0][cell]) ? row[0][cell] : null;
-        },
-        getSquares: function() { return this.board.values().reduce(function(acc, val) { return acc.concat(val); }, []) },
-        _gameWin: function () { this._removeEventListeners(); this.$el.addClass('game-win'); console.log("G A M E  W I N !!!"); console.log("User moves: %o", this.userMoves) },
         _gameOver: function() {
             // reset everything
             var _this = this;
@@ -195,6 +179,46 @@ var Gameboard = (function(){
             this.$el.find('.closed, .flagged').removeClass('closed flagged').addClass('open');
             console.log('G A M E  O V E R !!!');
         },
+        _renderSquare: function(square) {
+            var $cell = this.getGridCell(square),
+                $dangerSpan = $('<span />', { 'class': 'danger', html: (!square.isMined()) ? (square.isFlagged()) ? '&#9873;' : square.getDanger() : '&#9881;' });
+            // decorate <td> with CSS classes appropriate to square's state
+            $cell.removeClass()
+                 .addClass('square')
+                 .addClass(square.getState().toLowerCase());
+            // insert a span with the danger index
+            $cell.find('.danger')
+                 .remove()
+                 .end()
+                 .append($dangerSpan);
+            // add some data-* attributes to pass along on click events
+            $cell.data('row', square.getRow());
+            $cell.data('cell', square.getCell());
+            $cell.data('square', square);
+        },
+
+        // "PUBLIC" METHODS
+        render: function() {
+            this.getSquares().forEach(this._renderSquare.bind(this));
+            // return `this`, so this method can be chained to its initialization call
+            return this;
+        },
+        getGridCell: function(square) {
+            return this.$el
+                    .find('#row' + square.getRow())
+                    .find('td')
+                    .eq(square.getCell());
+        },
+        getSquareAt: function(row, cell) {
+            var row = this.board.get(row);
+            return (row && row[0] && row[0][cell]) ? row[0][cell] : null;
+        },
+        getSquares: function() {
+            return this.board
+                    .values()
+                    .reduce(function(acc, val) { return acc.concat(val); }, [])
+        },
+
         toJSON: function() { return this.board.values().join(', '); },
         toConsole: function(withDanger) {
             return this.board.values()
@@ -231,10 +255,12 @@ var Square = (function(){
             return Object.keys(this.States)
                          .filter(function(key) { return _this.States[key] === _this.state; })[0];
         },
+
         close: function() { this.state = this.States.CLOSED; },
         open: function() { this.state = this.States.OPENED; },
         flag: function() { this.state = this.States.FLAGGED; },
         mine: function() { this.state = this.States.MINED; },
+
         isClosed: function() { return this.state === this.States.CLOSED; },
         isOpen: function() { return this.state === this.States.OPENED; },
         isFlagged: function() { return this.state === this.States.FLAGGED; },
