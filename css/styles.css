@@ -32,3 +32,6 @@ section.card            { border: 1px dashed rgba(0,0,0,0.15); padding: 10px 15p
 .mined                  { background: #ECEAEE; }
 .mined.revealed         { background: #DC0000; }
 .mined.revealed .danger { display: block; color: #FFF; font-size: 36px; text-shadow: 2px 1px 2px #333; }
+
+.game-win 				{ border: 8px solid green; }
+.game-over 				{  }

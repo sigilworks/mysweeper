@@ -25,6 +25,8 @@ var Gameboard = (function(){
         this._loadBoard();
         // render the HTML to match the board in memory
         this._renderGrid();
+        // keep track of user clicks towards their win
+        this.userMoves = 0;
     }
 
     Gameboard.prototype = {
@@ -84,9 +86,12 @@ var Gameboard = (function(){
                 .forEach(function(safe) { safe.danger = _this.dangerCalc.forSquare(safe.getRow(), safe.getCell()); });
         },
         _setupEventListeners: function() {
-            var _this = this;
             this.$el.on('click', 'td, td > span', this._handleClick.bind(this));
             this.$el.on('contextmenu', 'td, td > span', this._handleRightClick.bind(this));
+        },
+        _removeEventListeners: function() {
+            this.$el.off('click', 'td, td > span');
+            this.$el.off('contextmenu', 'td, td > span');
         },
         _createHTMLGrid: function(dimensions) {
             var grid = '';
@@ -102,6 +107,8 @@ var Gameboard = (function(){
                 $cell = $target.prop('tagName').toLowerCase() === 'span' ? $target.parent() : $target,
                 square = $cell.data('square');
 
+            this.userMoves++;
+
             if (square.isClosed() && !square.isMined() && !square.isFlagged()) {
                 square.open();
                 $cell.removeClass('closed').addClass('open');
@@ -110,11 +117,16 @@ var Gameboard = (function(){
                 console.log("handle flagged situation...")
             else if (square.isMined())
                 this._gameOver();
+
+            if ($('.closed').length === 0)
+                this._gameWin();
         },
         _handleRightClick: function(event) {
             var $target = $(event.target),
                 $cell = $target.prop('tagName').toLowerCase() === 'span' ? $target.parent() : $target,
                 square = $cell.data('square');
+
+            this.userMoves++;
 
             console.log("$cell: %o, square: %o", $cell, square)
             if (square.isClosed()) {
@@ -169,7 +181,7 @@ var Gameboard = (function(){
             return (row && row[0] && row[0][cell]) ? row[0][cell] : null;
         },
         getSquares: function() { return this.board.values().reduce(function(acc, val) { return acc.concat(val); }, []) },
-        _gameWin: function () { /*  IMPLEMENT ME!!! */ },
+        _gameWin: function () { this._removeEventListeners(); this.$el.addClass('game-win'); console.log("G A M E  W I N !!!"); console.log("User moves: %o", this.userMoves) },
         _gameOver: function() {
             // reset everything
             var _this = this;
@@ -275,11 +287,11 @@ function DangerCalculator(gameboard) {
 
 $(function(){
 
-    window.gameboard = new Gameboard({ dimensions: 10, mines: 30 }).render();
+    window.gameboard = new Gameboard({ dimensions: 9, mines: 27 }).render();
 
-    var newDim = ((0.95 * $(window).height()) + 66) / 20;
-    $('.square').css({ height: newDim, width: newDim });
 });
 
 // set width/height of .square:
+    // var newDim = ((0.95 * $(window).height()) + 66) / 20;
+    // $('.square').css({ height: newDim, width: newDim });
 // (0.95 * $(window).height() + 66) / this.dimensions
