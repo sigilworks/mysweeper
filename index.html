@@ -12,14 +12,16 @@
         <form>
             <ul>
                 <li>
-                    <p><strong>Choose your desired board size:</strong></p>
-                    <label for="board9x9">9 x 9<input type="radio" id="board9x9" name="board-size" /></label>
-                    <label for="board18x18">18 x 18<input type="radio" id="board18x18" name="board-size" /></label>
-                    <label for="board36x36">36 x 36<input type="radio" id="board36x36" name="board-size" /></label>
+                    <p><strong>Choose your desired board dimensions:</strong></p>
+                    <input type="text" id="dimensions" placeholder="9" />
+                    <strong> x </strong>
+                    <input type="text" id="dimensions-mirror" placeholder="9" disabled />
+                    <span class="advice">Please do not exceed 25 x 25.</span>
                 </li>
                 <li>
-                    <p><strong>How many mines? </strong><span class="advice">NB: You cannot hide more mines than there are spaces in the board you chose above!</span></p>
+                    <p><strong>How many mines? </strong></p>
                     <input id="mine-count" name="mine-count" placeholder="1" />
+                    <span class="advice">Max. mines possible: <span></span></span>
                 </li>
                 <li><input id="submit" type="submit" value="Let's Play!" /></li>
             </ul>

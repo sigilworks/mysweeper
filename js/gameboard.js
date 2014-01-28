@@ -18,9 +18,9 @@ function Gameboard(options) {
         size: function() { return Object.keys(this._table).length; }
     };
     // the dimensions of the board when rendered
-    this.dimensions = +options.dimensions;
+    this.dimensions = +options.dimensions || 9;
     // the number of mines the user has selected
-    this.mines = +options.mines;
+    this.mines = +options.mines || 1;
     // the DOM element of the table serving as the board
     this.$el = $(options.board || "#board");
     // the object that calculates the number of surrounding mines at any square

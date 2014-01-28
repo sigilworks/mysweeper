@@ -4,15 +4,27 @@ section                 {}
 
 section.card            { border: 1px dashed rgba(0,0,0,0.15); padding: 10px 15px; margin: 0 auto; }
 
-#options-card           { display: none; width: 55%; }
+#options-card           { display: block; width: 55%; }
 #options-card ul        { list-style: none; }
-#options-card li        {}
+#options-card li        { line-height: 35px; margin-top: 50px; }
 #options-card label     {}
 #options-card input     {}
 
+#dimensions,
+#dimensions-mirror,
+#mine-count 			{ width: 50px; padding: 3px 5px; }
+
+#dimensions 			{ margin-right: 10px; }
+#dimensions-mirror 		{ margin-left: 10px; border: none; background: none; }
+
+#dimensions,
+#mine-count 			{ border: 2px solid #DDD; color: #333; text-align: center; }
+
+#mine-count				{ margin-right: 10px; }
+
 .advice                 { font-variant: small-caps; color: #AAA; }
 
-#board-card             { display: block; margin: 0 auto; text-align: center; }
+#board-card             { display: none; margin: 0 auto; text-align: center; }
 
 #board                  { display: inline-block; }
 
