@@ -109,6 +109,8 @@ Gameboard.prototype = {
             $cell = $target.prop('tagName').toLowerCase() === 'span' ? $target.parent() : $target,
             square = $cell.data('square');
 
+        // TODO: also handle first-click-can't-be-mine (if we're following that rule)
+        // here, if userMoves === 0...
         this.userMoves++;
 
         if (square.isClosed() && !square.isMined() && !square.isFlagged()) {
