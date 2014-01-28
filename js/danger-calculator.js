@@ -1,5 +1,5 @@
 
-module.exports = function DangerCalculator(gameboard) {
+function DangerCalculator(gameboard) {
     return {
         board: gameboard,
         neighborhood: {
@@ -33,3 +33,5 @@ module.exports = function DangerCalculator(gameboard) {
         }
     };
 }
+
+module.exports = DangerCalculator;

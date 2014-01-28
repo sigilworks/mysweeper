@@ -12,15 +12,15 @@ section.card            { border: 1px dashed rgba(0,0,0,0.15); padding: 10px 15p
 
 #dimensions,
 #dimensions-mirror,
-#mine-count 			{ width: 50px; padding: 3px 5px; }
+#mine-count             { width: 50px; padding: 3px 5px; }
 
-#dimensions 			{ margin-right: 10px; }
-#dimensions-mirror 		{ margin-left: 10px; border: none; background: none; }
+#dimensions             { margin-right: 10px; }
+#dimensions-mirror      { margin-left: 10px; border: none; background: none; }
 
 #dimensions,
-#mine-count 			{ border: 2px solid #DDD; color: #333; text-align: center; }
+#mine-count             { border: 2px solid #DDD; color: #333; text-align: center; }
 
-#mine-count				{ margin-right: 10px; }
+#mine-count             { margin-right: 10px; }
 
 .advice                 { font-variant: small-caps; color: #AAA; }
 
@@ -45,5 +45,5 @@ section.card            { border: 1px dashed rgba(0,0,0,0.15); padding: 10px 15p
 .mined.revealed         { background: #DC0000; }
 .mined.revealed .danger { display: block; color: #FFF; font-size: 36px; text-shadow: 2px 1px 2px #333; }
 
-.game-win 				{ border: 8px solid green; }
-.game-over 				{  }
+.game-win               { border: 8px solid green; }
+.game-over              {  }

@@ -6,7 +6,7 @@ module.exports = function(grunt) {
 
     browserify: {
       dist: {
-        files: { 'dist/mysweeper.js': ['js/*.js'], },
+        files: { 'dist/mysweeper.js': [ 'js/*.js' ], },
         options: { debug: true }
       }
     },
@@ -22,5 +22,4 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
 
   grunt.registerTask('default', ['browserify']);
-
 };

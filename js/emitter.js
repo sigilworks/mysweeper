@@ -1,9 +1,9 @@
 
-function MiniEmitter() {
+function Emitter() {
     this._events = {};
 }
 
-MiniEmitter.prototype = {
+Emitter.prototype = {
     on: function(event, fn) {
         this._events[event] = this._events[event] || [];
         this._events[event].push(fn);
@@ -19,4 +19,4 @@ MiniEmitter.prototype = {
     }
 };
 
-exports.Emitter = MiniEmitter;
+exports.Emitter = Emitter;
