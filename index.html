@@ -1,37 +1,41 @@
 <!doctype html>
 <html>
-<head>
+  <head>
     <title>mysweeper</title>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
     <script type="text/javascript" src="dist/mysweeper.js"></script>
     <link rel="stylesheet" type="text/css" href="css/styles.css" />
-</head>
+  </head>
 <body>
 
-    <section id="options-card" class="card">
-        <form>
-            <ul>
-                <li>
-                    <p><strong>Choose your desired board dimensions:</strong></p>
-                    <input type="text" id="dimensions" placeholder="9" />
-                    <strong> x </strong>
-                    <input type="text" id="dimensions-mirror" placeholder="9" disabled />
-                    <span class="advice">Please do not exceed 25 x 25.</span>
-                </li>
-                <li>
-                    <p><strong>How many mines? </strong></p>
-                    <input id="mine-count" name="mine-count" placeholder="1" />
-                    <span class="advice">Max. mines possible: <span></span></span>
-                </li>
-                <li><input id="submit" type="submit" value="Let's Play!" /></li>
-            </ul>
-        </form>
-    </section>
+  <section id="options-card" class="card">
+    <form>
+      <ul>
+
+        <li>
+          <p><strong>Choose your desired board dimensions:</strong></p>
+          <input type="text" id="dimensions" placeholder="9" />
+          <strong> x </strong>
+          <input type="text" id="dimensions-mirror" placeholder="9" disabled />
+          <span class="advice">Please do not exceed 25 x 25.</span>
+        </li>
+
+        <li>
+          <p><strong>How many mines? </strong></p>
+          <input id="mine-count" name="mine-count" placeholder="1" />
+          <span class="advice">Max. mines possible: <span></span></span>
+        </li>
+
+        <li><input id="submit" type="submit" value="Let's Play!" /></li>
+
+      </ul>
+    </form>
+  </section>
 
 
-    <section id="board-card" class="card">
-        <table id="board"></table>
-    </section>
+  <section id="board-card" class="card">
+    <table id="board"></table>
+  </section>
 
 </body>
 </html>
