@@ -2,9 +2,9 @@
 body                    { font-family: 'Droid Sans'; font-size: 14px; color: #333; }
 section                 {}
 
-section.card            { border: 1px dashed rgba(0,0,0,0.15); padding: 10px 15px; margin: 0 auto; }
+section.card            { /*border: 1px dashed rgba(0,0,0,0.15);*/ padding: 10px 15px; margin: 0 auto; }
 
-#options-card           { display: block; width: 55%; }
+#options-card           { display: block; width: 25%; margin-top: 7%; }
 #options-card ul        { list-style: none; }
 #options-card li        { line-height: 35px; margin-top: 50px; }
 #options-card label     {}
@@ -22,9 +22,11 @@ section.card            { border: 1px dashed rgba(0,0,0,0.15); padding: 10px 15p
 
 #mine-count             { margin-right: 10px; }
 
-.advice                 { font-variant: small-caps; color: #AAA; }
+.advice                 { color: #777; }
 
-#board-card             { display: none; margin: 0 auto; text-align: center; }
+#submit                 { padding: 7px 20px; font-size: 14px; font-weight: bold; color: #333; word-spacing: 4px; }
+
+#board-card             { display: none; margin: 25px auto; text-align: center; }
 
 #board                  { display: inline-block; }
 
@@ -46,4 +48,4 @@ section.card            { border: 1px dashed rgba(0,0,0,0.15); padding: 10px 15p
 .mined.revealed .danger { display: block; color: #FFF; font-size: 36px; text-shadow: 2px 1px 2px #333; }
 
 .game-win               { border: 8px solid green; }
-.game-over              {  }
+.game-over              {}

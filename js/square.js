@@ -1,3 +1,4 @@
+var BitFlags = require('./bit-flags');
 
 function Square(row, cell, state, danger) {
     if (!(this instanceof Square))
@@ -35,3 +36,5 @@ Square.prototype = {
 };
 
 module.exports = Square;
+
+// TODO: replace Square state internals with BitFlags impl...

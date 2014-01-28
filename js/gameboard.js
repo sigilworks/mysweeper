@@ -1,5 +1,6 @@
 var DangerCalculator = require('./danger-calculator'),
-    Square = require('./square');
+    Square = require('./square'),
+    $C = require('./constants');
 
 function Gameboard(options) {
     // the map, serving as the internal represenation of the gameboard
@@ -17,27 +18,30 @@ function Gameboard(options) {
         clear: function() { this._table = {}; },
         size: function() { return Object.keys(this._table).length; }
     };
+
     // the dimensions of the board when rendered
-    this.dimensions = +options.dimensions || 9;
+    this.dimensions = +options.dimensions || $C.DEFAULT_GAME_OPTIONS.dimensions;
     // the number of mines the user has selected
-    this.mines = +options.mines || 1;
+    this.mines = +options.mines || $C.DEFAULT_GAME_OPTIONS.mines;
     // the DOM element of the table serving as the board
-    this.$el = $(options.board || "#board");
+    this.$el = $(options.board || $C.DEFAULT_GAME_OPTIONS.board);
+
+    // keep track of user clicks towards their win
+    this.userMoves = 0;
+
     // the object that calculates the number of surrounding mines at any square
     this.dangerCalc = new DangerCalculator(this);
     // create the board in memory and assign values to the squares
     this._loadBoard();
     // render the HTML to match the board in memory
     this._renderGrid();
-    // keep track of user clicks towards their win
-    this.userMoves = 0;
 }
 
 Gameboard.prototype = {
 
     // "PRIVATE" METHODS:
     _loadBoard: function() {
-        // 1. prefill squares to required dimensions...
+        // prefill squares to required dimensions...
         var _this = this,
             dimensions = this.dimensions,
             mines = this.mines,
@@ -51,19 +55,20 @@ Gameboard.prototype = {
         for (var i=0; i < dimensions; ++i)
             this.board.set(i, fillRow(i, dimensions));
 
-        // 2. determine random positions of mined squares...
+        // determine random positions of mined squares...
         this._determineMineLocations(dimensions, mines);
 
-        // 3. pre-calculate the danger index of each non-mined square...
+        // pre-calculate the danger index of each non-mined square...
         this._precalcDangerIndices();
 
         console.log("G A M E B O A R D\n%o", this.toConsole());
         console.log("M I N E  P L A C E M E N T S\n%o", this.toConsole(true));
     },
     _renderGrid: function() {
-        // 1. layout the HTML <table> rows...
+        // layout the HTML <table> rows...
         this._createHTMLGrid(this.dimensions);
-        // 2. setup event listeners to listen for user clicks
+
+        // setup event listeners to listen for user clicks
         this._setupEventListeners();
     },
     _determineMineLocations: function(dimensions, mines) {
@@ -113,6 +118,7 @@ Gameboard.prototype = {
 
         } else if (square.isFlagged())
             console.log("handle flagged situation...")
+            // TODO: remove this?
 
         else if (square.isMined())
             return this._gameOver();
@@ -126,7 +132,7 @@ Gameboard.prototype = {
             square = $cell.data('square');
 
         this.userMoves++;
-
+        // TODO: fix right-clicks
         console.log("$cell: %o, square: %o", $cell, square)
         if (square.isClosed()) {
             square.flag();
@@ -162,7 +168,7 @@ Gameboard.prototype = {
     _gameWin: function () {
         this._removeEventListeners();
         this.$el.addClass('game-win');
-
+        // TODO: replace with real message
         console.log("G A M E  W I N !!!");
         console.log("User moves: %o", this.userMoves)
     },
@@ -177,6 +183,7 @@ Gameboard.prototype = {
         // put up 'Game Over' banner
         this.$el.find('.mined').addClass('revealed');
         this.$el.find('.closed, .flagged').removeClass('closed flagged').addClass('open');
+        // TODO: replace with real message
         console.log('G A M E  O V E R !!!');
     },
     _renderSquare: function(square) {
