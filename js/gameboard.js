@@ -92,7 +92,7 @@ Gameboard.prototype = {
         var grid = '';
         for (var i=0; i < dimensions; ++i) {
             grid += "<tr id='row" + i + "'>"
-                 +  [].join.call({ length: dimensions + 1 }, "<td></td>")
+                 +  [].join.call({ length: dimensions + 1 }, "<td><span class='danger'></span></td>")
                  +  "</tr>";
         }
         this.$el.append(grid);
@@ -118,7 +118,7 @@ Gameboard.prototype = {
         else if (square.isMined())
             return this._gameOver();
 
-        if ($('.closed').length === 0)
+        else if ($('.closed').length === 0)
             this._gameWin();
     },
     _handleRightClick: function(event) {
@@ -183,18 +183,20 @@ Gameboard.prototype = {
     },
     _renderSquare: function(square) {
         var $cell = this.getGridCell(square),
-            $dangerSpan = $('<span />', {
-                'class': 'danger',
-                html: (!square.isMined()) ? (square.isFlagged()) ? $C.Unicode.FLAG : square.getDanger() : $C.Unicode.MINE });
+            $dangerSpan = $cell.find('.danger');
+
+        // set the appropriate symbol when revealed:
+        $dangerSpan.html(function() {
+            if (square.isMined()) return '⚙'; // $C.Unicode.MINE;
+            if (square.isFlagged()) return '⚑'; // $C.Unicode.FLAG;
+            return square.getDanger();
+         });
+
         // decorate <td> with CSS classes appropriate to square's state
         $cell.removeClass()
              .addClass('square')
              .addClass(square.getState().join(' '));
-        // insert a span with the danger index
-        $cell.find('.danger')
-             .remove()
-             .end()
-             .append($dangerSpan);
+
         // add some data-* attributes to pass along on click events
         $cell.data('row', square.getRow());
         $cell.data('cell', square.getCell());
