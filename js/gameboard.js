@@ -1,24 +1,11 @@
-var DangerCalculator = require('./danger-calculator'),
+var Multimap = require('./multimap'),
+    DangerCalculator = require('./danger-calculator'),
     Square = require('./square'),
     $C = require('./constants');
 
 function Gameboard(options) {
     // the map, serving as the internal represenation of the gameboard
-    this.board = {
-        _table: [],
-        get: function(row) { return this._table[row]; },
-        set: function(row, val) { (this._table[row] || (this._table[row] = [])).push(val); },
-        forEach: function(fn) { return [].forEach.call(this.values(), fn); },
-        values: function() {
-            var _this = this;
-            return Object.keys(this._table)
-                         .map(function(row) { return _this._table[row]; })
-                         .reduce(function(acc, item) { return acc.concat(item); }, []);
-        },
-        clear: function() { this._table = {}; },
-        size: function() { return Object.keys(this._table).length; }
-    };
-
+    this.board = new Multimap;
     // the dimensions of the board when rendered
     this.dimensions = +options.dimensions || $C.DEFAULT_GAME_OPTIONS.dimensions;
     // the number of mines the user has selected
