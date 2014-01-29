@@ -3,6 +3,9 @@ var Multimap = require('./multimap'),
     Square = require('./square'),
     $C = require('./constants');
 
+// wrapper around `$log`, to toggle dev mode debugging
+var $log = function $log() { if($log.debug_mode || false) $log.apply(console, arguments); }
+
 function Gameboard(options) {
     // the map, serving as the internal represenation of the gameboard
     this.board = new Multimap;
@@ -12,6 +15,9 @@ function Gameboard(options) {
     this.mines = +options.mines || $C.DEFAULT_GAME_OPTIONS.mines;
     // the DOM element of the table serving as the board
     this.$el = $(options.board || $C.DEFAULT_GAME_OPTIONS.board);
+    // selectively enable debug mode for console visualizations and notifications
+    this.debug_mode = options.debug_mode || $C.DEFAULT_GAME_OPTIONS.debug_mode;
+    $log.debug_mode = this.debug_mode;
 
     // keep track of user clicks towards their win
     this.userMoves = 0;
@@ -32,7 +38,7 @@ Gameboard.prototype = {
         var _this = this,
             dimensions = this.dimensions,
             mines = this.mines,
-            fillRow = function(row, squares) {
+            populateRow = function(row, squares) {
                 var ret = [];
                 for (var i=0; i < squares; ++i)
                     ret[i] = new Square(row, i);
@@ -40,7 +46,7 @@ Gameboard.prototype = {
             };
 
         for (var i=0; i < dimensions; ++i)
-            this.board.set(i, fillRow(i, dimensions));
+            this.board.set(i, populateRow(i, dimensions));
 
         // determine random positions of mined squares...
         this._determineMineLocations(dimensions, mines);
@@ -48,8 +54,8 @@ Gameboard.prototype = {
         // pre-calculate the danger index of each non-mined square...
         this._precalcDangerIndices();
 
-        console.log("G A M E B O A R D\n%o", this.toConsole());
-        console.log("M I N E  P L A C E M E N T S\n%o", this.toConsole(true));
+        $log("G A M E B O A R D\n%o", this.toConsole());
+        $log("M I N E  P L A C E M E N T S\n%o", this.toConsole(true));
     },
     _renderGrid: function() {
         // layout the HTML <table> rows...
@@ -97,7 +103,7 @@ Gameboard.prototype = {
             square = $cell.data('square');
 
         // TODO: also handle first-click-can't-be-mine (if we're following that rule)
-        // here, if userMoves === 0...
+        // here, if userMoves === 0... :message => :mulligan?
         this.userMoves++;
 
         if (square.isClosed() && !square.isMined() && !square.isFlagged()) {
@@ -106,7 +112,7 @@ Gameboard.prototype = {
             this._recursiveReveal(square);
 
         } else if (square.isFlagged())
-            console.log("handle flagged situation...")
+            $log("handle flagged situation...")
             // TODO: remove this?
 
         else if (square.isMined())
@@ -122,7 +128,7 @@ Gameboard.prototype = {
 
         this.userMoves++;
         // TODO: fix right-clicks
-        console.log("$cell: %o, square: %o", $cell, square)
+        $log("$cell: %o, square: %o", $cell, square)
         if (square.isClosed()) {
             square.flag();
             this._renderSquare(square);
@@ -158,8 +164,8 @@ Gameboard.prototype = {
         this._removeEventListeners();
         this.$el.addClass('game-win');
         // TODO: replace with real message
-        console.log("G A M E  W I N !!!");
-        console.log("User moves: %o", this.userMoves)
+        $log("G A M E  W I N !!!");
+        $log("User moves: %o", this.userMoves)
     },
     _gameOver: function() {
         // reset everything
@@ -173,7 +179,7 @@ Gameboard.prototype = {
         this.$el.find('.mined').addClass('revealed');
         this.$el.find('.closed, .flagged').removeClass('closed flagged').addClass('open');
         // TODO: replace with real message
-        console.log('G A M E  O V E R !!!');
+        $log('G A M E  O V E R !!!');
     },
     _renderSquare: function(square) {
         var $cell = this.getGridCell(square),

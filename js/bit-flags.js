@@ -27,12 +27,12 @@ BitFlags.prototype = {
 
     _has: function(flag) { return !!(binToDec(this._flags) & flag); },
     _set: function(flag) { return this._flags = pad(decToBin(binToDec(this._flags) | flag)); },
-    _remove: function(flag) { return this._flags = pad(decToBin(binToDec(this._flags) & ~flag)); },
+    _unset: function(flag) { return this._flags = pad(decToBin(binToDec(this._flags) & ~flag)); },
 
-    close: function() { this._remove(this.F_OPEN); },
+    close: function() { this._unset(this.F_OPEN); },
     open: function() { this._set(this.F_OPEN); },
     flag: function() { this._set(this.F_FLAGGED); },
-    unflag: function() { this._remove(this.F_FLAGGED); },
+    unflag: function() { this._unset(this.F_FLAGGED); },
     mine: function() { this._set(this.F_MINED); },
     index: function() { this._set(this.F_INDEX); },
 

@@ -6,10 +6,13 @@ function Square(row, cell, state, danger) {
     this.row = row;
     this.cell = cell;
     this.state = state || this.States.CLOSED;
+    // TODO: fix this.danger default, get states ftom constants (as flags?).
     this.danger = danger || '-';
 }
 
 Square.prototype = {
+    // TODO: revisit and remove...
+    // Replace the rest of the prototype, delegating to BitFlags.
     States: { CLOSED: 'x', OPENED: '_', FLAGGED: 'f', MINED: '*' },
 
     getRow: function() { return this.row; },
