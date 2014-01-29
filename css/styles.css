@@ -38,6 +38,7 @@ section.card            { /*border: 1px dashed rgba(0,0,0,0.15);*/ padding: 10px
 
 
 .closed                 { background: #ECEAEE; }
+
 .closed .danger,
 .mined .danger          { display: none; }
 
@@ -47,9 +48,9 @@ section.card            { /*border: 1px dashed rgba(0,0,0,0.15);*/ padding: 10px
 .flagged                { background: #FCE9A5; }
 .flagged .danger        { display: block; color: #555; font-size: 28px; margin-top: 0px; text-shadow: 1px 1px 2px rgba(0,0,0,0.45); }
 
-.mined                  { background: #ECEAEE; }
-.mined.revealed         { background: #DC0000; }
-.mined.revealed .danger { display: block; color: #FFF; font-size: 36px; text-shadow: 2px 1px 2px #333; }
+.mined.closed           { background: #ECEAEE; }
+.mined.open             { background: #DC0000; }
+.mined.open .danger     { display: block; color: #FFF; font-size: 36px; text-shadow: 2px 1px 2px #333; }
 
 .game-win               { border: 8px solid green; }
 .game-over              {}

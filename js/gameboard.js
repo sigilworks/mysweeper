@@ -4,19 +4,19 @@ var Multimap = require('./multimap'),
     $C = require('./constants');
 
 // wrapper around `$log`, to toggle dev mode debugging
-var $log = function $log() { if($log.debug_mode || false) $log.apply(console, arguments); }
+var $log = function $log() { if ($log.debug_mode || false) console.log.apply(console, arguments); }
 
 function Gameboard(options) {
     // the map, serving as the internal represenation of the gameboard
     this.board = new Multimap;
     // the dimensions of the board when rendered
-    this.dimensions = +options.dimensions || $C.DEFAULT_GAME_OPTIONS.dimensions;
+    this.dimensions = +options.dimensions || $C.DefaultConfig.dimensions;
     // the number of mines the user has selected
-    this.mines = +options.mines || $C.DEFAULT_GAME_OPTIONS.mines;
+    this.mines = +options.mines || $C.DefaultConfig.mines;
     // the DOM element of the table serving as the board
-    this.$el = $(options.board || $C.DEFAULT_GAME_OPTIONS.board);
+    this.$el = $(options.board || $C.DefaultConfig.board);
     // selectively enable debug mode for console visualizations and notifications
-    this.debug_mode = options.debug_mode || $C.DEFAULT_GAME_OPTIONS.debug_mode;
+    this.debug_mode = options.debug_mode || $C.DefaultConfig.debug_mode;
     $log.debug_mode = this.debug_mode;
 
     // keep track of user clicks towards their win
@@ -77,7 +77,7 @@ Gameboard.prototype = {
         var _this = this;
         this.board.values()
             .reduce(function(acc, val) { return acc.concat(val.filter(function(sq) { return !sq.isMined(); })); }, [])
-            .forEach(function(safe) { safe.danger = _this.dangerCalc.forSquare(safe.getRow(), safe.getCell()); });
+            .forEach(function(safe) { safe.setDanger(_this.dangerCalc.forSquare(safe.getRow(), safe.getCell())); });
     },
     _setupEventListeners: function() {
         this.$el.on({
@@ -176,18 +176,20 @@ Gameboard.prototype = {
             .forEach(function(f) { _this.getGridCell(f).find('.danger').html(f.getDanger()); });
         // open/reveal all squares
         // put up 'Game Over' banner
-        this.$el.find('.mined').addClass('revealed');
+        this.$el.find('.mined').addClass('open');
         this.$el.find('.closed, .flagged').removeClass('closed flagged').addClass('open');
         // TODO: replace with real message
         $log('G A M E  O V E R !!!');
     },
     _renderSquare: function(square) {
         var $cell = this.getGridCell(square),
-            $dangerSpan = $('<span />', { 'class': 'danger', html: (!square.isMined()) ? (square.isFlagged()) ? '&#9873;' : square.getDanger() : '&#9881;' });
+            $dangerSpan = $('<span />', {
+                'class': 'danger',
+                html: (!square.isMined()) ? (square.isFlagged()) ? $C.Unicode.FLAG : square.getDanger() : $C.Unicode.MINE });
         // decorate <td> with CSS classes appropriate to square's state
         $cell.removeClass()
              .addClass('square')
-             .addClass(square.getState().toLowerCase());
+             .addClass(square.getState().join(' '));
         // insert a span with the danger index
         $cell.find('.danger')
              .remove()

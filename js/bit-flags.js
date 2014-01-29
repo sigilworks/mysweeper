@@ -1,5 +1,4 @@
 
-
 function BitFlags(isOpen, isMined, isFlagged, hasIndex) {
     this._flags = arguments.length > 0
         ? buildState([].slice.call(arguments))
@@ -8,14 +7,13 @@ function BitFlags(isOpen, isMined, isFlagged, hasIndex) {
 
 function binToDec(str) { return parseInt(str, 2); }
 function decToBin(num) { return num.toString(2); }
-function buildState(arr) { return arr.map(function(param) { return String(+param); }).join(''); }
+function buildState(arr) { return pad(arr.map(function(param) { return String(+param); }).join('')); }
 function pad(str, max) {
   max || (max = 4);
   var diff = max - str.length;
   for (var acc=[]; diff > 0; acc[--diff] = '0') {}
   return acc.join('') + str;
 }
-
 
 BitFlags.prototype = {
     F_OPEN:        1,
