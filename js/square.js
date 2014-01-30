@@ -1,5 +1,8 @@
-var BitFlags = require('./bit-flags'),
-    Symbols = require('./constants').Symbols;
+var BitFlagFactory = require('./bit-flag-factory'),
+    Symbols = require('./constants').Symbols,
+    Flags = require('./constants').Flags,
+
+    BitFlags = new BitFlagFactory([ Flags.OPEN, Flags.MINED, Flags.FLAGGED, Flags.INDEXED ]);
 
 function Square(row, cell, danger) {
     if (!(this instanceof Square))
@@ -7,34 +10,33 @@ function Square(row, cell, danger) {
     this.row = row;
     this.cell = cell;
     this.state = new BitFlags;
-    // TODO: fix this.danger default, get states ftom constants (as flags?).
-    this.danger = danger || '-';
+    this.danger = danger;
 }
 
 Square.prototype = {
     getRow: function() { return this.row; },
     getCell: function() { return this.cell; },
     getDanger: function() { return this.danger; },
-    setDanger: function(idx) { this.danger = idx; this.state.index(); },
+    setDanger: function(idx) { this.danger = idx; this.index(); },
     getState: function() {
         var _this = this;
         return Object.keys(Symbols)
-                     .filter(function(key) { return _this.state['is' + key.charAt(0) + key.substring(1).toLowerCase()](); })
+                     .filter(function(key) { return _this[ 'is' + key.charAt(0) + key.substring(1).toLowerCase() ](); })
                      .map(function(key) { return key.toLowerCase(); });
     },
 
-    close: function() { this.state.close(); },
-    open: function() { this.state.open(); },
-    flag: function() { this.state.flag(); },
-    unflag: function() { this.state.unflag(); },
-    mine: function() { this.state.mine(); },
-    index: function() { this.state.index(); },
+    close: function() { this.state.unset(this.state.F_OPEN); },
+    open: function() { this.state.set(this.state.F_OPEN); },
+    flag: function() { this.state.set(this.state.F_FLAGGED); },
+    unflag: function() { this.state.unset(this.state.F_FLAGGED); },
+    mine: function() { this.state.set(this.state.F_MINED); },
+    index: function() { this.state.set(this.state.F_INDEX); },
 
-    isClosed: function() { return this.state.isClosed(); },
+    isClosed: function() { return !this.state.isOpen(); },
     isOpen: function() { return this.state.isOpen(); },
     isFlagged: function() { return this.state.isFlagged(); },
     isMined: function() { return this.state.isMined(); },
-    hasIndex: function() { return this.state.hasIndex(); },
+    isIndexed: function() { return this.state.isIndexed(); },
 
     toJSON: function() { return { row: this.row, cell: this.cell, state: this.state, danger: this.danger } },
     toString: function() { return this.state.isMined()

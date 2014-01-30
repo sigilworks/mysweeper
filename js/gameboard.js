@@ -164,7 +164,7 @@ Gameboard.prototype = {
         this._removeEventListeners();
         this.$el.addClass('game-win');
         // TODO: replace with real message
-        $log("G A M E  W I N !!!");
+        $log("---  GAME WIN!  ---");
         $log("User moves: %o", this.userMoves)
     },
     _gameOver: function() {
@@ -179,7 +179,7 @@ Gameboard.prototype = {
         this.$el.find('.mined').addClass('open');
         this.$el.find('.closed, .flagged').removeClass('closed flagged').addClass('open');
         // TODO: replace with real message
-        $log('G A M E  O V E R !!!');
+        $log('---  GAME OVER!  ---');
     },
     _renderSquare: function(square) {
         var $cell = this.getGridCell(square),
@@ -229,7 +229,9 @@ Gameboard.prototype = {
     toConsole: function(withDanger) {
         return this.board.values()
             .reduce(function(str, row, idx) {
-                var symbols = withDanger ? row.map(function(sq) { return sq.getDanger() || ' '; }) : row;
+                var symbols = (!withDanger) ? row : row.map(function(sq) {
+                    return (sq.isMined()) ? '-' : sq.getDanger() || '';
+                });
                 return str += symbols.join('   ').toLowerCase() + "       [" + idx + "]\n";
             }, '\n');
     }

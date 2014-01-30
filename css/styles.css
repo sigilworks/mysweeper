@@ -35,7 +35,7 @@ section.card            { /*border: 1px dashed rgba(0,0,0,0.15);*/ padding: 10px
 #board                  { display: inline-block; font-face: Arial; }
 
 .square                 { background: #FFF; border: 1px solid #333; padding: 5px; height: 75px; width: 75px; }
-.square .danger           { display: block; color: #555; font-weight: bold; font-size: 20px; margin-top: 50%; }
+.square .danger         { display: block; color: #555; font-weight: bold; font-size: 20px; margin-top: 50%; }
 
 
 .closed                 { background: #ECEAEE; }

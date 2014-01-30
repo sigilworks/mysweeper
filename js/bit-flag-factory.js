@@ -1,5 +1,5 @@
 
-// @usage var BitFlags = new BitFlagFactory(['F_OPEN', 'F_MINED', 'F_FLAGGED', 'F_INDEX']); bf = new BitFlags;
+// @usage var BitFlags = new BitFlagFactory(['F_OPEN', 'F_MINED', 'F_FLAGGED', 'F_INDEXED']); bf = new BitFlags;
 function BitFlagFactory(args) {
 
     var binToDec = function(str) { return parseInt(str, 2); },

@@ -34,7 +34,6 @@ $(function(){
     });
 
 });
-
 // set width/height of .square:
     // var newDim = ((0.95 * $(window).height()) + 66) / 20;
     // $('.square').css({ height: newDim, width: newDim });
