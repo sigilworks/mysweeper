@@ -18,10 +18,10 @@ function Gameboard(options) {
     // selectively enable debug mode for console visualizations and notifications
     this.debug_mode = options.debug_mode || $C.DefaultConfig.debug_mode;
     $log.debug_mode = this.debug_mode;
-
+    // container for flash messages, such as win/loss of game
+    this.flashContainer = $($C.MessageOverlay);
     // keep track of user clicks towards their win
     this.userMoves = 0;
-
     // the object that calculates the number of surrounding mines at any square
     this.dangerCalc = new DangerCalculator(this);
     // create the board in memory and assign values to the squares
@@ -160,17 +160,18 @@ Gameboard.prototype = {
             }
         });
     },
+    _flashMsg: function(msg) { this.flashContainer.html(msg).show(); },
     _gameWin: function () {
         this._removeEventListeners();
         this.$el.addClass('game-win');
         // TODO: replace with real message
         $log("---  GAME WIN!  ---");
         $log("User moves: %o", this.userMoves)
+        this._flashMsg('You Win!');
     },
     _gameOver: function() {
         // reset everything
         var _this = this;
-
         this.getSquares()
             .filter(function(sq) { return sq.isFlagged(); })
             .forEach(function(f) { _this.getGridCell(f).find('.danger').html(f.getDanger()); });
@@ -180,6 +181,7 @@ Gameboard.prototype = {
         this.$el.find('.closed, .flagged').removeClass('closed flagged').addClass('open');
         // TODO: replace with real message
         $log('---  GAME OVER!  ---');
+        this._flashMsg('Game Over!');
     },
     _renderSquare: function(square) {
         var $cell = this.getGridCell(square),

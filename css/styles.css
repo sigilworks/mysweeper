@@ -30,7 +30,7 @@ section.card            { /*border: 1px dashed rgba(0,0,0,0.15);*/ padding: 10px
 
 #flash                  { display: none; border: 1px dashed #CCC; width: 55%; margin: 0 auto; text-align: center;
                           position: fixed; top: 10%; left: 22%; z-index: 1000; background: #FCFCFC; padding: 10px 25px;
-                          box-shadow: 2px 3px 7px #999; }
+                          box-shadow: 2px 3px 7px #999; font-size: 48px; font-weight: bold; letter-spacing: 3px; word-spacing: 25px; }
 
 #board                  { display: inline-block; font-face: Arial; }
 
