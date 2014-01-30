@@ -1,7 +1,7 @@
 var BitFlags = require('./bit-flags'),
     Symbols = require('./constants').Symbols;
 
-function Square(row, cell, state, danger) {
+function Square(row, cell, danger) {
     if (!(this instanceof Square))
         return new Square(arguments);
     this.row = row;

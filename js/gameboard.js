@@ -187,8 +187,8 @@ Gameboard.prototype = {
 
         // set the appropriate symbol when revealed:
         $dangerSpan.html(function() {
-            if (square.isMined()) return '⚙'; // $C.Unicode.MINE;
-            if (square.isFlagged()) return '⚑'; // $C.Unicode.FLAG;
+            if (square.isMined()) return '⚙'; // $C.Unicode.MINE
+            if (square.isFlagged()) return $C.Unicode.FLAG; //'⚑'
             return square.getDanger();
          });
 
