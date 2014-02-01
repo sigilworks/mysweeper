@@ -86,7 +86,8 @@ Gameboard.prototype = {
         }, 'td, td > span');
     },
     _removeEventListeners: function() {
-        this.$el.off('click, contextmenu', 'td, td > span');
+        // this.$el.off('click, contextmenu');
+        this.$el.off();
     },
     _createHTMLGrid: function(dimensions) {
         var grid = '';
@@ -118,8 +119,8 @@ Gameboard.prototype = {
         else if (square.isMined())
             return this._gameOver();
 
-        else if ($('.closed').length === 0)
-            this._gameWin();
+        if ($(".square:not(.mined)").length === $(".open").length)
+            return this._gameWin();
     },
     _handleRightClick: function(event) {
         var $target = $(event.target),
@@ -179,6 +180,7 @@ Gameboard.prototype = {
         // put up 'Game Over' banner
         this.$el.find('.mined').addClass('open');
         this.$el.find('.closed, .flagged').removeClass('closed flagged').addClass('open');
+        this._removeEventListeners();
         // TODO: replace with real message
         $log('---  GAME OVER!  ---');
         this._flashMsg('Game Over!');
@@ -189,7 +191,7 @@ Gameboard.prototype = {
 
         // set the appropriate symbol when revealed:
         $dangerSpan.html(function() {
-            if (square.isMined()) return '⚙'; // $C.Unicode.MINE
+            if (square.isMined()) return '&#9873;'; // '⚙'; // $C.Unicode.MINE
             if (square.isFlagged()) return $C.Unicode.FLAG; //'⚑'
             return square.getDanger();
          });

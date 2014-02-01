@@ -4,6 +4,12 @@ section                 {}
 
 section.card            { /*border: 1px dashed rgba(0,0,0,0.15);*/ padding: 10px 15px; margin: 0 auto; }
 
+/* clears <input> placeholder text on focus in Chrome and FF... */
+input:focus::-webkit-input-placeholder 	{ color: transparent; }
+input:focus::-webkit-input-placeholder 	{ color: transparent!important; }
+input:focus::-moz-placeholder			{ color: transparent!important; }
+input:focus:-moz-placeholder			{ color: transparent!important; }
+
 #options-card           { display: block; width: 25%; margin-top: 7%; }
 #options-card ul        { list-style: none; }
 #options-card li        { line-height: 35px; margin-top: 50px; }
