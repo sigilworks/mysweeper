@@ -1,5 +1,5 @@
 
-body                    { font-family: 'Droid Sans'; font-size: 14px; color: #333; }
+body                    { font-family: 'Droid Sans'; font-size: 14px; color: #333; background: #F8F8F8; }
 section                 {}
 
 section.card            { /*border: 1px dashed rgba(0,0,0,0.15);*/ padding: 10px 15px; margin: 0 auto; }
@@ -34,32 +34,31 @@ input:focus:-moz-placeholder            { color: transparent!important; }
 
 #board-card             { display: none; margin: 25px auto; text-align: center; }
 
-#flash                  { display: none; border: 1px dashed #CCC; width: 55%; margin: 0 auto; text-align: center;
-                          position: fixed; top: 10%; left: 22%; z-index: 1000; background: #FCFCFC; padding: 10px 25px;
-                          box-shadow: 2px 3px 7px #999; font-size: 48px; font-weight: bold; letter-spacing: 3px; word-spacing: 25px; }
+#flash                  { display: none; margin: 0 auto; text-align: center; position: fixed; z-index: 1000; background: #800; padding: 10px 25px;
+                          box-shadow: 1px 3px 10px #555; font-size: 36px; font-weight: bold; letter-spacing: 3px; color: #F0F0F0; top: 0; left: 0; width: 100%; }
 
 #board                  { display: inline-block; }
 
-.square                 { background: #FFF; border: 1px solid #333; padding: 5px; height: 75px; width: 75px; }
-.square .danger         { display: block; color: #555; font-weight: bold; font-size: 20px; margin-top: 50%; }
+.square                 { background: #F0F0F0; border: 3px solid #555; padding: 7px; height: 50px; width: 50px; }
+.square .danger         { display: block; color: #777; font-weight: bold; font-size: 20px; margin-top: 50%; }
 
 
-.closed                 { background: #ECEAEE; }
+.closed                 { background: #555; }
 
 .closed .danger,
 .mined .danger          { display: none; }
 
 .open                   {}
 
-.flagged                { background: #FCE9A5; }
-.flagged .danger        { display: block; color: #555; font-size: 40px; margin-top: 0px; text-shadow: 1px 1px 2px rgba(0,0,0,0.45); font-family: 'RaphaelIcons'; }
+.flagged                { background: #FFE68C; }
+.flagged .danger        { display: block; color: #333; font-size: 40px; margin-top: 0px; text-shadow: 1px 1px 2px rgba(0,0,0,0.45); font-family: 'RaphaelIcons'; }
 
-.mined.closed           { background: #ECEAEE; }
-.mined.open             { background: #DC0000; }
+.mined.closed           { background: #555; }
+.mined.open             { background: #800; }
 .mined.open .danger     { display: block; color: #FFF; font-size: 48px; text-shadow: 2px 1px 2px #333; font-family: 'RaphaelIcons'; font-weight: normal; margin-top: 0; }
 
-.game-win               { border: 8px solid green; }
-.game-over              {}
+.game-win               { box-shadow: 1px 2px 45px rgba(0, 150, 0, 0.75); border: 3px solid rgb(0, 150, 0); }
+.game-over              { box-shadow: 1px 2px 45px #DC0000; border: 3px solid #800; }
 
 /* for Raphael icons */
 @font-face              { font-family: 'RaphaelIcons'; src: url('../fonts/raphaelicons-webfont.eot');
