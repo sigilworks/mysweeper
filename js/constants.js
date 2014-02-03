@@ -7,7 +7,7 @@ var Constants = {
 
 	Flags: 	{ OPEN: 'F_OPEN', MINED: 'F_MINED', FLAGGED: 'F_FLAGGED', INDEXED: 'F_INDEXED' },
 
-	Unicode: { FLAG: '\u2691' /*'⚑'*/ /*'&#9873;'*/, MINE: '\u2699' /*'⚙'*/ /*'&#9881;'*/ },
+	Unicode: { FLAG: /*'\u2691'*/ /*'⚑'*/ /*'&#9873;'*/ 'x', MINE: /*'\u2699'*/ /*'⚙'*/ /*'&#9881;'*/ 'Ä' },
 
 	MessageOverlay: '#flash'
 };

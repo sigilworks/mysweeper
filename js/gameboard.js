@@ -60,7 +60,6 @@ Gameboard.prototype = {
     _renderGrid: function() {
         // layout the HTML <table> rows...
         this._createHTMLGrid(this.dimensions);
-
         // setup event listeners to listen for user clicks
         this._setupEventListeners();
     },
@@ -86,14 +85,13 @@ Gameboard.prototype = {
         }, 'td, td > span');
     },
     _removeEventListeners: function() {
-        // this.$el.off('click, contextmenu');
         this.$el.off();
     },
     _createHTMLGrid: function(dimensions) {
         var grid = '';
         for (var i=0; i < dimensions; ++i) {
             grid += "<tr id='row" + i + "'>"
-                 +  [].join.call({ length: dimensions + 1 }, "<td><span class='danger'></span></td>")
+                 +  [].join.call({ length: dimensions + 1 }, "<td></td>")
                  +  "</tr>";
         }
         this.$el.append(grid);
@@ -187,23 +185,21 @@ Gameboard.prototype = {
     },
     _renderSquare: function(square) {
         var $cell = this.getGridCell(square),
-            $dangerSpan = $cell.find('.danger');
+            getContents = function(sq) {
+                if (sq.isMined()) return $C.Unicode.MINE;//'⚙'; // '&#9873;'; // $C.Unicode.MINE
+                if (sq.isFlagged()) return  $C.Unicode.FLAG; //'⚑' // '&9844;'
+                return sq.getDanger();
+            },
+            $dangerSpan = $('<span />', { 'class': 'danger', html: getContents(square) });
 
-        // set the appropriate symbol when revealed:
-        $dangerSpan.html(function() {
-            if (square.isMined()) return '&#9873;'; // '⚙'; // $C.Unicode.MINE
-            if (square.isFlagged()) return $C.Unicode.FLAG; //'⚑'
-            return square.getDanger();
-         });
+        $cell.empty().append($dangerSpan);
 
         // decorate <td> with CSS classes appropriate to square's state
         $cell.removeClass()
              .addClass('square')
              .addClass(square.getState().join(' '));
 
-        // add some data-* attributes to pass along on click events
-        $cell.data('row', square.getRow());
-        $cell.data('cell', square.getCell());
+        // attach the Square to the data associated with the grid cell
         $cell.data('square', square);
     },
 
