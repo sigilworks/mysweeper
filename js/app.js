@@ -3,7 +3,8 @@ var Gameboard = require('./gameboard');
 $(function(){
 
     var mineableSpaces = function(dim) { return Math.pow(dim, 2) - 1; },
-        $possibleMines = $("#mine-count").siblings(".advice").find("span");
+        $possibleMines = $("#mine-count").siblings(".advice").find("span"),
+        disableOption = function($el) { $el.addClass('disabled'); $el.find("input").prop('readonly', true); };
 
     // setting initial value
     $possibleMines.html(mineableSpaces($("#dimensions").attr("placeholder")));

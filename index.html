@@ -11,25 +11,47 @@
 
   <section id="options-card" class="card">
     <form>
-      <ul>
+      <div id="preset-container" class="container">
+        <label for="preset-mode"><input type="radio" id="preset-mode" name="mode-select" checked />
+          Choose a preset difficulty level (vintage mode)
+          <span class="or">- or -</span>
+        </label>
+        <ul class="preset">
+          <li>
+            <p><strong>Select a difficulty level:</strong></p>
+            <ol>
+              <li><label for="level-beginner"><input type="radio" id="level-beginner" name="preset-level"  checked />Beginner</label></li>
+              <li><label for="level-intermediate"><input type="radio" id="level-intermediate" name="preset-level" />Intermediate</label></li>
+              <li><label for="level-expert"><input type="radio" id="level-advanced" name="preset-level" />Expert</label></li>
+            </ol>
+          </li>
 
-        <li>
-          <p><strong>Choose your desired board dimensions:</strong></p>
-          <input type="text" id="dimensions" placeholder="9" />
-          <strong> x </strong>
-          <input type="text" id="dimensions-mirror" placeholder="9" disabled />
-          <span class="advice">Please do not exceed 25 x 25.</span>
-        </li>
+        </ul>
+      </div>
 
-        <li>
-          <p><strong>How many mines? </strong></p>
-          <input id="mine-count" name="mine-count" placeholder="1" />
-          <span class="advice">Max. mines possible: <span></span></span>
-        </li>
+      <div id="custom-container" class="container">
+        <label for="custom-mode"><input type="radio" id="custom-mode" name="mode-select" />
+          Create your own custom game...
+        </label>
+        <ul class="custom">
+          <li>
+            <p><strong>Choose your desired board dimensions:</strong></p>
+            <input type="text" id="dimensions" placeholder="9" />
+            <strong> x </strong>
+            <input type="text" id="dimensions-mirror" placeholder="9" disabled />
+            <span class="advice">Please do not exceed 25 x 25.</span>
+          </li>
 
-        <li><input id="submit" type="submit" value="Let's Play!" /></li>
+          <li>
+            <p><strong>How many mines? </strong></p>
+            <input id="mine-count" name="mine-count" placeholder="1" />
+            <span class="advice">Max. mines possible: <span></span></span>
+          </li>
+        </ul>
+      </div>
 
-      </ul>
+      <input id="submit" type="submit" value="Let's Play!" />
+
     </form>
   </section>
 
