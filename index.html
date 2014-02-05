@@ -12,7 +12,7 @@
   <section id="options-card" class="card">
     <form>
       <div id="preset-container" class="container">
-        <label for="preset-mode"><input type="radio" id="preset-mode" name="mode-select" checked />
+        <label for="preset-mode"><input type="radio" id="preset-mode" name="mode-select" value="P" checked />
           Choose a preset difficulty level (vintage mode)
           <span class="or">- or -</span>
         </label>
@@ -20,9 +20,9 @@
           <li>
             <p><strong>Select a difficulty level:</strong></p>
             <ol>
-              <li><label for="level-beginner"><input type="radio" id="level-beginner" name="preset-level"  checked />Beginner</label></li>
-              <li><label for="level-intermediate"><input type="radio" id="level-intermediate" name="preset-level" />Intermediate</label></li>
-              <li><label for="level-expert"><input type="radio" id="level-advanced" name="preset-level" />Expert</label></li>
+              <li><label for="level-beginner"><input type="radio" id="level-beginner" name="preset-level" value="B" />Beginner</label></li>
+              <li><label for="level-intermediate"><input type="radio" id="level-intermediate" name="preset-level" value="I" checked />Intermediate</label></li>
+              <li><label for="level-expert"><input type="radio" id="level-advanced" name="preset-level" value="E" />Expert</label></li>
             </ol>
           </li>
 
@@ -30,7 +30,7 @@
       </div>
 
       <div id="custom-container" class="container">
-        <label for="custom-mode"><input type="radio" id="custom-mode" name="mode-select" />
+        <label for="custom-mode"><input type="radio" id="custom-mode" name="mode-select" value="C" />
           Create your own custom game...
         </label>
         <ul class="custom">

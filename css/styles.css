@@ -47,6 +47,7 @@ label[for='custom-mode']{ margin-left: -35px; }
 
 .advice                 { color: #777; }
 .or                     { font-style: italic; color: #777; font-weight: bold; margin-right: -60px; margin-left: 10px; }
+.disabled               { opacity: 0.25; }
 
 #submit                 { padding: 7px 20px; font-size: 14px; font-weight: bold; color: #333; word-spacing: 4px; }
 
