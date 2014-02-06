@@ -10,6 +10,9 @@ input:focus::-webkit-input-placeholder  { color: transparent!important; }
 input:focus::-moz-placeholder           { color: transparent!important; }
 input:focus:-moz-placeholder            { color: transparent!important; }
 
+input[type='range']     { width: 350px; }
+output                  { display: block; margin: 0 auto; text-align: center; }
+
 #options-card           { display: block; width: 50%; margin-top: 7%; text-align: center; }
 #options-card .container{ width: 45%; display: inline-block; float: left; }
 

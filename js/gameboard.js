@@ -152,7 +152,7 @@ Gameboard.prototype = {
                 horiz = _this.dangerCalc.neighborhood[direction][1],
                 neighbor = _this.getSquareAt(row + vert, cell + horiz);
 
-            if (neighbor && !neighbor.isMined() && neighbor.isClosed() && neighbor.getDanger() > 0) {
+            if (neighbor && !neighbor.isMined() && !neighbor.isFlagged() && neighbor.isClosed() && !neighbor.getDanger()) {
                 neighbor.open();
                 _this.getGridCell(neighbor).removeClass('closed').addClass('open');
                 _this._recursiveReveal(neighbor);

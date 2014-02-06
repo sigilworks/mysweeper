@@ -40,12 +40,18 @@
             <strong> x </strong>
             <input type="text" id="dimensions-mirror" placeholder="9" disabled />
             <span class="advice">Please do not exceed 25 x 25.</span>
+
+            <output for="dimensions-range">--</output>
+            <input type="range" id="dimensions-range" name="dimensions-range" min="3" max="25" step="1" value="9" />
           </li>
 
           <li>
             <p><strong>How many mines? </strong></p>
             <input id="mine-count" name="mine-count" placeholder="1" />
             <span class="advice">Max. mines possible: <span></span></span>
+
+            <output for="mines-range">--</output>
+            <input type="range" id="mines-range" name="mines-range" min="1" step="1" value="1" />
           </li>
         </ul>
       </div>

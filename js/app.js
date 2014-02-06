@@ -1,19 +1,15 @@
 var Gameboard = require('./gameboard'),
+    Modes = require('./constants').Modes,
+    PresetLevels = require('./constants').PresetLevels,
+    PresetSetups = require('./constants').PresetSetups,
 
-    mineableSpaces = function(dim) { return Math.pow(dim, 2) - 1; },
+    mineableSpaces = function(dim) { return ~~(Math.pow(dim, 2) * 0.5); },
     disableOption = function($el, undo) {
         if (undo == null) undo = false;
         $el[undo ? 'removeClass' : 'addClass']('disabled');
         $el.find("input").prop('readonly', !undo);
     },
-    enableOption = function($el) { return disableOption($el, true); },
-    Modes = { PRESET: "P", CUSTOM: "C" },
-    PresetLevels = { BEGINNER: "B", INTERMEDIATE: "I", EXPERT: "E" },
-    PresetSetups = {
-        BEGINNER: { dimensions: 9, mines: 9 },
-        INTERMEDIATE: { dimensions: 12, mines: 21 },
-        EXPERT: { dimensions: 15, mines: 67 }
-    };
+    enableOption = function($el) { return disableOption($el, true); };
 
 $(function(){
 
@@ -35,6 +31,22 @@ $(function(){
         // ...and the possible number of mines.
         $possibleMines.html(mineableSpaces($this.val()) + '.');
     });
+
+    $("output[for=dimensions-range]").html($("#dimensions-range").val() + ' x ' + $("#dimensions-range").val());
+    $("#dimensions-range").on("change", function() {
+        var val = $(this).val();
+        $("output[for=dimensions-range]").html(val + ' x ' + val);
+
+        var oldmax = +$("#mines-range").prop('max') || 1,
+            oldval = +$("#mines-range").val(),
+            ratio = oldval / oldmax;
+
+        $("#mines-range").prop('max', mineableSpaces(val));
+        $("#mines-range").val(~~($("#mines-range").prop('max') * ratio)).change();
+    });
+
+    $("output[for=mines-range]").html($("#mines-range").val());
+    $("#mines-range").on("change", function() { $("output[for=mines-range]").html($(this).val()); });
 
     $("form").on("submit", function() {
 
