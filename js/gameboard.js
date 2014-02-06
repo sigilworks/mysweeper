@@ -224,7 +224,26 @@ Gameboard.prototype = {
                 .values()
                 .reduce(function(acc, val) { return acc.concat(val); }, [])
     },
-
+    // export serialized state to persist game for later
+    export: function() {
+        // need gameOptions, metadata on datetime/etc., serialize all squares' states
+        return {
+            _meta: {
+                timestamp: +new Date,
+                score: null,
+                clock: null,
+                transcript: []
+            },
+            options: {
+                board: this.$el.selector,
+                squares: JSON.stringify(this.board._table),
+                debug_mode: this.debug_mode,
+                dimensions: this.dimensions,
+                mines: this.mines,
+                userMoves: this.userMoves
+            }
+        };
+    },
     toJSON: function() { return this.board.values().join(', '); },
     toConsole: function(withDanger) {
         return this.board.values()
