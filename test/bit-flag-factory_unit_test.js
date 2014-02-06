@@ -1,28 +1,32 @@
-var expect = chai.expect,
+var expect = require('chai').expect,
+    Flags = require('../js/constants').Flags,
     BitFlagFactory = require('../js/bit-flag-factory');
 
 // 1. test the BitFlagFactory...
 // 2. ...then test the BitFlags object it produces.
+// BitFlags = new BitFlagFactory([ Flags.OPEN, Flags.MINED, Flags.FLAGGED, Flags.INDEXED ]);
+// BitFlags-------
+//     _flags
+// has(flag)
+// set(flag)
+// unset(flag)
+// BitFlags.withDefaults(defs) => new BitFlags(defs)
+// flags on proto (inst.FLAGNAME)
+// DEFAULT_STATE on proto
 
-describe("BitFlagFactory", function() {
+describe('BitFlagFactory',function(){
+  var BitFlags, bf;
 
-  describe("constructor", function() {
-    it("should have a default name", function() {
-      var cow = new Cow();
-      expect(cow.name).to.equal("Anon cow");
-    });
-
-    it("should set cow's name if provided", function() {
-      var cow = new Cow("Kate");
-      expect(cow.name).to.equal("Kate");
-    });
+  before(function(done){
+    BitFlags = new BitFlagFactory([ Flags.OPEN, Flags.MINED, Flags.FLAGGED, Flags.INDEXED ]);
+    bf = new BitFlags;
+    done();
   });
 
-  describe("#greets", function() {
-    it("should greet passed target", function() {
-      var greetings = (new Cow("Kate")).greets("Baby");
-      expect(greetings).to.equal("Kate greets Baby");
-    });
+  it('should have a (private) `_flags` property',function(){
+    expect(bf._flags).to.equal('0000');
+    expect(bf._flags).to.equal(bf.DEFAULT_STATE);
   });
-
 });
+
+
