@@ -153,10 +153,11 @@ Gameboard.prototype = {
                 horiz = _this.dangerCalc.neighborhood[direction][1],
                 neighbor = _this.getSquareAt(row + vert, cell + horiz);
 
-            if (neighbor && !neighbor.isMined() && !neighbor.isFlagged() && neighbor.isClosed() && !neighbor.getDanger()) {
+            if (neighbor && !neighbor.isMined() && !neighbor.isFlagged() && neighbor.isClosed()) {
                 neighbor.open();
                 _this.getGridCell(neighbor).removeClass('closed').addClass('open');
-                _this._recursiveReveal(neighbor);
+                if (!neighbor.getDanger() || !neighbor.getDanger() > 0)
+                    _this._recursiveReveal(neighbor);
             }
         });
     },
