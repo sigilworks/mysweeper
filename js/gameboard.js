@@ -1,7 +1,8 @@
 var Multimap = require('./multimap'),
     DangerCalculator = require('./danger-calculator'),
     Square = require('./square'),
-    $C = require('./constants');
+    Serializer = require('./serializer')
+ ,   $C = require('./constants');
 
 // wrapper around `$log`, to toggle dev mode debugging
 var $log = function $log() { if ($log.debug_mode || false) console.log.apply(console, arguments); }
@@ -186,8 +187,8 @@ Gameboard.prototype = {
     _renderSquare: function(square) {
         var $cell = this.getGridCell(square),
             getContents = function(sq) {
-                if (sq.isMined()) return $C.Unicode.MINE;//'⚙'; // '&#9873;'; // $C.Unicode.MINE
-                if (sq.isFlagged()) return  $C.Unicode.FLAG; //'⚑' // '&9844;'
+                if (sq.isMined()) return $C.Unicode.MINE;
+                if (sq.isFlagged()) return  $C.Unicode.FLAG;
                 return sq.getDanger() !== 0 ? sq.getDanger() : '';
             },
             $dangerSpan = $('<span />', { 'class': 'danger', html: getContents(square) });
@@ -227,22 +228,7 @@ Gameboard.prototype = {
     // export serialized state to persist game for later
     export: function() {
         // need gameOptions, metadata on datetime/etc., serialize all squares' states
-        return {
-            _meta: {
-                timestamp: +new Date,
-                score: null,
-                clock: null,
-                transcript: []
-            },
-            options: {
-                board: this.$el.selector,
-                squares: JSON.stringify(this.board._table),
-                debug_mode: this.debug_mode,
-                dimensions: this.dimensions,
-                mines: this.mines,
-                userMoves: this.userMoves
-            }
-        };
+        return Serializer.export(this);
     },
     toJSON: function() { return this.board.values().join(', '); },
     toConsole: function(withDanger) {
