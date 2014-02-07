@@ -14,9 +14,9 @@ var Constants = {
     PresetLevels: { BEGINNER: "B", INTERMEDIATE: "I", EXPERT: "E" },
 
     PresetSetups: {
-        BEGINNER: { dimensions: 9, mines: 9 },
-        INTERMEDIATE: { dimensions: 12, mines: 21 },
-        EXPERT: { dimensions: 15, mines: 67 }
+        BEGINNER: 		{ dimensions:  9, mines:  9 },
+        INTERMEDIATE: 	{ dimensions: 12, mines: 21 },
+        EXPERT: 		{ dimensions: 15, mines: 67 }
     },
 
 	MessageOverlay: '#flash'

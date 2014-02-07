@@ -2,31 +2,53 @@ var expect = require('chai').expect,
     Flags = require('../js/constants').Flags,
     BitFlagFactory = require('../js/bit-flag-factory');
 
-// 1. test the BitFlagFactory...
-// 2. ...then test the BitFlags object it produces.
-// BitFlags = new BitFlagFactory([ Flags.OPEN, Flags.MINED, Flags.FLAGGED, Flags.INDEXED ]);
-// BitFlags-------
-//     _flags
-// has(flag)
-// set(flag)
-// unset(flag)
-// BitFlags.withDefaults(defs) => new BitFlags(defs)
-// flags on proto (inst.FLAGNAME)
-// DEFAULT_STATE on proto
 
-describe('BitFlagFactory',function(){
-  var BitFlags, bf;
+describe("BitFlagFactory",function(){
+  var BitFlags,
+      bf,
+      FLAGS_ARRAY = [ Flags.OPEN, Flags.MINED, Flags.FLAGGED, Flags.INDEXED ];
 
   before(function(done){
-    BitFlags = new BitFlagFactory([ Flags.OPEN, Flags.MINED, Flags.FLAGGED, Flags.INDEXED ]);
+    BitFlags = new BitFlagFactory(FLAGS_ARRAY);
     bf = new BitFlags;
     done();
   });
 
-  it('should have a (private) `_flags` property',function(){
-    expect(bf._flags).to.equal('0000');
+  it("should have a (private) `_flags` property", function(){
+    expect(bf._flags).to.equal("0000");
     expect(bf._flags).to.equal(bf.DEFAULT_STATE);
   });
+
+  it("should have a DEFAULT_STATE property based on its number of flags", function() {
+    expect(bf._flags.length).to.equal(bf.DEFAULT_STATE.length);
+  });
+
+  it("should have the flags passed to factory's constructor available on the prototype", function() {
+    FLAGS_ARRAY.forEach(function(flag, idx) {
+      expect(bf[String(flag)]).to.equal(Math.pow(2, idx));
+    });
+  });
+
+  it("can set the value of a flag", function() {
+    bf.set(bf.F_MINED);
+    expect(bf._flags).to.equal("0010");
+  });
+
+  it("can unset the value of a flag", function() {
+    bf.set(bf.F_MINED);
+    expect(bf._flags).to.equal("0010");
+    bf.unset(bf.F_MINED);
+    expect(bf._flags).to.equal("0000");
+  });
+
+  it("can test the value of a flag", function() {
+    expect(bf.has(bf.F_MINED)).to.equal(false);
+    bf.set(bf.F_MINED);
+    expect(bf.has(bf.F_MINED)).to.equal(true);
+    bf.unset(bf.F_MINED);
+    expect(bf.has(bf.F_MINED)).to.equal(false);
+  });
+
 });
 
 
