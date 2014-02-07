@@ -188,7 +188,7 @@ Gameboard.prototype = {
             getContents = function(sq) {
                 if (sq.isMined()) return $C.Unicode.MINE;//'⚙'; // '&#9873;'; // $C.Unicode.MINE
                 if (sq.isFlagged()) return  $C.Unicode.FLAG; //'⚑' // '&9844;'
-                return sq.getDanger();
+                return sq.getDanger() !== 0 ? sq.getDanger() : '';
             },
             $dangerSpan = $('<span />', { 'class': 'danger', html: getContents(square) });
 
@@ -249,7 +249,7 @@ Gameboard.prototype = {
         return this.board.values()
             .reduce(function(str, row, idx) {
                 var symbols = (!withDanger) ? row : row.map(function(sq) {
-                    return (sq.isMined()) ? '-' : sq.getDanger() || '';
+                    return (sq.isMined()) ? '-' : sq.getDanger() === 0 ? ' ' : sq.getDanger();
                 });
                 return str += symbols.join('   ').toLowerCase() + "       [" + idx + "]\n";
             }, '\n');
