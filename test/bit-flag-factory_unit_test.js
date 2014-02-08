@@ -8,7 +8,7 @@ describe("BitFlagFactory",function(){
       bf,
       FLAGS_ARRAY = [ Flags.OPEN, Flags.MINED, Flags.FLAGGED, Flags.INDEXED ];
 
-  before(function(done){
+  beforeEach(function(done){
     BitFlags = new BitFlagFactory(FLAGS_ARRAY);
     bf = new BitFlags;
     done();
@@ -42,11 +42,11 @@ describe("BitFlagFactory",function(){
   });
 
   it("can test the value of a flag", function() {
-    expect(bf.has(bf.F_MINED)).to.equal(false);
+    expect(bf.has(bf.F_MINED)).to.be.false;
     bf.set(bf.F_MINED);
-    expect(bf.has(bf.F_MINED)).to.equal(true);
+    expect(bf.has(bf.F_MINED)).to.be.true;
     bf.unset(bf.F_MINED);
-    expect(bf.has(bf.F_MINED)).to.equal(false);
+    expect(bf.has(bf.F_MINED)).to.be.false;
   });
 
 });

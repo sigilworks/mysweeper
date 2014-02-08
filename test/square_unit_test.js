@@ -12,11 +12,10 @@ describe("Square",function(){
       bf = new BitFlags,
       ROW = 2, CELL = 3, DANGER = 7, square;
 
-  before(function(done){
+  beforeEach(function(done){
     square = new Square(ROW, CELL, DANGER);
     done();
   });
-
 
   it("#getRow returns the row number the square is located in", function(){
     expect(square.getRow()).to.equal(ROW);
@@ -43,37 +42,37 @@ describe("Square",function(){
   });
 
   it("#isClosed returns whether or not the square is closed", function(){
-    expect(square.isClosed()).to.equal(true);
+    expect(square.isClosed()).to.be.true;
     square.open();
-    expect(square.isClosed()).to.equal(false);
+    expect(square.isClosed()).to.be.false;
   });
 
   it("#isOpen returns whether or not the square is open", function(){
-    expect(square.isOpen()).to.equal(true);
-    square.close();
-    expect(square.isOpen()).to.equal(false);
+    expect(square.isOpen()).to.be.false;
+    square.open();
+    expect(square.isOpen()).to.be.true;
   });
 
   it("#isFlagged returns whether or not the square is flagged", function(){
-    expect(square.isFlagged()).to.equal(true);
-    square.unflag();
-    expect(square.isFlagged()).to.equal(false);
+    expect(square.isFlagged()).to.be.false;
+    square.flag();
+    expect(square.isFlagged()).to.be.true;
   });
 
   it("#isMined returns whether or not the square is mined", function(){
-    expect(square.isMined()).to.equal(true);
-    square.state.unset(square.state.F_MINED);
-    expect(square.isMined()).to.equal(false);
+    expect(square.isMined()).to.be.false;
+    square.state.set(square.state.F_MINED);
+    expect(square.isMined()).to.be.true;
   });
 
   it("#isIndexed returns whether or not the square has a danger index", function(){
-    expect(square.isIndexed()).to.equal(true);
-    square.state.unset(square.state.F_INDEXED);
-    expect(square.isIndexed()).to.equal(false);
+    expect(square.isIndexed()).to.be.false;
+    square.state.set(square.state.F_INDEXED);
+    expect(square.isIndexed()).to.be.true;
   });
 
   it("#toJSON returns a JSON representation of the square's state", function(){
-    var obj = { row: ROW, cell: CELL, state: { _flags: square.state.DEFAULT_STATE }, danger: 1 },
+    var obj = { row: ROW, cell: CELL, state: { _flags: square.state.DEFAULT_STATE }, danger: DANGER },
         JSON_STRING = JSON.stringify(obj);
     expect(JSON.stringify(square.toJSON())).to.equal(JSON_STRING);
   });

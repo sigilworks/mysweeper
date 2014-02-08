@@ -1,8 +1,8 @@
 var Multimap = require('./multimap'),
     DangerCalculator = require('./danger-calculator'),
     Square = require('./square'),
-    Serializer = require('./serializer')
- ,   $C = require('./constants');
+    Serializer = require('./serializer'),
+    $C = require('./constants');
 
 // wrapper around `$log`, to toggle dev mode debugging
 var $log = function $log() { if ($log.debug_mode || false) console.log.apply(console, arguments); }
@@ -135,7 +135,9 @@ Gameboard.prototype = {
             $cell.removeClass('closed').addClass('flagged');
 
         } else if (square.isFlagged()) {
+            $log("Should be unflagging...")
             square.close();
+            square.unflag();
             $cell.removeClass('flagged').addClass('closed');
         }
 
@@ -188,8 +190,8 @@ Gameboard.prototype = {
     _renderSquare: function(square) {
         var $cell = this.getGridCell(square),
             getContents = function(sq) {
+                if (sq.isFlagged()) return $C.Unicode.FLAG;
                 if (sq.isMined()) return $C.Unicode.MINE;
-                if (sq.isFlagged()) return  $C.Unicode.FLAG;
                 return sq.getDanger() !== 0 ? sq.getDanger() : '';
             },
             $dangerSpan = $('<span />', { 'class': 'danger', html: getContents(square) });
