@@ -45,7 +45,7 @@ Countdown.prototype = {
                         _this.seconds--;
                     } else {
                         clearInterval(timer);
-                        _this.setDisplay(0, 0);
+                        _this._setDisplay(0, 0);
                     }
                 } else
                     clearInterval(timer);
