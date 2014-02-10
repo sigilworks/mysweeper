@@ -16,6 +16,8 @@ h1.banner > span                        { font-weight: bold; }
 #options-card                           { display: block; width: 50%; margin-top: 7%; text-align: center; }
 #options-card .container                { width: 45%; display: inline-block; float: left; }
 
+[name='mode-select']                    { height: 30px; width: 30px; }
+
 #preset-container                       { text-align: right; }
 
 #preset-container ol                    { list-style: none; padding-left: 0; }
@@ -52,7 +54,7 @@ label[for='custom-mode']                { margin-left: -35px; }
 #mine-count                             { margin-right: 10px; }
 
 .advice                                 { color: #AAA; }
-.or                                     { font-style: italic; color: #777; font-weight: bold; margin-right: -60px; margin-left: 10px; }
+
 .disabled                               { opacity: 0.25; }
 
 #submit                                 { padding: 7px 20px; font-size: 14px; font-weight: bold; color: #333; word-spacing: 4px; }

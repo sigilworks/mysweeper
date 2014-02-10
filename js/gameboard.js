@@ -3,7 +3,8 @@ var Multimap = require('./multimap'),
     Square = require('./square'),
     Serializer = require('./serializer'),
     $C = require('./constants'),
-    DEFAULT_GAME_OPTIONS = require('./constants').DefaultConfig;
+    DEFAULT_GAME_OPTIONS = require('./constants').DefaultConfig,
+    Countdown = require('./countdown');
 
 // wrapper around `$log`, to toggle dev mode debugging
 var $log = function $log() { if ($log.debug_mode || false) console.log.apply(console, arguments); }
@@ -26,6 +27,10 @@ function Gameboard(options) {
     this.userMoves = 0;
     // the object that calculates the number of surrounding mines at any square
     this.dangerCalc = new DangerCalculator(this);
+    // add in the countdown clock...
+    this.clock = new Countdown(+options.timer || DEFAULT_GAME_OPTIONS.timer, '#countdown');
+    this.clock.start();
+
     // create the board in memory and assign values to the squares
     this._loadBoard();
     // render the HTML to match the board in memory
