@@ -141,6 +141,7 @@ Gameboard.prototype = {
 
         return false;
     },
+    // handles autoclearing of spaces around the one clicked
     _recursiveReveal: function(source) {
         // based on `source` square, walk and recursively reveal connected spaces
         var directions = Object.keys(this.dangerCalc.neighborhood),
@@ -167,27 +168,37 @@ Gameboard.prototype = {
                 .html(msg)
                 .show();
     },
+    _prepareFinalReveal: function() {
+        var _this = this;
+        this.getSquares()
+            .filter(function(sq) { return sq.isFlagged(); })
+            .forEach(function(f) {
+                _this.getGridCell(f).find('.danger').html(f.getDanger());
+                f.unflag();
+                _this._renderSquare(f);
+            });
+    },
     _gameWin: function () {
-        this._removeEventListeners();
+        this._prepareFinalReveal();
+
         this.$el.addClass('game-win');
         this.$el
             .find('.square')
             .removeClass('closed flagged')
             .addClass('open');
+
+        this._removeEventListeners();
+
         // TODO: replace with real message
         $log("---  GAME WIN!  ---");
         $log("User moves: %o", this.userMoves)
         this._flashMsg('You Win!');
     },
     _gameOver: function() {
-        // reset everything
-        var _this = this;
-        this.getSquares()
-            .filter(function(sq) { return sq.isFlagged(); })
-            .forEach(function(f) { _this.getGridCell(f).find('.danger').html(f.getDanger()); });
+        this._prepareFinalReveal();
 
+        this.$el.addClass('game-over');
         // open/reveal all squares
-        $log("this.$el: %o", this.$el)
         this.$el
             .find('.square')
             .removeClass('closed flagged')
