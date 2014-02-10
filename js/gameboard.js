@@ -193,7 +193,7 @@ Gameboard.prototype = {
             .addClass('open');
 
         this._removeEventListeners();
-
+        this.clock.stop();
         // TODO: replace with real message
         $log("---  GAME WIN!  ---");
         $log("User moves: %o", this.userMoves)
@@ -210,7 +210,7 @@ Gameboard.prototype = {
             .addClass('open');
 
         this._removeEventListeners();
-
+        this.clock.stop();
         // put up 'Game Over' banner
         $log('---  GAME OVER!  ---');
         this._flashMsg('Game Over!', true);
