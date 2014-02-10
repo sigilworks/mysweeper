@@ -115,11 +115,10 @@ Gameboard.prototype = {
         if (square.isClosed() && !square.isMined() && !square.isFlagged()) {
             square.open();
             $cell.removeClass('closed').addClass('open');
-            this._recursiveReveal(square);
+            if (!square.getDanger() > 0)
+                this._recursiveReveal(square);
 
-        } else if (square.isFlagged())
-            $log("handle flagged situation...")
-            // TODO: remove this?
+        } else if (square.isFlagged()) {} // no-op right now
 
         else if (square.isMined())
             return this._gameOver();
@@ -162,6 +161,7 @@ Gameboard.prototype = {
             if (neighbor && !neighbor.isMined() && !neighbor.isFlagged() && neighbor.isClosed()) {
                 neighbor.open();
                 _this.getGridCell(neighbor).removeClass('closed').addClass('open');
+
                 if (!neighbor.getDanger() || !neighbor.getDanger() > 0)
                     _this._recursiveReveal(neighbor);
             }
