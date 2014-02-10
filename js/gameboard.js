@@ -193,6 +193,7 @@ Gameboard.prototype = {
             .addClass('open');
 
         this._removeEventListeners();
+        $log("stopping clock...", this.clock)
         this.clock.stop();
         // TODO: replace with real message
         $log("---  GAME WIN!  ---");
@@ -210,6 +211,7 @@ Gameboard.prototype = {
             .addClass('open');
 
         this._removeEventListeners();
+        $log("stopping clock...", this.clock)
         this.clock.stop();
         // put up 'Game Over' banner
         $log('---  GAME OVER!  ---');
