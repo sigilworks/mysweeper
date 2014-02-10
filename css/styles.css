@@ -1,5 +1,5 @@
 
-body                                    { font-family: Arial /*'Droid Sans'*/; font-size: 14px; color: #333; background: #F8F8F8; }
+body                                    { font-family: 'Droid Sans Regular'; font-size: 14px; color: #333; background: #F8F8F8; }
 section                                 {}
 
 section.card                            { padding: 10px 15px; margin: 0 auto; }
@@ -108,3 +108,21 @@ label[for='custom-mode']                { margin-left: -35px; }
                                                url('../fonts/raphaelicons-webfont.ttf') format('truetype'),
                                                url('../fonts/raphaelicons-webfont.svg') format('svg');
                                           font-weight: normal; font-style: normal; }
+
+/* for Droid Sans embedding */
+@font-face                             { font-family: 'Droid Sans Regular'; src: url('../fonts/DroidSans-webfont.eot');
+                                         src: local('☺'),
+                                              url('../fonts/DroidSans-webfont.eot?#iefix') format('embedded-opentype'),
+                                              url('../fonts/DroidSans-webfont.woff') format('woff'),
+                                              url('../fonts/DroidSans-webfont.ttf') format('truetype'),
+                                              url('../fonts/DroidSans-webfont.svg#droid_sansregular') format('svg');
+                                         font-weight: normal; font-style: normal; }
+
+@font-face                            { font-family: 'Droid Sans Bold'; src: url('../fonts/DroidSans-Bold-webfont.eot');
+                                        src: local('☺'),
+                                            url('../fonts/DroidSans-Bold-webfont.eot?#iefix') format('embedded-opentype'),
+                                            url('../fonts/DroidSans-Bold-webfont.woff') format('woff'),
+                                            url('../fonts/DroidSans-Bold-webfont.ttf') format('truetype'),
+                                            url('../fonts/DroidSans-Bold-webfont.svg#droid_sansbold') format('svg');
+                                        font-weight: normal; font-style: normal; }
+
