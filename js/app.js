@@ -58,7 +58,7 @@ $(function(){
             gameOptions.mines = $("#mine-count").val();
         }
 
-        $("#mines-display".find("span").html(gameOptions.dimensions);
+        $("#mines-display".find("span").html(gameOptions.mines);
 
         window.gameboard = new Gameboard(gameOptions).render();
 
