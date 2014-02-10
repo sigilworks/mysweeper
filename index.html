@@ -20,9 +20,24 @@
           <li>
             <p><strong>Select a difficulty level:</strong></p>
             <ol>
-              <li><label for="level-beginner"><input type="radio" id="level-beginner" name="preset-level" value="B" />Beginner</label></li>
-              <li><label for="level-intermediate"><input type="radio" id="level-intermediate" name="preset-level" value="I" checked />Intermediate</label></li>
-              <li><label for="level-expert"><input type="radio" id="level-advanced" name="preset-level" value="E" />Expert</label></li>
+              <li>
+                <label for="level-beginner">
+                  <input type="radio" id="level-beginner" name="preset-level" value="B" />
+                  Beginner <span class="advice"></span>
+                </label>
+              </li>
+              <li>
+                <label for="level-intermediate">
+                  <input type="radio" id="level-intermediate" name="preset-level" value="I" checked />
+                  Intermediate <span class="advice"></span>
+                </label>
+              </li>
+              <li>
+                <label for="level-expert">
+                  <input type="radio" id="level-expert" name="preset-level" value="E" />
+                  Expert <span class="advice"></span>
+                </label>
+              </li>
             </ol>
           </li>
 
@@ -40,18 +55,12 @@
             <strong> x </strong>
             <input type="text" id="dimensions-mirror" placeholder="9" disabled />
             <span class="advice">Please do not exceed 25 x 25.</span>
-
-            <output for="dimensions-range">--</output>
-            <input type="range" id="dimensions-range" name="dimensions-range" min="3" max="25" step="1" value="9" />
           </li>
 
           <li>
             <p><strong>How many mines? </strong></p>
             <input id="mine-count" name="mine-count" placeholder="1" />
             <span class="advice">Max. mines possible: <span></span></span>
-
-            <output for="mines-range">--</output>
-            <input type="range" id="mines-range" name="mines-range" min="1" step="1" value="1" />
           </li>
         </ul>
       </div>
@@ -62,6 +71,15 @@
   </section>
 
   <section id="board-card" class="card">
+    <header>
+      <span id="mines-display">Mines: <span class="minecounter">0</span></span>
+      <h1 class="banner"><span>my</span>sweeper</h1>
+      <span id="countdown">
+        <span id="h1" class="timer hours">0</span><span id="h2" class="timer hours">0</span><span class="colon">:</span>
+        <span id="m1" class="timer minutes">0</span><span id="m2" class="timer minutes">0</span><span class="colon">:</span>
+        <span id="s1" class="timer seconds">0</span><span id="s2" class="timer seconds">0</span>
+      </span>
+    </header>
     <div id="flash"></div>
     <table id="board"></table>
   </section>

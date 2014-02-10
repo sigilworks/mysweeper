@@ -1,8 +1,8 @@
 
-body                    { font-family: 'Droid Sans'; font-size: 14px; color: #333; background: #F8F8F8; }
-section                 {}
+body                                    { font-family: 'Droid Sans'; font-size: 14px; color: #333; background: #F8F8F8; }
+section                                 {}
 
-section.card            { padding: 10px 15px; margin: 0 auto; }
+section.card                            { padding: 10px 15px; margin: 0 auto; }
 
 /* clears <input> placeholder text on focus in Chrome and FF... */
 input:focus::-webkit-input-placeholder  { color: transparent; }
@@ -10,92 +10,98 @@ input:focus::-webkit-input-placeholder  { color: transparent!important; }
 input:focus::-moz-placeholder           { color: transparent!important; }
 input:focus:-moz-placeholder            { color: transparent!important; }
 
-input[type='range']     { width: 350px; }
-output                  { display: block; margin: 0 auto; text-align: center; }
+h1.banner                               { display: inline; font-weight: normal; font-size: 40px; color: #777; letter-spacing: -1px; }
 
-#options-card           { display: block; width: 50%; margin-top: 7%; text-align: center; }
-#options-card .container{ width: 45%; display: inline-block; float: left; }
+#options-card                           { display: block; width: 50%; margin-top: 7%; text-align: center; }
+#options-card .container                { width: 45%; display: inline-block; float: left; }
 
-#preset-container       { text-align: right; }
+#preset-container                       { text-align: right; }
 
-#preset-container ol    { list-style: none; padding-left: 0; }
-#options-card ol > li   { margin: 15px 0 0 15px; }
+#preset-container ol                    { list-style: none; padding-left: 0; }
+#options-card ol > li                   { margin: 15px 0 0 15px; }
 
-#options-card ul        { list-style: none; text-align: left; }
-#options-card ul > li   { line-height: 35px; margin-top: 50px; }
+#options-card ul                        { list-style: none; text-align: left; }
+#options-card ul > li                   { line-height: 35px; margin-top: 50px; }
 
-#options-card label     {}
-label[for='custom-mode']{ margin-left: -35px; }
+.preset label                           { width: 250px; display: inline-block; }
+.preset label .advice                   { margin-left: 15px; float: right; }
 
-#options-card input     {}
-#options-card input[type='radio'] { vertical-align: middle; margin: 0 5px 2px 0; }
+#options-card label                     {}
+label[for='custom-mode']                { margin-left: -35px; }
+
+#options-card input                     {}
+#options-card input[type='radio']       { vertical-align: middle; margin: 0 5px 2px 0; }
 
 #options-card .preset,
-#options-card .custom   { width: 100%; display: inline-block; }
+#options-card .custom                   { width: 100%; display: inline-block; }
 
-#options-card .preset   { border-right: 1px dotted #CCC; }
-#options-card .custom   { padding-left: 150px; }
+#options-card .preset                   { border-right: 1px dotted #CCC; }
+#options-card .custom                   { padding-left: 150px; }
 
 #dimensions,
 #dimensions-mirror,
-#mine-count             { width: 50px; padding: 3px 5px; }
+#mine-count                             { width: 50px; padding: 3px 5px; }
 
-#dimensions             { margin-right: 10px; }
-#dimensions-mirror      { margin-left: 10px; border: none; background: none; }
+#dimensions                             { margin-right: 10px; }
+#dimensions-mirror                      { margin-left: 10px; border: none; background: none; }
 
 #dimensions,
-#mine-count             { border: 2px solid #DDD; color: #333; text-align: center; }
+#mine-count                             { border: 2px solid #DDD; color: #333; text-align: center; }
 
-#mine-count             { margin-right: 10px; }
+#mine-count                             { margin-right: 10px; }
 
-.advice                 { color: #777; }
-.or                     { font-style: italic; color: #777; font-weight: bold; margin-right: -60px; margin-left: 10px; }
-.disabled               { opacity: 0.25; }
+.advice                                 { color: #AAA; }
+.or                                     { font-style: italic; color: #777; font-weight: bold; margin-right: -60px; margin-left: 10px; }
+.disabled                               { opacity: 0.25; }
 
-#submit                 { padding: 7px 20px; font-size: 14px; font-weight: bold; color: #333; word-spacing: 4px; }
+#submit                                 { padding: 7px 20px; font-size: 14px; font-weight: bold; color: #333; word-spacing: 4px; }
 
-#board-card             { display: none; margin: 25px auto; text-align: center; }
+#board-card                             { display: none; margin: 25px auto; text-align: center; }
 
-#flash                  { display: none; margin: 0 auto; text-align: center; position: fixed; z-index: 1000; background: #800; padding: 10px 25px;
-                          box-shadow: 1px 3px 10px #555; font-size: 36px; font-weight: bold; letter-spacing: 3px; color: #F0F0F0; top: 0; left: 0; width: 100%; }
+#flash                                  { display: none; margin: 0 auto 10px; text-align: center; padding: 10px 25px; text-shadow: 1px 2px 12px #333;
+                                          box-shadow: 1px 3px 10px #555; font-size: 36px; font-weight: bold; letter-spacing: 3px; color: #F0F0F0;
+                                          top: 35%; left: 0; position: absolute; width: 100%; }
+#flash.game-over                        { background: rgba(136,0,0, 0.75); border: none; box-shadow: none; }
+#flash.game-win                         { background: rgba(0,150,0, 0.75); border: none; box-shadow: none; }
 
-#board                  { display: inline-block; }
+#board-card > header                    { position: relative; top: -35px; width: 100%; height: 45px; margin: 0 auto; line-height: 45px;
+                                          border-bottom: 1px solid #DDD; padding-bottom: 5px; }
 
-.square                 { background: #F0F0F0; border: 3px solid #555; padding: 7px; height: 50px; width: 50px; }
-.square .danger         { display: block; color: #777; font-weight: bold; font-size: 20px; margin-top: 50%; }
+#mines-display                          { width: 25%; display: inline-block; float: left; }
+#countdown                              { width: 30%; display: inline-block; float: right; }
+
+.minecounter,
+.timer                                  { background: #555; color: #FFF; text-align: center; display: inline-block; line-height: normal; padding: 5px; margin: 1px; }
+.colon                                  { text-align: center; font-weight: bold; display: inline-block; width: 7px; }
 
 
-.closed                 { background: #555; }
+#board                                  { display: inline-block; }
+
+.square                                 { background: #F0F0F0; border: 3px solid #555; padding: 7px; height: 50px; width: 50px; }
+.square .danger                         { display: block; color: #777; font-weight: bold; font-size: 20px; margin-top: 50%; }
+
+
+.closed                                 { background: #555; }
 
 .closed .danger,
-.mined .danger          { display: none; }
+.mined .danger                          { display: none; }
 
-.open                   { border: 3px solid rgba(51, 51, 51, 0.50); }
+.open                                   { border: 3px solid rgba(51, 51, 51, 0.50); }
 
-.flagged                { background: #FFE68C; }
-.flagged .danger        { display: block; color: #333; font-size: 40px; margin-top: 0px; text-shadow: 1px 1px 2px rgba(0,0,0,0.45); font-family: 'RaphaelIcons'; }
+.flagged                                { background: #FFE68C; }
+.flagged .danger                        { display: block; color: #333; font-size: 40px; margin-top: 0px; text-shadow: 1px 1px 2px rgba(0,0,0, 0.45); font-family: 'RaphaelIcons'; }
 
-.mined.closed           { background: #555; }
-.mined.open             { background: #800; }
-.mined.open .danger     { display: block; color: #FFF; font-size: 48px; text-shadow: 1px 1px 15px #F00; font-family: 'RaphaelIcons'; font-weight: normal; margin-top: 0; }
+.mined.closed                           { background: #555; }
+.mined.open                             { background: #800; }
+.mined.open .danger                     { display: block; color: #FFF; font-size: 48px; text-shadow: 1px 1px 15px #F00; font-family: 'RaphaelIcons'; font-weight: normal; margin-top: 0; }
 
-.game-win               { box-shadow: 1px 2px 45px rgba(0, 150, 0, 0.75); border: 3px solid rgb(0, 150, 0); }
-.game-over              { box-shadow: 1px 2px 45px #DC0000; border: 3px solid #800; }
+.game-win                               { box-shadow: 1px 2px 45px rgba(0, 150, 0, 0.75); border: 3px solid rgb(0, 150, 0); }
+.game-over                              { box-shadow: 1px 2px 45px #DC0000; border: 3px solid #800; }
 
 /* for Raphael icons */
-@font-face              { font-family: 'RaphaelIcons'; src: url('../fonts/raphaelicons-webfont.eot');
-                          src: local('☺'),
-                               url('../fonts/raphaelicons-webfont.woff') format('woff'),
-                               url('../fonts/raphaelicons-webfont.ttf') format('truetype'),
-                               url('../fonts/raphaelicons-webfont.svg') format('svg');
-                          font-weight: normal; font-style: normal; }
-
-.group:before,
-.group:after            { content: "."; display: block; clear: both; visibility: hidden;
-                          line-height: 0; height: 0; }
-.group                  { display: inline-block; }
-.group:after            { clear: both; }
-.group                  { zoom: 1; } /* IE < 8 */
-
-html[xmlns] .group      { display: block; }
-* html .group           { height: 1%; }
+@font-face                              { font-family: 'RaphaelIcons'; src: url('../fonts/raphaelicons-webfont.eot');
+                                          src: local('☺'),
+                                               url('../fonts/raphaelicons-webfont.woff') format('woff'),
+                                               url('../fonts/raphaelicons-webfont.ttf') format('truetype'),
+                                               url('../fonts/raphaelicons-webfont.svg') format('svg');
+                                          font-weight: normal; font-style: normal; }

@@ -20,6 +20,14 @@ $(function(){
     $("#preset-mode").on('click', function() { enableOption($("ul.preset")); disableOption($("ul.custom")); }).click();
     $("#custom-mode").on('click', function() { enableOption($("ul.custom")); disableOption($("ul.preset")); });
 
+    $.each($("label[for=level-beginner],label[for=level-intermediate],label[for=level-expert]"), function(_, label) {
+        var level = $(label).attr('for').substring('level-'.length).toUpperCase(),
+            dims = PresetSetups[level].dimensions,
+            mines = PresetSetups[level].mines,
+            $advice = $(label).find('.advice');
+        $advice.html(" (" + dims + " x " + dims + ", " + mines + " mines)");
+    });
+
     // onkeyup when choosing gameboard dimensions,
     // neighboring input should mirror new value,
     // and total possible mineable squares (dimensions ^ 2 -1)
@@ -31,22 +39,6 @@ $(function(){
         // ...and the possible number of mines.
         $possibleMines.html(mineableSpaces($this.val()) + '.');
     });
-
-    $("output[for=dimensions-range]").html($("#dimensions-range").val() + ' x ' + $("#dimensions-range").val());
-    $("#dimensions-range").on("change", function() {
-        var val = $(this).val();
-        $("output[for=dimensions-range]").html(val + ' x ' + val);
-
-        var oldmax = +$("#mines-range").prop('max') || 1,
-            oldval = +$("#mines-range").val(),
-            ratio = oldval / oldmax;
-
-        $("#mines-range").prop('max', mineableSpaces(val));
-        $("#mines-range").val(~~($("#mines-range").prop('max') * ratio)).change();
-    });
-
-    $("output[for=mines-range]").html($("#mines-range").val());
-    $("#mines-range").on("change", function() { $("output[for=mines-range]").html($(this).val()); });
 
     $("form").on("submit", function() {
 
@@ -65,6 +57,8 @@ $(function(){
             gameOptions.dimensions = $("#dimensions").val();
             gameOptions.mines = $("#mine-count").val();
         }
+
+        $("#mines-display".find("span").html(gameOptions.dimensions);
 
         window.gameboard = new Gameboard(gameOptions).render();
 

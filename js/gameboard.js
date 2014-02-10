@@ -2,7 +2,8 @@ var Multimap = require('./multimap'),
     DangerCalculator = require('./danger-calculator'),
     Square = require('./square'),
     Serializer = require('./serializer'),
-    $C = require('./constants');
+    $C = require('./constants'),
+    DEFAULT_GAME_OPTIONS = require('./constants').DefaultConfig;
 
 // wrapper around `$log`, to toggle dev mode debugging
 var $log = function $log() { if ($log.debug_mode || false) console.log.apply(console, arguments); }
@@ -11,13 +12,13 @@ function Gameboard(options) {
     // the map, serving as the internal represenation of the gameboard
     this.board = new Multimap;
     // the dimensions of the board when rendered
-    this.dimensions = +options.dimensions || $C.DefaultConfig.dimensions;
+    this.dimensions = +options.dimensions || DEFAULT_GAME_OPTIONS.dimensions;
     // the number of mines the user has selected
-    this.mines = +options.mines || $C.DefaultConfig.mines;
+    this.mines = +options.mines || DEFAULT_GAME_OPTIONS.mines;
     // the DOM element of the table serving as the board
-    this.$el = $(options.board || $C.DefaultConfig.board);
+    this.$el = $(options.board || DEFAULT_GAME_OPTIONS.board);
     // selectively enable debug mode for console visualizations and notifications
-    this.debug_mode = options.debug_mode || $C.DefaultConfig.debug_mode;
+    this.debug_mode = options.debug_mode || DEFAULT_GAME_OPTIONS.debug_mode;
     $log.debug_mode = this.debug_mode;
     // container for flash messages, such as win/loss of game
     this.flashContainer = $($C.MessageOverlay);
@@ -127,15 +128,12 @@ Gameboard.prototype = {
             square = $cell.data('square');
 
         this.userMoves++;
-        // TODO: fix right-clicks
-        $log("$cell: %o, square: %o", $cell, square)
-        if (square.isClosed()) {
+
+        if (square.isClosed() && !square.isFlagged()) {
             square.flag();
             this._renderSquare(square);
             $cell.removeClass('closed').addClass('flagged');
-
         } else if (square.isFlagged()) {
-            $log("Should be unflagging...")
             square.close();
             square.unflag();
             $cell.removeClass('flagged').addClass('closed');
@@ -163,10 +161,19 @@ Gameboard.prototype = {
             }
         });
     },
-    _flashMsg: function(msg) { this.flashContainer.html(msg).show(); },
+    _flashMsg: function(msg, isAlert) {
+        this.flashContainer
+                .addClass(isAlert ? 'game-over' : 'game-win')
+                .html(msg)
+                .show();
+    },
     _gameWin: function () {
         this._removeEventListeners();
         this.$el.addClass('game-win');
+        this.$el
+            .find('.square')
+            .removeClass('closed flagged')
+            .addClass('open');
         // TODO: replace with real message
         $log("---  GAME WIN!  ---");
         $log("User moves: %o", this.userMoves)
@@ -178,14 +185,19 @@ Gameboard.prototype = {
         this.getSquares()
             .filter(function(sq) { return sq.isFlagged(); })
             .forEach(function(f) { _this.getGridCell(f).find('.danger').html(f.getDanger()); });
+
         // open/reveal all squares
-        // put up 'Game Over' banner
-        this.$el.find('.mined').addClass('open');
-        this.$el.find('.closed, .flagged').removeClass('closed flagged').addClass('open');
+        $log("this.$el: %o", this.$el)
+        this.$el
+            .find('.square')
+            .removeClass('closed flagged')
+            .addClass('open');
+
         this._removeEventListeners();
-        // TODO: replace with real message
+
+        // put up 'Game Over' banner
         $log('---  GAME OVER!  ---');
-        this._flashMsg('Game Over!');
+        this._flashMsg('Game Over!', true);
     },
     _renderSquare: function(square) {
         var $cell = this.getGridCell(square),
