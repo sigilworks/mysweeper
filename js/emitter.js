@@ -19,4 +19,4 @@ Emitter.prototype = {
     }
 };
 
-exports.Emitter = Emitter;
+module.exports = Emitter;

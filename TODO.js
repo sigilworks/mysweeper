@@ -5,3 +5,4 @@
  - Use events transcript to replay?
  - set up score clock
  - way to re-start game after win/loss
+ - Easter eggs: "hinting" for mine locations on key combo

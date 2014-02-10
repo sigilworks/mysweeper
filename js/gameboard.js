@@ -4,12 +4,17 @@ var Multimap = require('./multimap'),
     Serializer = require('./serializer'),
     $C = require('./constants'),
     DEFAULT_GAME_OPTIONS = require('./constants').DefaultConfig,
-    Countdown = require('./countdown');
+    Countdown = require('./countdown'),
+    Emitter = require('./emitter'),
+    $U = require('util');
 
 // wrapper around `$log`, to toggle dev mode debugging
 var $log = function $log() { if ($log.debug_mode || false) console.log.apply(console, arguments); }
 
 function Gameboard(options) {
+    // call the Emitter constructor here...
+    Emitter.call(this);
+
     // the map, serving as the internal represenation of the gameboard
     this.board = new Multimap;
     // the dimensions of the board when rendered
@@ -36,6 +41,7 @@ function Gameboard(options) {
     // render the HTML to match the board in memory
     this._renderGrid();
 }
+
 
 Gameboard.prototype = {
 
@@ -274,5 +280,8 @@ Gameboard.prototype = {
             }, '\n');
     }
 };
+
+// mixin the Emitter object's methods into the Gameboard
+$U._extend(Gameboard.prototype, Emitter.prototype);
 
 module.exports = Gameboard;
