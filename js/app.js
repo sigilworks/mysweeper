@@ -2,6 +2,7 @@ var Gameboard = require('./gameboard'),
     Modes = require('./constants').Modes,
     PresetLevels = require('./constants').PresetLevels,
     PresetSetups = require('./constants').PresetSetups,
+    VERSION = require('./constants').Version,
 
     mineableSpaces = function(dim) { return ~~(Math.pow(dim, 2) * 0.5); },
     disableOption = function($el, undo) {
@@ -58,7 +59,9 @@ $(function(){
             gameOptions.mines = $("#mine-count").val();
         }
 
-        $("#mines-display".find("span").html(gameOptions.mines);
+        // set up <header> content...
+        $("#mines-display").find("span").html(gameOptions.mines);
+        $(".version").html(VERSION);
 
         window.gameboard = new Gameboard(gameOptions).render();
 

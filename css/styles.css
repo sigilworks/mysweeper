@@ -1,5 +1,5 @@
 
-body                                    { font-family: 'Droid Sans'; font-size: 14px; color: #333; background: #F8F8F8; }
+body                                    { font-family: Arial /*'Droid Sans'*/; font-size: 14px; color: #333; background: #F8F8F8; }
 section                                 {}
 
 section.card                            { padding: 10px 15px; margin: 0 auto; }
@@ -10,7 +10,8 @@ input:focus::-webkit-input-placeholder  { color: transparent!important; }
 input:focus::-moz-placeholder           { color: transparent!important; }
 input:focus:-moz-placeholder            { color: transparent!important; }
 
-h1.banner                               { display: inline; font-weight: normal; font-size: 40px; color: #777; letter-spacing: -1px; }
+h1.banner                               { display: inline; font-weight: normal; font-size: 28px; color: #777; letter-spacing: -1px; }
+h1.banner > span                        { font-weight: bold; }
 
 #options-card                           { display: block; width: 50%; margin-top: 7%; text-align: center; }
 #options-card .container                { width: 45%; display: inline-block; float: left; }
@@ -73,6 +74,8 @@ label[for='custom-mode']                { margin-left: -35px; }
 .minecounter,
 .timer                                  { background: #555; color: #FFF; text-align: center; display: inline-block; line-height: normal; padding: 5px; margin: 1px; }
 .colon                                  { text-align: center; font-weight: bold; display: inline-block; width: 7px; }
+
+.version                                { font-weight: bold; color: #800; margin-left: 7px; }
 
 
 #board                                  { display: inline-block; }

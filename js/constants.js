@@ -1,5 +1,6 @@
 
 var Constants = {
+	Version: 'beta1',
 
 	DefaultConfig: { dimensions: 9, mines: 1, board: "#board", debug_mode: true /*false*/ },
 
