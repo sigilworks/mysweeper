@@ -8,7 +8,9 @@
  - way to re-start game after win/loss
  - Easter eggs: "hinting" for mine locations on key combo
  - Autosize squares based on browser display:
+ 	```
     // (0.95 * $(window).height() + 66) / this.dimensions
     // $('.square').css({ height: newDim, width: newDim });
- - emergency escape hatch - close tab w/o ending game first, saved to LocalStorage, rehydrates on return
+    ```
+ - emergency escape and restore - close tab w/o ending game first, saved to LocalStorage, rehydrates on return
  - light/dark themes

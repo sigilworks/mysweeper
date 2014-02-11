@@ -6,7 +6,7 @@ var Serializer = {
                 timestamp: +new Date,
                 score: null,
                 clock: null,
-                transcript: []
+                transcripts: gameboard.emitter._transcripts || []
             },
             options: {
                 board: gameboard.$el.selector,

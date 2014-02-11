@@ -5,7 +5,7 @@ var Multimap = require('./multimap'),
     $C = require('./constants'),
     DEFAULT_GAME_OPTIONS = require('./constants').DefaultConfig,
     Countdown = require('./countdown'),
-    Emitter = require('./emitter'),
+    TranscribingEmitter = require('./transcribing-emitter'),
     $U = require('util'),
     LinearCongruentialGenerator = require('./lcgenerator');
 
@@ -13,9 +13,6 @@ var Multimap = require('./multimap'),
 var $log = function $log() { if ($log.debug_mode || false) console.log.apply(console, arguments); }
 
 function Gameboard(options) {
-    // call the Emitter constructor here...
-    Emitter.call(this);
-
     // the map, serving as the internal represenation of the gameboard
     this.board = new Multimap;
     // the dimensions of the board when rendered
@@ -24,6 +21,8 @@ function Gameboard(options) {
     this.mines = +options.mines || DEFAULT_GAME_OPTIONS.mines;
     // the DOM element of the table serving as the board
     this.$el = $(options.board || DEFAULT_GAME_OPTIONS.board);
+    // the event transcriber for playback and persistence
+    this.emitter = new TranscribingEmitter;
     // selectively enable debug mode for console visualizations and notifications
     this.debug_mode = options.debug_mode || DEFAULT_GAME_OPTIONS.debug_mode;
     $log.debug_mode = this.debug_mode;
@@ -98,20 +97,6 @@ Gameboard.prototype = {
             click: this._handleClick.bind(this),
             contextmenu: this._handleRightClick.bind(this)
         }, 'td, td > span');
-
-        var _this = this;
-        this.on('click', function() {
-            _this.transcript || (_this.transcript = []);
-            var args = [].slice.call(arguments,0);
-            args.unshift(+new Date);
-            _this.transcript.push(args);
-        });
-        this.on('contextmenu', function() {
-            _this.transcript || (_this.transcript = []);
-            var args = [].slice.call(arguments,0);
-            args.unshift(+new Date);
-            _this.transcript.push(args);
-        });
     },
     _removeEventListeners: function() {
         this.$el.off();
@@ -129,8 +114,6 @@ Gameboard.prototype = {
         var $target = $(event.target),
             $cell = $target.prop('tagName').toLowerCase() === 'span' ? $target.parent() : $target,
             square = $cell.data('square');
-
-        this.trigger('click', event, $cell[0], square);
 
         // TODO: also handle first-click-can't-be-mine (if we're following that rule)
         // here, if userMoves === 0... :message => :mulligan?
@@ -154,8 +137,6 @@ Gameboard.prototype = {
         var $target = $(event.target),
             $cell = $target.prop('tagName').toLowerCase() === 'span' ? $target.parent() : $target,
             square = $cell.data('square');
-
-        this.trigger('contextmenu', event, $cell[0], square);
 
         this.userMoves++;
 
@@ -208,6 +189,8 @@ Gameboard.prototype = {
                 f.unflag();
                 _this._renderSquare(f);
             });
+        this._removeEventListeners();
+        this.clock.stop();
     },
     _gameWin: function () {
         this._prepareFinalReveal();
@@ -218,10 +201,6 @@ Gameboard.prototype = {
             .removeClass('closed flagged')
             .addClass('open');
 
-        this._removeEventListeners();
-        $log("stopping clock...", this.clock)
-        this.clock.stop();
-        // TODO: replace with real message
         $log("---  GAME WIN!  ---");
         $log("User moves: %o", this.userMoves)
         this._flashMsg('<span>Game Over!</span><a href="#" class="replay">Click here to play again...</a>');
@@ -236,9 +215,6 @@ Gameboard.prototype = {
             .removeClass('closed flagged')
             .addClass('open');
 
-        this._removeEventListeners();
-        $log("stopping clock...", this.clock)
-        this.clock.stop();
         // put up 'Game Over' banner
         $log('---  GAME OVER!  ---');
         this._flashMsg('<span>Game Over!</span><a href="#" class="replay">Click here to play again...</a>', true);
@@ -300,8 +276,5 @@ Gameboard.prototype = {
             }, '\n');
     }
 };
-
-// mixin the Emitter object's methods into the Gameboard
-$U._extend(Gameboard.prototype, Emitter.prototype);
 
 module.exports = Gameboard;
