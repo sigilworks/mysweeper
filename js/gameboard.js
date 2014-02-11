@@ -6,7 +6,8 @@ var Multimap = require('./multimap'),
     DEFAULT_GAME_OPTIONS = require('./constants').DefaultConfig,
     Countdown = require('./countdown'),
     Emitter = require('./emitter'),
-    $U = require('util');
+    $U = require('util'),
+    LinearCongruentialGenerator = require('./lcgenerator');
 
 // wrapper around `$log`, to toggle dev mode debugging
 var $log = function $log() { if ($log.debug_mode || false) console.log.apply(console, arguments); }
@@ -77,8 +78,9 @@ Gameboard.prototype = {
         this._setupEventListeners();
     },
     _determineMineLocations: function(dimensions, mines) {
+        var rndGenerator = new LinearCongruentialGenerator;
         for (var i=0; i < mines; ++i) {
-            var rnd = Math.random() * (Math.pow(dimensions, 2)) | 0,
+            var rnd = /*Math.random()*/ rndGenerator.rand() * (Math.pow(dimensions, 2)) | 0,
                 row = ~~(rnd / dimensions),
                 cell = rnd % dimensions,
                 square = this.getSquareAt(row, cell);
