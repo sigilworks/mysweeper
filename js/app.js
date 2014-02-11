@@ -71,8 +71,10 @@ $(function(){
         return false;
     });
 
+    $("a.replay").on("click", function() {
+        // temporary, brute-force fix...
+        // TODO: reset form and toggle visibility on the sections...
+        window.location.reload();
+    });
+
 });
-// set width/height of .square:
-    // var newDim = ((0.95 * $(window).height()) + 66) / 20;
-    // $('.square').css({ height: newDim, width: newDim });
-// (0.95 * $(window).height() + 66) / this.dimensions
