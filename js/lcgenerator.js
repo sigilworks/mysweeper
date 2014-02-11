@@ -29,3 +29,4 @@ var LinearCongruentialGenerator = (function(){
   return LinearCongruentialGenerator;
 })();
 
+module.exports = LinearCongruentialGenerator;
