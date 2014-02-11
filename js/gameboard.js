@@ -98,6 +98,20 @@ Gameboard.prototype = {
             click: this._handleClick.bind(this),
             contextmenu: this._handleRightClick.bind(this)
         }, 'td, td > span');
+
+        var _this = this;
+        this.on('click', function() {
+            _this.transcript || (_this.transcript = []);
+            var args = [].slice.call(arguments,0);
+            args.unshift(+new Date);
+            _this.transcript.push(args);
+        });
+        this.on('contextmenu', function() {
+            _this.transcript || (_this.transcript = []);
+            var args = [].slice.call(arguments,0);
+            args.unshift(+new Date);
+            _this.transcript.push(args);
+        });
     },
     _removeEventListeners: function() {
         this.$el.off();
@@ -115,6 +129,8 @@ Gameboard.prototype = {
         var $target = $(event.target),
             $cell = $target.prop('tagName').toLowerCase() === 'span' ? $target.parent() : $target,
             square = $cell.data('square');
+
+        this.trigger('click', event, $cell[0], square);
 
         // TODO: also handle first-click-can't-be-mine (if we're following that rule)
         // here, if userMoves === 0... :message => :mulligan?
@@ -138,6 +154,8 @@ Gameboard.prototype = {
         var $target = $(event.target),
             $cell = $target.prop('tagName').toLowerCase() === 'span' ? $target.parent() : $target,
             square = $cell.data('square');
+
+        this.trigger('contextmenu', event, $cell[0], square);
 
         this.userMoves++;
 
