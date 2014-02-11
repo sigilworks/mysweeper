@@ -71,7 +71,7 @@ $(function(){
         return false;
     });
 
-    $("a.replay").on("click", function() {
+    $("#board-card").on("click", "a.replay", function() {
         // temporary, brute-force fix...
         // TODO: reset form and toggle visibility on the sections...
         window.location.reload();

@@ -206,7 +206,7 @@ Gameboard.prototype = {
         // TODO: replace with real message
         $log("---  GAME WIN!  ---");
         $log("User moves: %o", this.userMoves)
-        this._flashMsg(('<span>Game Over!</span><p><a href="#" class="replay">Click here to play again...</a></p>');
+        this._flashMsg('<span>Game Over!</span><a href="#" class="replay">Click here to play again...</a>');
     },
     _gameOver: function() {
         this._prepareFinalReveal();
@@ -223,7 +223,7 @@ Gameboard.prototype = {
         this.clock.stop();
         // put up 'Game Over' banner
         $log('---  GAME OVER!  ---');
-        this._flashMsg('<span>Game Over!</span><p><a href="#" class="replay">Click here to play again...</a></p>', true);
+        this._flashMsg('<span>Game Over!</span><a href="#" class="replay">Click here to play again...</a>', true);
     },
     _renderSquare: function(square) {
         var $cell = this.getGridCell(square),
