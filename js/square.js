@@ -14,6 +14,7 @@ function Square(row, cell, danger) {
 }
 
 Square.prototype = {
+    constructor: Square,
     getRow: function() { return this.row; },
     getCell: function() { return this.cell; },
     getDanger: function() { return this.danger; },

@@ -44,7 +44,7 @@ function Gameboard(options) {
 
 
 Gameboard.prototype = {
-
+    constructor: Gameboard,
     // "PRIVATE" METHODS:
     _loadBoard: function() {
         // prefill squares to required dimensions...

@@ -13,6 +13,7 @@ function Countdown(seconds, el) {
 }
 
 Countdown.prototype = {
+    constructor: Countdown,
     _renderInitial: function() {
         var arr = this._toMinsSecs(this.seconds);
         this._setDisplay(arr[0] || 0, arr[1] || 0);

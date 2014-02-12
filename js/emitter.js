@@ -4,6 +4,7 @@ function Emitter() {
 }
 
 Emitter.prototype = {
+    constructor: Emitter,
     on: function(event, fn) {
         this._events[event] = this._events[event] || [];
         this._events[event].push(fn);

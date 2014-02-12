@@ -16,6 +16,7 @@ var LinearCongruentialGenerator = (function(){
       this.setSeed();
   }
   LinearCongruentialGenerator.prototype = {
+    constructor: LinearCongruentialGenerator,
     setSeed: function(val) { this.z = this.seed = val || Math.round(Math.random() * this.m); },
     getSeed: function() { return this.seed; },
     rand: function() {

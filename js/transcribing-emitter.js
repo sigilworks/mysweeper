@@ -7,6 +7,7 @@ function TranscribingEmitter() {
 }
 
 TranscribingEmitter.prototype = Object.create(Emitter.prototype);
+TranscribingEmitter.prototype.constructor = TranscribingEmitter;
 
 TranscribingEmitter.prototype.__trigger__ = TranscribingEmitter.prototype.trigger;
 TranscribingEmitter.prototype.trigger = function(event /*, data... [varargs] */) {

@@ -4,6 +4,7 @@ function Multimap() {
 }
 
 Multimap.prototype = {
+    constructor: Multimap,
     get: function(row) { return this._table[row]; },
     set: function(row, val) { (this._table[row] || (this._table[row] = [])).push(val); },
     forEach: function(fn) { return [].forEach.call(this.values(), fn); },
