@@ -8,7 +8,7 @@ var Constants = {
 
 	Flags: 	{ OPEN: 'F_OPEN', MINED: 'F_MINED', FLAGGED: 'F_FLAGGED', INDEXED: 'F_INDEXED' },
 
-	Unicode: { FLAG: 'x', MINE: 'Ä' },
+	Glyphs: { FLAG: 'x', MINE: 'Ä' },
 
 	Modes: { PRESET: "P", CUSTOM: "C" },
 

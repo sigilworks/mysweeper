@@ -6,8 +6,8 @@ var Multimap = require('./multimap'),
     DEFAULT_GAME_OPTIONS = require('./constants').DefaultConfig,
     Countdown = require('./countdown'),
     TranscribingEmitter = require('./transcribing-emitter'),
-    $U = require('util'),
-    LinearCongruentialGenerator = require('./lcgenerator');
+    LinearCongruentialGenerator = require('./lcgenerator'),
+    Scorekeeper = require('./scorekeeper');
 
 // wrapper around `$log`, to toggle dev mode debugging
 var $log = function $log() { if ($log.debug_mode || false) console.log.apply(console, arguments); }
@@ -35,6 +35,8 @@ function Gameboard(options) {
     // add in the countdown clock...
     this.clock = new Countdown(+options.timer || DEFAULT_GAME_OPTIONS.timer, '#countdown');
     this.clock.start();
+    // create the scorekeeping object
+    this.scorekeeper = new Scorekeeper;
 
     // create the board in memory and assign values to the squares
     this._loadBoard();
@@ -222,8 +224,8 @@ Gameboard.prototype = {
     _renderSquare: function(square) {
         var $cell = this.getGridCell(square),
             getContents = function(sq) {
-                if (sq.isFlagged()) return $C.Unicode.FLAG;
-                if (sq.isMined()) return $C.Unicode.MINE;
+                if (sq.isFlagged()) return $C.Glyphs.FLAG;
+                if (sq.isMined()) return $C.Glyphs.MINE;
                 return sq.getDanger() !== 0 ? sq.getDanger() : '';
             },
             $dangerSpan = $('<span />', { 'class': 'danger', html: getContents(square) });
