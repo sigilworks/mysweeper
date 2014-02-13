@@ -99,7 +99,6 @@ Gameboard.prototype = {
             click: this._handleClick.bind(this),
             contextmenu: this._handleRightClick.bind(this)
         }, 'td, td > span');
-<<<<<<< HEAD
         this.$el.hammer().on({
             tap: this._handleClick.bind(this),
             hold: this._handleRightClick.bind(this)
@@ -108,11 +107,6 @@ Gameboard.prototype = {
     _removeEventListeners: function() {
         this.$el.off();
         this.$el.hammer().off();
-=======
-    },
-    _removeEventListeners: function() {
-        this.$el.off();
->>>>>>> 0ebb458deae1b0d1d8e1c5030ff77d357e03098a
     },
     _createHTMLGrid: function(dimensions) {
         var grid = '';
