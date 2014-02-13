@@ -6,13 +6,13 @@ module.exports = function(grunt) {
 
     browserify: {
       dist: {
-        files: { 'dist/mysweeper.js': [ 'js/*.js' ], },
+        files: { 'dist/mysweeper.js': [ 'js/**/*.js' ], },
         options: { debug: true }
       }
     },
 
     watch: {
-      files: ['js/*.js'],
+      files: ['js/**/*.js'],
       tasks: ['browserify']
     }
 
