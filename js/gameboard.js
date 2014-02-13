@@ -99,13 +99,15 @@ Gameboard.prototype = {
             click: this._handleClick.bind(this),
             contextmenu: this._handleRightClick.bind(this)
         }, 'td, td > span');
+        // for touch events: tap == click, doubletap == right click
         this.$el.hammer().on({
             tap: this._handleClick.bind(this),
-            hold: this._handleRightClick.bind(this)
+            doubletap: this._handleRightClick.bind(this)
         }, 'td, td > span');
     },
     _removeEventListeners: function() {
         this.$el.off();
+        // turn off touch events as well
         this.$el.hammer().off();
     },
     _createHTMLGrid: function(dimensions) {
