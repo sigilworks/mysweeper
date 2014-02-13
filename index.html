@@ -1,0 +1,87 @@
+<!doctype html>
+<html>
+  <head>
+    <title>mysweeper</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script type="text/javascript" src="js/vendor/jquery.hammer-full.js"></script>
+    <script type="text/javascript" src="dist/mysweeper.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/styles.css" />
+  </head>
+<body>
+
+  <section id="options-card" class="card">
+    <form>
+      <div id="preset-container" class="container">
+        <label for="preset-mode"><input type="radio" id="preset-mode" name="mode-select" value="P" checked />
+          Choose a preset difficulty level (vintage mode)
+        </label>
+        <ul class="preset">
+          <li>
+            <p><strong>Select a difficulty level:</strong></p>
+            <ol>
+              <li>
+                <label for="level-beginner">
+                  <input type="radio" id="level-beginner" name="preset-level" value="B" />
+                  Beginner <span class="advice"></span>
+                </label>
+              </li>
+              <li>
+                <label for="level-intermediate">
+                  <input type="radio" id="level-intermediate" name="preset-level" value="I" checked />
+                  Intermediate <span class="advice"></span>
+                </label>
+              </li>
+              <li>
+                <label for="level-expert">
+                  <input type="radio" id="level-expert" name="preset-level" value="E" />
+                  Expert <span class="advice"></span>
+                </label>
+              </li>
+            </ol>
+          </li>
+
+        </ul>
+      </div>
+
+      <div id="custom-container" class="container">
+        <label for="custom-mode"><input type="radio" id="custom-mode" name="mode-select" value="C" />
+          Create a customized game...
+        </label>
+        <ul class="custom">
+          <li>
+            <p><strong>Choose your desired board dimensions:</strong></p>
+            <input type="text" id="dimensions" placeholder="9" />
+            <strong> x </strong>
+            <input type="text" id="dimensions-mirror" placeholder="9" disabled />
+            <span class="advice">Please do not exceed 25 x 25.</span>
+          </li>
+
+          <li>
+            <p><strong>How many mines? </strong></p>
+            <input id="mine-count" name="mine-count" placeholder="1" />
+            <span class="advice">Max. mines possible: <span></span></span>
+          </li>
+        </ul>
+      </div>
+
+      <input id="submit" type="submit" value="Let's Play!" />
+
+    </form>
+  </section>
+
+  <section id="board-card" class="card">
+    <header>
+      <span id="mines-display">Mines: <span class="minecounter">0</span></span>
+      <h1 class="banner"><span>my</span>sweeper</h1><span class="version"></span>
+      <span id="countdown">
+        <span id="m1" class="timer minutes">0</span><span id="m2" class="timer minutes">0</span><span class="colon">:</span>
+        <span id="s1" class="timer seconds">0</span><span id="s2" class="timer seconds">0</span>
+      </span>
+    </header>
+    <div id="flash"></div>
+    <table id="board"></table>
+  </section>
+
+</body>
+</html>
