@@ -99,10 +99,10 @@ Gameboard.prototype = {
             click: this._handleClick.bind(this),
             contextmenu: this._handleRightClick.bind(this)
         }, 'td, td > span');
-        // for touch events: tap == click, doubletap == right click
+        // for touch events: tap == click, hold == right click
         this.$el.hammer().on({
             tap: this._handleClick.bind(this),
-            doubletap: this._handleRightClick.bind(this)
+            hold: this._handleRightClick.bind(this)
         }, 'td, td > span');
     },
     _removeEventListeners: function() {
