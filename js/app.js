@@ -49,7 +49,8 @@ $(function(){
         if (mode === Modes.PRESET) {
             var level = $("[name=preset-level]:checked").val(),
                 setup = Object.keys(PresetLevels)
-                              .filter(function(pl) { return PresetLevels[pl] === level; })[0];
+                              .filter(function(pl) { return PresetLevels[pl] === level; })
+                              .pop();
 
             gameOptions.dimensions = PresetSetups[setup].dimensions;
             gameOptions.mines = PresetSetups[setup].mines;
