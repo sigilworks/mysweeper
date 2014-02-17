@@ -86,7 +86,10 @@ label[for='custom-mode']                { margin-left: -35px; }
 
 .square                                 { background: #F0F0F0; border: 3px solid #555; padding: 7px; height: 50px; width: 50px; }
 .square .danger                         { display: block; color: #777; font-weight: bold; font-size: 20px; margin-top: 50%; }
-.square, .danger                        { -webkit-user-select: none; -webkit-touch-callout: none; }
+
+/* mobile/touch event-related CSS */
+.square, .danger                        { -webkit-user-select: none; -webkit-touch-callout: none; 
+                                          -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
 
 .closed                                 { background: #555; }
 
