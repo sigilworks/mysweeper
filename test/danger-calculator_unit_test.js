@@ -1,6 +1,6 @@
 var expect = require('chai').expect,
     DangerCalculator = require('../js/danger-calculator'),
-    Multimap = require('../js/multimap'),
+    Multimap = require('../js/lib/multimap'),
     PresetSetups = require('../js/constants').PresetSetups,
     Square = require('../js/square');
 

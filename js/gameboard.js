@@ -1,4 +1,4 @@
-var Multimap = require('./multimap'),
+var Multimap = require('./lib/multimap'),
     DangerCalculator = require('./danger-calculator'),
     Square = require('./square'),
     Serializer = require('./serializer'),
@@ -6,7 +6,7 @@ var Multimap = require('./multimap'),
     DEFAULT_GAME_OPTIONS = require('./constants').DefaultConfig,
     Countdown = require('./countdown'),
     TranscribingEmitter = require('./transcribing-emitter'),
-    LinearCongruentialGenerator = require('./lcgenerator'),
+    LinearCongruentialGenerator = require('./lib/lcgenerator'),
     Scorekeeper = require('./scorekeeper');
 
 // wrapper around `$log`, to toggle dev mode debugging
@@ -156,8 +156,12 @@ Gameboard.prototype = {
         } else if (square.isFlagged()) {
             square.close();
             square.unflag();
+            this._renderSquare(square);
             $cell.removeClass('flagged').addClass('closed');
         }
+
+        if ($(".square:not(.mined)").length === $(".open").length)
+            return this._gameWin();
 
         return false;
     },

@@ -1,4 +1,4 @@
-var Emitter = require('./emitter'),
+var Emitter = require('./lib/emitter'),
     util = require('util');
 
 function TranscribingEmitter() {

@@ -1,6 +1,6 @@
 var expect = require('chai').expect,
     Square = require('../js/square'),
-    BitFlagFactory = require('../js/bit-flag-factory'),
+    BitFlagFactory = require('../js/lib/bit-flag-factory'),
     Symbols = require('../js/constants').Symbols,
     Flags = require('../js/constants').Flags;
 

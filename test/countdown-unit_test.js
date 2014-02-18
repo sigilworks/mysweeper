@@ -4,37 +4,45 @@ var expect = require('chai').expect,
 
 
 describe("Countdown",function(){
-  var clock;
+
+  global.document = { getElementById: function(x){ return x; } };
+
+  var clock,
+      el = { charAt: function(){}, querySelector: function(){} },
+      getDisplay = function(c) { return [ c.m1.innerHTML, c.m2.innerHTML, ':', c.s1.innerHTML, c.s2.innerHTML ].join(''); },
+      TIME_IN_SECONDS = 70,
+      TIME_DISPLAY = "01:10",
+      TIME_RESET = "00:00";
 
   beforeEach(function(done){
-    /*clock = new Countdown(70, '#countdown');
-    clock.el = sinon.stub;
-    clock.m1 = sinon.stub;
-    clock.m2 = sinon.stub;
-    clock.s1 = sinon.stub;
-    clock.s2 = sinon.stub;*/
+    clock = new Countdown(TIME_IN_SECONDS, el);
+    clock.el = { innerHTML: '' };
+    clock.m1 = { innerHTML: '' };
+    clock.m2 = { innerHTML: '' };
+    clock.s1 = { innerHTML: '' };
+    clock.s2 = { innerHTML: '' };
     done();
   });
 
   it("should render the initial display", function(){
+    clock._renderInitial();
+    expect(getDisplay(clock)).to.equal(TIME_DISPLAY);
+  });
 
+  // TODO: test #start, #stop async here
+
+  it("should be able to reset its display", function() {
+    clock._renderInitial();
+    expect(getDisplay(clock)).to.equal(TIME_DISPLAY);
+    clock.reset();
+    expect(getDisplay(clock)).to.equal(TIME_RESET);
   });
 
 });
 
 
-
-/*function Countdown(seconds, el) {
-    this.seconds = seconds;
-    this.el = document.getElementById(el.charAt(0) === '#' ? el.substring(1) : el);
-
-    this.m1 = this.el.querySelector('#m1');
-    this.m2 = this.el.querySelector('#m2');
-    this.s1 = this.el.querySelector('#s1');
-    this.s2 = this.el.querySelector('#s2');
-
-    this.freeze = false;
-}
+/*
+function Countdown(seconds, el) {}
 
 Countdown.prototype = {
     _renderInitial: function() {},
