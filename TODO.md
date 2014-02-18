@@ -17,8 +17,6 @@
  - break up CSS so that light/dark themes could be easily extracted
  - replace bespoke mocks with Sinon equivs in tests for Countdown and TranscribingEmitter.
 
-
 ## Bugs To Fix
- - if you falsely a non-mined square, then unflag it, it has a danger index of 'x' (the flag char in icon font)
  - a custom 4x4 game w/3 mines...consistently only has 2 mines?!
- - why do some games not end when I've opened all squares, and flagged all mines?
+ - ensure random numbers are unique so that number of mines will be correct!

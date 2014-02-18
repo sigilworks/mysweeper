@@ -80,8 +80,9 @@ Gameboard.prototype = {
     },
     _determineMineLocations: function(dimensions, mines) {
         var rndGenerator = new LinearCongruentialGenerator;
+        // TODO: create array of unique random numbers here!
         for (var i=0; i < mines; ++i) {
-            var rnd = /*Math.random()*/ rndGenerator.rand() * (Math.pow(dimensions, 2)) | 0,
+            var rnd = rndGenerator.rand() * (Math.pow(dimensions, 2)) | 0,
                 row = ~~(rnd / dimensions),
                 cell = rnd % dimensions,
                 square = this.getSquareAt(row, cell);
