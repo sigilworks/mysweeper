@@ -14,7 +14,8 @@
     // $('.square').css({ height: newDim, width: newDim });
     ```
  - emergency escape and restore - close tab w/o ending game first, saved to LocalStorage, rehydrates on return
- - light/dark themes
+ - break up CSS so that light/dark themes could be easily extracted
+ - replace bespoke mocks with Sinon equivs in tests for Countdown and TranscribingEmitter.
 
 
 ## Bugs To Fix
