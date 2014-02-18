@@ -6,7 +6,7 @@ var Multimap = require('./lib/multimap'),
     DEFAULT_GAME_OPTIONS = require('./constants').DefaultConfig,
     Countdown = require('./countdown'),
     TranscribingEmitter = require('./transcribing-emitter'),
-    LinearCongruentialGenerator = require('./lib/lcgenerator'),
+    MineLayer = require('./minelayer'),
     Scorekeeper = require('./scorekeeper');
 
 // wrapper around `$log`, to toggle dev mode debugging
@@ -79,15 +79,12 @@ Gameboard.prototype = {
         this._setupEventListeners();
     },
     _determineMineLocations: function(dimensions, mines) {
-        var rndGenerator = new LinearCongruentialGenerator;
-        // TODO: create array of unique random numbers here!
-        for (var i=0; i < mines; ++i) {
-            var rnd = rndGenerator.rand() * (Math.pow(dimensions, 2)) | 0,
-                row = ~~(rnd / dimensions),
-                cell = rnd % dimensions,
-                square = this.getSquareAt(row, cell);
-            square.mine();
-        }
+        var locs = new MineLayer(mines, dimensions), _this = this;
+        locs.forEach(function(loc) {
+            console.log("loc: %o", loc)
+            // var square = _this.getSquareAt(loc[0], loc[1]);
+            // square.mine();
+        });
     },
     _precalcDangerIndices: function() {
         var _this = this;
