@@ -80,11 +80,7 @@ Gameboard.prototype = {
     },
     _determineMineLocations: function(dimensions, mines) {
         var locs = new MineLayer(mines, dimensions), _this = this;
-        locs.forEach(function(loc) {
-            console.log("loc: %o", loc)
-            // var square = _this.getSquareAt(loc[0], loc[1]);
-            // square.mine();
-        });
+        locs.forEach(function(loc) { _this.getSquareAt(loc[0], loc[1]).mine(); });
     },
     _precalcDangerIndices: function() {
         var _this = this;

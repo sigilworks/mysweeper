@@ -8,7 +8,7 @@ function MineLayer(mines, dimensions) {
 
     var rands = [],
         _this = this,
-        getRandomNumber = function() { return _this.generator.rand() * (Math.pow(this.dimensions, 2)) | 0; };
+        getRandomNumber = function() { return _this.generator.rand() * (Math.pow(_this.dimensions, 2)) | 0; };
 
     for (var i=0; i < mines; ++i) {
         var rnd = getRandomNumber();
