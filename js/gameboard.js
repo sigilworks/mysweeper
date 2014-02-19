@@ -2,7 +2,8 @@ var Multimap = require('./lib/multimap'),
     DangerCalculator = require('./danger-calculator'),
     Square = require('./square'),
     Serializer = require('./serializer'),
-    $C = require('./constants'),
+    Glyphs = require('./constants').Glyphs,
+    MessageOverlay = require('./constants').MessageOverlay,
     DEFAULT_GAME_OPTIONS = require('./constants').DefaultConfig,
     Countdown = require('./countdown'),
     TranscribingEmitter = require('./transcribing-emitter'),
@@ -27,7 +28,7 @@ function Gameboard(options) {
     this.debug_mode = options.debug_mode || DEFAULT_GAME_OPTIONS.debug_mode;
     $log.debug_mode = this.debug_mode;
     // container for flash messages, such as win/loss of game
-    this.flashContainer = $($C.MessageOverlay);
+    this.flashContainer = $(MessageOverlay);
     // keep track of user clicks towards their win
     this.userMoves = 0;
     // the object that calculates the number of surrounding mines at any square
@@ -229,8 +230,8 @@ Gameboard.prototype = {
     _renderSquare: function(square) {
         var $cell = this.getGridCell(square),
             getContents = function(sq) {
-                if (sq.isFlagged()) return $C.Glyphs.FLAG;
-                if (sq.isMined()) return $C.Glyphs.MINE;
+                if (sq.isFlagged()) return Glyphs.FLAG;
+                if (sq.isMined()) return Glyphs.MINE;
                 return sq.getDanger() !== 0 ? sq.getDanger() : '';
             },
             $dangerSpan = $('<span />', { 'class': 'danger', html: getContents(square) });
