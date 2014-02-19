@@ -74,8 +74,11 @@ Gameboard.prototype = {
         // pre-calculate the danger index of each non-mined square...
         this._precalcDangerIndices();
 
-        $log("G A M E B O A R D\n%o", this.toConsole());
-        $log("M I N E  P L A C E M E N T S\n%o", this.toConsole(true));
+        // display output and game strategy to the console...
+        if (this.debug_mode) {
+            this.toConsole();
+            this.toConsole(true);
+        }
     },
     _renderGrid: function() {
         // layout the HTML <table> rows...
@@ -285,13 +288,10 @@ Gameboard.prototype = {
     },
     toJSON: function() { return this.board.values().join(', '); },
     toConsole: function(withDanger) {
-        return this.board.values()
-            .reduce(function(str, row, idx) {
-                var symbols = (!withDanger) ? row : row.map(function(sq) {
-                    return (sq.isMined()) ? '-' : sq.getDanger() === 0 ? ' ' : sq.getDanger();
-                });
-                return str += symbols.join('   ').toLowerCase() + "       [" + idx + "]\n";
-            }, '\n');
+        if (withDanger)
+            ConsoleRenderer.to($log).withValues(this.board.values()).viewGame();
+        else
+            ConsoleRenderer.to($log).withValues(this.board.values()).viewMines();
     }
 };
 

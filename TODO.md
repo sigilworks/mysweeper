@@ -6,7 +6,6 @@
  - Serialize state to JSON or JSON64 to be persisted?
  - Use events transcript to replay?
  - set up scoring system and scoreboard
- - way to re-start game after win/loss
  - Easter eggs: "hinting" for mine locations on key combo
  - Autosize squares based on browser display:
  	```
@@ -16,7 +15,6 @@
  - emergency escape and restore - close tab w/o ending game first, saved to LocalStorage, rehydrates on return
  - break up CSS so that light/dark themes could be easily extracted
  - replace bespoke mocks with Sinon equivs in tests for Countdown and TranscribingEmitter.
- - ConsoleRenderer class to take over Gameboard#toConsole.
 
 ## Bugs To Fix
  - a custom 4x4 game w/3 mines...consistently only has 2 mines?!
