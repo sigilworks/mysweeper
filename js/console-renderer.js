@@ -5,7 +5,7 @@ var ConsoleRenderer = {
     MINED_SQUARE: '-',
     BLANK_SQUARE: '.',
     RENDERED_MAP: '%o',
-    DEFAULT_SYMBOLIZER: function(row){ return row; },
+    DEFAULT_TRANSFORMER: function(row){ return row; },
 
     _makeTitle: function(str) { return str.split('').join(' ').toUpperCase(); },
     _displayRowNum: function(num) { return "       [" + num + "]\n" },
@@ -20,9 +20,9 @@ var ConsoleRenderer = {
             return values;
         else throw "No values present.";
     },
-    _getRenderedMap: function(symbolizer) {
+    _getRenderedMap: function(transformer) {
         var vals = this._validate(this.values);
-        return this._toSymbols(vals, symbolizer);
+        return this._toSymbols(vals, transformer);
     },
 
     to: function(log) { this.$log = log; return this; },
@@ -33,7 +33,7 @@ var ConsoleRenderer = {
 
     viewGame: function() {
         var _this = this,
-            symbolizer = function(row) {
+            transformer = function(row) {
                 return row.map(function(sq) {
                     return (sq.isMined())
                         ? _this.MINED_SQUARE
@@ -41,10 +41,14 @@ var ConsoleRenderer = {
                             ? _this.BLANK_SQUARE
                             : sq.getDanger(); })
             };
-        this.$log([ this._makeTitle("gameboard"), this.RENDERED_MAP ].join('\n'), this._getRenderedMap(symbolizer));
+        this.$log([ this._makeTitle("gameboard"), this.RENDERED_MAP ]
+            .join('\n'),
+            this._getRenderedMap(transformer));
     },
     viewMines: function() {
-        this.$log([ this._makeTitle("mine placements"), this.RENDERED_MAP ].join('\n'), this._getRenderedMap(this.DEFAULT_SYMBOLIZER));
+        this.$log([ this._makeTitle("mine placements"), this.RENDERED_MAP ]
+            .join('\n'),
+            this._getRenderedMap(this.DEFAULT_TRANSFORMER));
     }
 };
 
