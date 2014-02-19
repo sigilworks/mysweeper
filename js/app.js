@@ -56,9 +56,12 @@ $(function(){
             gameOptions.mines = PresetSetups[setup].mines;
         } else {
             // Modes.CUSTOM...
-            gameOptions.dimensions = $("#dimensions").val();
-            gameOptions.mines = $("#mine-count").val();
+            gameOptions.dimensions = $("#dimensions").val() || +$("#dimensions").attr("placeholder");
+            gameOptions.mines = $("#mine-count").val() || +$("#mine-count").attr("placeholder");
         }
+
+        // set the desired color theme...
+        gameOptions.theme = $("#color-theme").val();
 
         // set up <header> content...
         $("#mines-display").find("span").html(gameOptions.mines);
