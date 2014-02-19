@@ -7,6 +7,8 @@ var Multimap = require('./lib/multimap'),
     DEFAULT_GAME_OPTIONS = require('./constants').DefaultConfig,
     Countdown = require('./countdown'),
     TranscribingEmitter = require('./transcribing-emitter'),
+    ThemeStyler = require('./theme-styler'),
+    ConsoleRenderer = require('./console-renderer'),
     MineLayer = require('./minelayer'),
     Scorekeeper = require('./scorekeeper');
 
@@ -27,6 +29,8 @@ function Gameboard(options) {
     // selectively enable debug mode for console visualizations and notifications
     this.debug_mode = options.debug_mode || DEFAULT_GAME_OPTIONS.debug_mode;
     $log.debug_mode = this.debug_mode;
+    // specifies the desired color theme or skin
+    this.theme = this._setColorTheme(options.theme || DEFAULT_GAME_OPTIONS.theme);
     // container for flash messages, such as win/loss of game
     this.flashContainer = $(MessageOverlay);
     // keep track of user clicks towards their win
@@ -78,6 +82,8 @@ Gameboard.prototype = {
         this._createHTMLGrid(this.dimensions);
         // setup event listeners to listen for user clicks
         this._setupEventListeners();
+        // set the color theme...
+        this._setColorTheme(this.theme);
     },
     _determineMineLocations: function(dimensions, mines) {
         var locs = new MineLayer(mines, dimensions), _this = this;
@@ -88,6 +94,19 @@ Gameboard.prototype = {
         this.board.values()
             .reduce(function(acc, val) { return acc.concat(val.filter(function(sq) { return !sq.isMined(); })); }, [])
             .forEach(function(safe) { safe.setDanger(_this.dangerCalc.forSquare(safe.getRow(), safe.getCell())); });
+    },
+    _createHTMLGrid: function(dimensions) {
+        var grid = '';
+        for (var i=0; i < dimensions; ++i) {
+            grid += "<tr id='row" + i + "'>"
+                 +  [].join.call({ length: dimensions + 1 }, "<td></td>")
+                 +  "</tr>";
+        }
+        this.$el.append(grid);
+    },
+    _setColorTheme: function(theme) {
+        ThemeStyler.set(theme, this.$el);
+        return theme;
     },
     _setupEventListeners: function() {
         this.$el.on({
@@ -104,15 +123,6 @@ Gameboard.prototype = {
         this.$el.off();
         // turn off touch events as well
         this.$el.hammer().off();
-    },
-    _createHTMLGrid: function(dimensions) {
-        var grid = '';
-        for (var i=0; i < dimensions; ++i) {
-            grid += "<tr id='row" + i + "'>"
-                 +  [].join.call({ length: dimensions + 1 }, "<td></td>")
-                 +  "</tr>";
-        }
-        this.$el.append(grid);
     },
     _handleClick: function(event) {
         var $target = $(event.target),

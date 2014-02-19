@@ -14,11 +14,11 @@ h1.banner                               { display: inline; font-weight: normal; 
 h1.banner > span                        { font-weight: bold; }
 
 #options-card                           { display: block; width: 50%; margin-top: 7%; text-align: center; }
-#options-card .container                { width: 45%; display: inline-block; float: left; }
+#options-card .container                { width: 45%; display: inline-block; vertical-align: top; }
 
 [name='mode-select']                    { height: 30px; width: 30px; }
 
-#preset-container                       { text-align: right; }
+#preset-container                       { text-align: left; border-right: 1px dotted #CCC; }
 
 #preset-container ol                    { list-style: none; padding-left: 0; }
 #options-card ol > li                   { margin: 15px 0 0 15px; }
@@ -36,10 +36,10 @@ label[for='custom-mode']                { margin-left: -35px; }
 #options-card input[type='radio']       { vertical-align: middle; margin: 0 5px 2px 0; }
 
 #options-card .preset,
-#options-card .custom                   { width: 100%; display: inline-block; }
+#options-card .custom                   { width: 100%; display: inline-block; margin: 10px 0 50px; }
 
-#options-card .preset                   { border-right: 1px dotted #CCC; }
-#options-card .custom                   { padding-left: 150px; }
+#options-card .preset                   {}
+#options-card .custom                   { padding-left: 125px; }
 
 #dimensions,
 #dimensions-mirror,
@@ -52,6 +52,8 @@ label[for='custom-mode']                { margin-left: -35px; }
 #mine-count                             { border: 2px solid #DDD; color: #333; text-align: center; }
 
 #mine-count                             { margin-right: 10px; }
+
+#color-theme                            { width: 100px; padding: 3px 5px; }
 
 .advice                                 { color: #AAA; }
 
@@ -88,7 +90,7 @@ label[for='custom-mode']                { margin-left: -35px; }
 .square .danger                         { display: block; color: #777; font-weight: bold; font-size: 20px; margin-top: 50%; }
 
 /* mobile/touch event-related CSS */
-.square, .danger                        { -webkit-user-select: none; -webkit-touch-callout: none; 
+.square, .danger                        { -webkit-user-select: none; -webkit-touch-callout: none;
                                           -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
 
 .closed                                 { background: #555; }
