@@ -288,10 +288,8 @@ Gameboard.prototype = {
     },
     toJSON: function() { return this.board.values().join(', '); },
     toConsole: function(withDanger) {
-        if (withDanger)
-            ConsoleRenderer.to($log).withValues(this.board.values()).viewGame();
-        else
-            ConsoleRenderer.to($log).withValues(this.board.values()).viewMines();
+        var renderer = ConsoleRenderer.to($log).withValues(this.board.values());
+        return (withDanger) ? renderer.viewGame() : renderer.viewMines();
     }
 };
 
