@@ -3,7 +3,6 @@
 ## Features or Components To Add
  - Unit tests on Gameboard, Countdown, and Scorer
  - Mines cannot number more than 1/3rd.
- - Serialize state to JSON or JSON64 to be persisted?
  - Use events transcript to replay?
  - set up scoring system and scoreboard
  - Easter eggs: "hinting" for mine locations on key combo
@@ -16,6 +15,7 @@
  - break up CSS so that light/dark themes could be easily extracted
  - replace bespoke mocks with Sinon equivs in tests for Countdown and TranscribingEmitter.
  - 'card flip' effect when revealing squares, and 'killer mine' flare.
+ - complete serialization/deserialization process
 
 ## Bugs To Fix
  - fix options card alignment and UI-related annoyances for mobile and smaller screens, &c.
