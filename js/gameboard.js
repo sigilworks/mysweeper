@@ -144,8 +144,10 @@ Gameboard.prototype = {
 
         } else if (square.isFlagged()) {} // no-op right now
 
-        else if (square.isMined())
+        else if (square.isMined()) {
+            $cell.addClass('killer-mine');
             return this._gameOver();
+        }
 
         if ($(".square:not(.mined)").length === $(".open").length)
             return this._gameWin();
