@@ -81,4 +81,15 @@ describe("Square",function(){
     expect(square.toString()).to.equal("x");
   });
 
+  it("should be able to set initial flag status from constructor injection", function() {
+    square = new Square(ROW, CELL, DANGER, "0110");
+    expect(square.getRow()).to.equal(ROW);
+    expect(square.getCell()).to.equal(CELL);
+    expect(square.getDanger()).to.equal(DANGER);
+    expect(square.isMined()).to.be.true;
+    expect(square.isFlagged()).to.be.true;
+    expect(square.isOpen()).to.be.false;
+    expect(square.isIndexed()).to.be.false;
+  });
+
 });

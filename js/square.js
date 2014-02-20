@@ -4,12 +4,12 @@ var BitFlagFactory = require('./lib/bit-flag-factory'),
 
     BitFlags = new BitFlagFactory([ Flags.OPEN, Flags.MINED, Flags.FLAGGED, Flags.INDEXED ]);
 
-function Square(row, cell, danger) {
+function Square(row, cell, danger, flags) {
     if (!(this instanceof Square))
         return new Square(arguments);
     this.row = row;
     this.cell = cell;
-    this.state = new BitFlags;
+    this.state = flags ? new BitFlags(flags) : new BitFlags;
     this.danger = (danger == +danger) ? +danger : void 0;
 }
 
