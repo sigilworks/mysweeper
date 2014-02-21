@@ -2,7 +2,7 @@
 var ConsoleRenderer = {
 
     COL_SPACING: '   ',
-    MINED_SQUARE: '-',
+    MINED_SQUARE: '*',
     BLANK_SQUARE: '.',
     RENDERED_MAP: '%o',
     DEFAULT_TRANSFORMER: function(row){ return row; },
