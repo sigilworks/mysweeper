@@ -36,10 +36,8 @@ var ConsoleRenderer = {
             transformer = function(row) {
                 return row.map(function(sq) {
                     return (sq.isMined())
-                        ? _this.MINED_SQUARE
-                        : sq.getDanger() === 0
-                            ? _this.BLANK_SQUARE
-                            : sq.getDanger(); })
+                        ? _this.MINED_SQUARE : sq.getDanger() === 0
+                            ? _this.BLANK_SQUARE : sq.getDanger(); })
             };
         this.$log([ this._makeTitle("gameboard"), this.RENDERED_MAP ]
             .join('\n'),

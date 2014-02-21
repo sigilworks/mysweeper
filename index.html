@@ -13,10 +13,13 @@
   <section id="options-card" class="card">
     <form>
       <div id="preset-container" class="container">
-        <label for="preset-mode"><input type="radio" id="preset-mode" name="mode-select" value="P" checked />
-          Choose a preset difficulty level (vintage mode)
-        </label>
+
         <ul class="preset">
+          <li class="game-type-choice">
+            <label for="preset-mode"><input type="radio" id="preset-mode" name="mode-select" value="P" checked />
+              Choose a preset difficulty level (vintage mode)
+            </label>
+          </li>
           <li>
             <p><strong>Select a difficulty level:</strong></p>
             <ol>
@@ -45,10 +48,13 @@
       </div>
 
       <div id="custom-container" class="container">
-        <label for="custom-mode"><input type="radio" id="custom-mode" name="mode-select" value="C" />
-          Create a customized game...
-        </label>
+
         <ul class="custom">
+          <li class="game-type-choice">
+            <label for="custom-mode"><input type="radio" id="custom-mode" name="mode-select" value="C" />
+              Create a customized game...
+            </label>
+          </li>
           <li>
             <p><strong>Choose your desired board dimensions:</strong></p>
             <input type="text" id="dimensions" placeholder="9" />
