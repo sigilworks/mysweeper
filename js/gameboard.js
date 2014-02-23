@@ -25,6 +25,8 @@ function Gameboard(options) {
     this.mines = +options.mines || DEFAULT_GAME_OPTIONS.mines;
     // the DOM element of the table serving as the board
     this.$el = $(options.board || DEFAULT_GAME_OPTIONS.board);
+    // is custom or preset game?
+    this.isCustom = options.isCustom || false;
     // the event transcriber for playback and persistence
     this.emitter = new TranscribingEmitter;
     // selectively enable debug mode for console visualizations and notifications
@@ -44,7 +46,7 @@ function Gameboard(options) {
     this.clock = new Countdown(+options.timer || DEFAULT_GAME_OPTIONS.timer, '#countdown');
     this.clock.start();
     // create the scorekeeping object
-    this.scorekeeper = new Scorekeeper;
+    this.scorekeeper = new Scorekeeper(this);
 
     // create the board in memory and assign values to the squares
     this._loadBoard();

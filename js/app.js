@@ -51,11 +51,12 @@ $(function(){
                 setup = Object.keys(PresetLevels)
                               .filter(function(pl) { return PresetLevels[pl] === level; })
                               .pop();
-
+            gameOptions.isCustom = false;
             gameOptions.dimensions = PresetSetups[setup].dimensions;
             gameOptions.mines = PresetSetups[setup].mines;
         } else {
             // Modes.CUSTOM...
+            gameOptions.isCustom = true;
             gameOptions.dimensions = $("#dimensions").val() || +$("#dimensions").attr("placeholder");
             gameOptions.mines = $("#mine-count").val() || +$("#mine-count").attr("placeholder");
         }

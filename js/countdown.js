@@ -2,6 +2,7 @@
 
 function Countdown(seconds, el) {
     this.seconds = seconds;
+    this.initial = seconds;
     this.el = document.getElementById(el.charAt(0) === '#' ? el.substring(1) : el);
 
     this.m1 = this.el.querySelector('#m1');
