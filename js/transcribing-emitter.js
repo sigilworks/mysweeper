@@ -12,7 +12,8 @@ TranscribingEmitter.prototype.constructor = TranscribingEmitter;
 TranscribingEmitter.prototype.__trigger__ = TranscribingEmitter.prototype.trigger;
 TranscribingEmitter.prototype.trigger = function(event /*, data... [varargs] */) {
     var args = [].slice.call(arguments);
-    this.__trigger__.apply(this, args);
+
+    this.__trigger__.apply(this, args.slice(1));
     this._transcripts.push([ +new Date, event ].concat(args.slice(1)));
 };
 

@@ -5,6 +5,7 @@ var Multimap = require('./lib/multimap'),
     Glyphs = require('./constants').Glyphs,
     MessageOverlay = require('./constants').MessageOverlay,
     DEFAULT_GAME_OPTIONS = require('./constants').DefaultConfig,
+    rgx_mobile_devices = require('./constants').MobileDeviceRegex,
     Countdown = require('./countdown'),
     TranscribingEmitter = require('./transcribing-emitter'),
     ThemeStyler = require('./theme-styler'),
@@ -33,6 +34,8 @@ function Gameboard(options) {
     this.theme = this._setColorTheme(options.theme || DEFAULT_GAME_OPTIONS.theme);
     // container for flash messages, such as win/loss of game
     this.flashContainer = $(MessageOverlay);
+    // check for desktop or mobile platform (for event handlers)
+    this.isMobile = this._checkForMobile();
     // keep track of user clicks towards their win
     this.userMoves = 0;
     // the object that calculates the number of surrounding mines at any square
@@ -111,16 +114,28 @@ Gameboard.prototype = {
         ThemeStyler.set(theme, this.$el);
         return theme;
     },
+    _checkForMobile: function() { return rgx_mobile_devices.test(navigator.userAgent.toLowerCase()); },
     _setupEventListeners: function() {
-        this.$el.on({
-            click: this._handleClick.bind(this),
-            contextmenu: this._handleRightClick.bind(this)
-        }, 'td, td > span');
-        // for touch events: tap == click, hold == right click
-        this.$el.hammer().on({
-            tap: this._handleClick.bind(this),
-            hold: this._handleRightClick.bind(this)
-        }, 'td, td > span');
+
+        if (!this.isMobile)
+            // for touch events: tap == click, hold == right click
+            this.$el.hammer().on({
+                tap: this._handleClick.bind(this),
+                hold: this._handleRightClick.bind(this)
+            }, 'td, td > span');
+        else
+            this.$el.on({
+                click: this._handleClick.bind(this),
+                contextmenu: this._handleRightClick.bind(this)
+            }, 'td, td > span');
+
+        this.emitter.on('sq:open', function(square, cell) { $log("Opening square at (%o, %o).", square.getRow(), square.getCell()); });
+        this.emitter.on('gb:start', function(event, ename, gameboard, $el) { $log("Let the game begin!", arguments); });
+        this.emitter.on('gb:end:win', function(event, ename, gameboard, $el) { $log("Game over! You win!"); });
+        this.emitter.on('gb:end:over', function(event, ename, gameboard, $el) { $log("Game over! You're dead!"); });
+        // TODO: move this! (probably to last line inside constructor?)
+        // trigger event for game to begin...
+        this.emitter.trigger(null, 'gb:start', this.board, this.$el.selector);
     },
     _removeEventListeners: function() {
         this.$el.off();
@@ -132,9 +147,12 @@ Gameboard.prototype = {
             $cell = $target.prop('tagName').toLowerCase() === 'span' ? $target.parent() : $target,
             square = $cell.data('square');
 
+        this.emitter.trigger(event, "sq:open", square, $cell);
+
         // TODO: also handle first-click-can't-be-mine (if we're following that rule)
         // here, if userMoves === 0... :message => :mulligan?
         this.userMoves++;
+        var curr_open = this._getOpenSquaresCount();
 
         if (square.isClosed() && !square.isMined() && !square.isFlagged()) {
             square.open();
@@ -151,6 +169,8 @@ Gameboard.prototype = {
 
         if ($(".square:not(.mined)").length === $(".open").length)
             return this._gameWin();
+
+        $log("Just opened %o squares...telling scorer.\nUser moves: %o.", (this._getOpenSquaresCount() - curr_open), this.userMoves);
     },
     _handleRightClick: function(event) {
         var $target = $(event.target),
@@ -163,11 +183,13 @@ Gameboard.prototype = {
             square.flag();
             this._renderSquare(square);
             $cell.removeClass('closed').addClass('flagged');
+            this.emitter.trigger(event, "sq:flag", square, $cell);
         } else if (square.isFlagged()) {
             square.close();
             square.unflag();
             this._renderSquare(square);
             $cell.removeClass('flagged').addClass('closed');
+            this.emitter.trigger(event, "sq:unflag", square, $cell);
         }
 
         if ($(".square:not(.mined)").length === $(".open").length)
@@ -197,6 +219,7 @@ Gameboard.prototype = {
             }
         });
     },
+    _getOpenSquaresCount: function() { return $(".square.open").length; },
     _flashMsg: function(msg, isAlert) {
         this.flashContainer
                 .addClass(isAlert ? 'game-over' : 'game-win')
@@ -227,6 +250,7 @@ Gameboard.prototype = {
         $log("---  GAME WIN!  ---");
         $log("User moves: %o", this.userMoves)
         this._flashMsg('<span>Game Over!</span><a href="#" class="replay">Click here to play again...</a>');
+        this.emitter.trigger(null, 'gb:end:win', this.board, this.$el.selector);
     },
     _gameOver: function() {
         this._prepareFinalReveal();
@@ -241,6 +265,7 @@ Gameboard.prototype = {
         // put up 'Game Over' banner
         $log('---  GAME OVER!  ---');
         this._flashMsg('<span>Game Over!</span><a href="#" class="replay">Click here to play again...</a>', true);
+        this.emitter.trigger(null, 'gb:end:over', this.board, this.$el.selector);
     },
     _renderSquare: function(square) {
         var $cell = this.getGridCell(square),

@@ -19,3 +19,4 @@
 
 ## Bugs To Fix
  - fix options card alignment and UI-related annoyances for mobile and smaller screens, &c.
+ - fix double-counting of square openings due to mobile events simultaneously being triggered.

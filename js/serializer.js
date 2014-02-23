@@ -17,7 +17,8 @@ var Serializer = {
                 debug_mode: gameboard.debug_mode,
                 dimensions: gameboard.dimensions,
                 mines: gameboard.mines,
-                userMoves: gameboard.userMoves
+                userMoves: gameboard.userMoves,
+                isMobile: gameboard.isMobile
             }
         };
     },
@@ -34,7 +35,7 @@ var Serializer = {
         // 6. debug_mode = exported.debug_mode
         // 7. dimensions = exported.dimensions
         // 8. mines = gameboard.mines
-        // 9. userMoves = gameboad.userMoves
+        // 9. userMoves = gameboad.userMoves, and isMobile
         // 10. make new Countdown with exported._meta.timer = seconds, clock.start()
         // 11. instantiate new TranscribingEmitter, loading _meta.transcripts into its _transcripts
         // 12. re-run the internal init() ops: _loadBoard, _renderGrid

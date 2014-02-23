@@ -29,7 +29,9 @@ var Constants = {
 
     Themes: { LIGHT: 'light', DARK: 'dark' },
 
-    MessageOverlay: '#flash'
+    MessageOverlay: '#flash',
+
+    MobileDeviceRegex: /android|applewebkit|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/
 };
 
 module.exports = Constants;
