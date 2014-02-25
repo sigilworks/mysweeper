@@ -116,9 +116,7 @@ Gameboard.prototype = {
         ThemeStyler.set(theme, this.$el);
         return theme;
     },
-    _checkForMobile: function() {
-        console.log("rgx: %o\nua: %o", rgx_mobile_devices, navigator.userAgent.toLowerCase())
-        return rgx_mobile_devices.test(navigator.userAgent.toLowerCase()); },
+    _checkForMobile: function() { return rgx_mobile_devices.test(navigator.userAgent.toLowerCase()); },
     _setupEventListeners: function() {
 
         if (this.isMobile) {
@@ -183,6 +181,9 @@ Gameboard.prototype = {
         var $target = $(event.target),
             $cell = $target.prop('tagName').toLowerCase() === 'span' ? $target.parent() : $target,
             square = $cell.data('square');
+
+        // stop the contextmenu from popping up on desktop browsers
+        event.preventDefault();
 
         this.userMoves++;
 
