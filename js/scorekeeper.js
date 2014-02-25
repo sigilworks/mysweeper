@@ -68,7 +68,7 @@ Scorekeeper.prototype = {
         else
             return 1 * SECONDS;
     },
-    _bisect: function(x) {
+    _sortedInsert: function(x) {
       var lo = 0, hi = this.queue.length;
       while (lo < hi) {
         var mid = ~~((lo + hi) / 2);
@@ -79,7 +79,7 @@ Scorekeeper.prototype = {
       }
       return lo;
     },
-    _insort: function(x) { return this.queue.splice(this._bisect(x), 0, x); },
+    _enqueue: function(x) { return this.queue.splice(this._sortedInsert(x), 0, x); },
     _processEvent: function(event) {
       var fn = this.callbacks[event.type];
       if (fn != null)
@@ -96,7 +96,7 @@ Scorekeeper.prototype = {
         }
     },
     _tick: function() {
-      var currIdx = this._bisect({ time: new Date().getTime() }), index = 0;
+      var currIdx = this._sortedInsert({ time: new Date().getTime() }), index = 0;
       while (index < currIdx) {
         var _this = this;
             callback = function() { _this._processEvent(_this.queue[index]); return index += 1; };
@@ -108,7 +108,7 @@ Scorekeeper.prototype = {
         // update the scoreboard on the page here...
         console.log(":score => %o  @ [%o]", this.score, new Date);
     },
-    _addScoreToQueue: function(type, pts) { return this._insort({ time: ((+new Date) + this.nsu), type: type, pts: pts }); },
+    _addScoreToQueue: function(type, pts) { return this._enqueue({ time: ((+new Date) + this.nsu), type: type, pts: pts }); },
 
     up: function(pts) { console.log("Queueing `up` score event of %o", pos(pts)); this._addScoreToQueue("up", pos(pts)); },
     down: function(pts) { console.log("Queueing `down` score event of %o", neg(pts)); this._addScoreToQueue("down", neg(pts)); },
