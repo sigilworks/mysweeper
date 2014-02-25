@@ -116,20 +116,23 @@ Gameboard.prototype = {
         ThemeStyler.set(theme, this.$el);
         return theme;
     },
-    _checkForMobile: function() { return rgx_mobile_devices.test(navigator.userAgent.toLowerCase()); },
+    _checkForMobile: function() {
+        console.log("rgx: %o\nua: %o", rgx_mobile_devices, navigator.userAgent.toLowerCase())
+        return rgx_mobile_devices.test(navigator.userAgent.toLowerCase()); },
     _setupEventListeners: function() {
 
-        if (!this.isMobile)
+        if (this.isMobile) {
             // for touch events: tap == click, hold == right click
             this.$el.hammer().on({
                 tap: this._handleClick.bind(this),
                 hold: this._handleRightClick.bind(this)
             }, 'td, td > span');
-        else
+        } else {
             this.$el.on({
                 click: this._handleClick.bind(this),
                 contextmenu: this._handleRightClick.bind(this)
             }, 'td, td > span');
+        }
 
         this.emitter.on('sq:open', function(square, cell) { $log("Opening square at (%o, %o).", square.getRow(), square.getCell()); });
         this.emitter.on('gb:start', function(event, ename, gameboard, $el) { $log("Let the game begin!", arguments); });
@@ -172,7 +175,9 @@ Gameboard.prototype = {
         if ($(".square:not(.mined)").length === $(".open").length)
             return this._gameWin();
 
-        $log("Just opened %o squares...telling scorer.\nUser moves: %o.", (this._getOpenSquaresCount() - curr_open), this.userMoves);
+        var opened_squares = this._getOpenSquaresCount() - curr_open;
+        $log("Just opened %o squares...telling scorer.\nUser moves: %o.", opened_squares, this.userMoves);
+        this.scorekeeper.up(opened_squares);
     },
     _handleRightClick: function(event) {
         var $target = $(event.target),
@@ -239,6 +244,7 @@ Gameboard.prototype = {
             });
         this._removeEventListeners();
         this.clock.stop();
+        this.scorekeeper.close();
     },
     _gameWin: function () {
         this._prepareFinalReveal();

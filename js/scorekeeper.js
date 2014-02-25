@@ -1,26 +1,60 @@
-
-// need a queue to push +1, -4, &c.
-// only push on `nextSignificantUnit` of time (delayed update), based on number of squares/default countdown...or gameWin/gameOver...then final score reconciliation
-// one method of giving points for opening squares: 1 - (userMoves / number of unmined squares at game start) * 10 ...for end of game score reconciliation
-
 function Scorekeeper(gameboard) {
-    this.q = [];
-    this.final = [];
-    this.score = 0;
+  var _this = this;
 
-    this.gameboard = gameboard;
+  this.callbacks = {
+    up: function up(pts) { this.score += pts; },
+    down: function down(pts) { this.score = (this.score - pts <= 0) ? 0 : this.score - pts; }
+  };
 
-    this.nsu = this._determineSignificantUnit();
-    this.endGame = false; // if game is now over, flush queues
+  this.finalizers = {
+    forOpeningSquares: function(gameboard) {
+        var moves = gameboard.userMoves,
+            unmined = Math.pow(gameboard.dimensions, 2) - gameboard.mines;
+        return 1 - (~~(moves / unmined) * 10);
+    },
+    forTimePassed: function(gameboard) {
+        var total = gameboard.clock.initial, elapsed = gameboard.clock.seconds;
+        return 100 - ~~(elapsed / total * 100);
+    },
+    forFewestMoves: function(gameboard) {
+        // experimental: sqrt(x^2 - x) * 10
+        var dims = Math.pow(gameboard.dimensions, 2);
+        return ~~(Math.sqrt(dims - gameboard.userMoves) * 10);
+    },
+    forFinalMisflaggings: function(gameboard) {
+        var squares = gameboard.getSquares(),
+            flagged = squares.filter(function(sq) { return sq.isFlagged(); }),
+            misflagged = flagged.filter(function(sq) { return !sq.isMined(); });
+        return (misflagged.length * 10) || 0;
+    },
+    forCorrectFlagging: function(gameboard) {
+        var mines = gameboard.mines,
+            squares = gameboard.getSquares(),
+            flagged = squares.filter(function(sq) { return sq.isFlagged(); }),
+            flaggedMines = squares.filter(function(sq) { return sq.isMined(); }),
+            pct = ~~(flaggedMines.length / mines);
+        return Math.ceil((mines * 10) * pct);
+    }
+  };
 
-    this._initialize();
+  this.queue = [];
+  this.final = [];
+
+  this.gameboard = gameboard;
+  this.score = 0;
+
+  this.nsu = this._determineSignificantUnit();
+  this.endGame = false; // if game is now over, flush queues
+  this.timer = setInterval(this._tick.bind(_this), this.nsu);
+
+  console.log("Scorekeeper initialized.  :score => %o, :timer => %o", this.score, this.timer);
+
 }
 
+function pos(pts) { return Math.abs(+pts) || 0; }
+function neg(pts) { return -1 * Math.abs(+pts) || 0; }
+
 Scorekeeper.prototype = {
-    _initialize: function() {
-        // start the event loop, with nothing in it for now
-        this._next(function() {});
-    },
     _determineSignificantUnit: function() {
         var isCustom = this.gameboard.isCustom,
             s = this.gameboard.clock.seconds,
@@ -34,73 +68,71 @@ Scorekeeper.prototype = {
         else
             return 1 * SECONDS;
     },
-    _flush: function(queue) {
-        Array.isArray(queue) || (queue = [queue]);
-        console.log("flushing...");
-        var pts = queue.reduce(function(acc, score) { return acc += score; }, 0);
-        this._next(function() { this.score += pts; });
-
-        if (this.endGame && this.final.length > 0)
-            this._flushFinal();
-
-        this._updateDisplay();
+    _bisect: function(x) {
+      var lo = 0, hi = this.queue.length;
+      while (lo < hi) {
+        var mid = ~~((lo + hi) / 2);
+        if (x.time < this.queue[mid].time)
+          hi = mid;
+        else
+          lo = mid + 1;
+      }
+      return lo;
     },
-    _flushFinal: function() {
-            console.log("flushing final queue...");
-            var pts = this.final.reduce(function(acc, score) { return acc += score; }, 0);
-            this._next(function() { this.score += pts; }, true);
-
-            this.score += this._creditForOpeningSquares();
-            this.score += this._creditForTimePassed();
+    _insort: function(x) { return this.queue.splice(this._bisect(x), 0, x); },
+    _processEvent: function(event) {
+      var fn = this.callbacks[event.type];
+      if (fn != null)
+          return (fn.length > 1)
+                ? fn.call(this, event.pts, function(err) { if (!err) return void 0; })
+                : console.log("<score event: %o>: :old [%o]", fn.name, this.score), fn.call(this, event.pts), console.log("...:new => [%o]", this.score);
+      else
+          return console.log("[Scorekeeper] could not find function " + event.type);
     },
-    _creditForOpeningSquares: function() {
-        var moves = this.gameboard.userMoves,
-            unmined = Math.pow(this.gameboard.dimensions, 2) - this.gameboard.mines;
-        return 1 - (~~(moves / unmined) * 10);
+    _processFinalizers: function() {
+        for (var visitor in this.finalizers) {
+            console.log("<finalizer: %o>: :old [%o] => :new [%o]... ", visitor, this.score, (this.score += this.finalizers[visitor](this.gameboard)));
+            // this.score += visitor(this.gameboard);
+        }
     },
-    _creditForTimePassed: function() {
-        var total = this.gameboard.clock.initial,
-            elapsed = this.gameboard.clock.seconds;
-        return 100 - ~~(elapsed / total * 100);
+    _tick: function() {
+      var currIdx = this._bisect({ time: new Date().getTime() }), index = 0;
+      while (index < currIdx) {
+        var _this = this;
+            callback = function() { _this._processEvent(_this.queue[index]); return index += 1; };
+        callback();
+      }
+      return this.queue.splice(0, currIdx);
     },
     _updateDisplay: function() {
         // update the scoreboard on the page here...
-        console.log(":score => %o       [%o]", this.score, new Date);
+        console.log(":score => %o  @ [%o]", this.score, new Date);
     },
-    _next: function(fn, isFinal) {
-        if (this.loop)
-            clearInterval(this.loop);
+    _addScoreToQueue: function(type, pts) { return this._insort({ time: ((+new Date) + this.nsu), type: type, pts: pts }); },
 
-        if (this.endGame) {
-            setInterval(fn.bind(this), 0);
-            this._flush(this.final);
-        } else
-            this.loop = setInterval(fn.bind(this), isFinal ? 0 : this.nsu);
+    up: function(pts) { console.log("Queueing `up` score event of %o", pos(pts)); this._addScoreToQueue("up", pos(pts)); },
+    down: function(pts) { console.log("Queueing `down` score event of %o", neg(pts)); this._addScoreToQueue("down", neg(pts)); },
+
+    finalUp: function(pts) { this.final.push(pos(pts)); },
+    finalDown: function(pts) { this.final.push(neg(pts)); },
+
+    getPendingScoreCount: function() { return this.queue.length; },
+
+    close: function() {
+        clearInterval(this.timer);
+
+        console.log("Clearing out remaining queue!");
+        var _this = this;
+        this.queue.forEach(function(event) { _this._processEvent(event); });
+
+        this._processFinalizers();
+
+        console.info("FINAL SCORE: %o", this.score);
     },
-    up: function(pts) { console.log("upping by %o", pts); this.q.push(+pts); },
-    down: function(pts) {
-        pts = +pts;
-        console.log("downing by %o", pts);
-        // make sure not decrementing below zero
-        if ((this.score - pts) < 0)
-            this.q.push(0);
-        else
-            this.q.push(-pts);
-    },
-    finalUp: function(pts) {
-        console.log("final upping by %o", pts); this.final.push(+pts);
-    },
-    finalDown: function(pts) {
-        pts = +pts;
-        console.log("final downing by %o", pts);
-        // make sure not decrementing below zero
-        if ((this.score - pts) < 0)
-            this.final.push(0);
-        else
-            this.final.push(-pts);
-    },
-    clear: function(isFullClear) {
-        if (isFullClear) this.q.length = 0;
+    clear: function() {
+        clearInterval(this.timer);
+        this.queue.length = 0;
+        this.final.length = 0;
         this.score = 0;
     }
 };

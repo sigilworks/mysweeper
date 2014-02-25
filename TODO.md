@@ -19,4 +19,5 @@
 
 ## Bugs To Fix
  - fix options card alignment and UI-related annoyances for mobile and smaller screens, &c.
- - fix double-counting of square openings due to mobile events simultaneously being triggered.
+ - fix lazy-loading symbol font by putting black mine symbol in header menu
+ - move private methods out of prototype objects -- take advantage of modules' privacy!

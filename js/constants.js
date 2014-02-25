@@ -31,7 +31,7 @@ var Constants = {
 
     MessageOverlay: '#flash',
 
-    MobileDeviceRegex: /android|applewebkit|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/
+    MobileDeviceRegex: /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/
 };
 
 module.exports = Constants;
