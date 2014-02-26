@@ -10,7 +10,9 @@ function Square(row, cell, danger, flags) {
     this.row = row;
     this.cell = cell;
     this.state = flags ? new BitFlags(flags) : new BitFlags;
-    this.danger = (danger == +danger) ? +danger : void 0;
+    this.danger = (danger == +danger) ? +danger : 0;
+
+    if (this.danger > 0) this.index();
 }
 
 Square.prototype = {
@@ -18,7 +20,7 @@ Square.prototype = {
     getRow: function() { return this.row; },
     getCell: function() { return this.cell; },
     getDanger: function() { return this.danger; },
-    setDanger: function(idx) { if (idx == +idx) { this.danger = +idx; this.index(); } },
+    setDanger: function(idx) { if (idx == +idx) { this.danger = +idx; this.danger > 0 && this.index(); } },
     getState: function() {
         var _this = this;
         return Object.keys(Symbols)
