@@ -46,7 +46,8 @@ function BitFlagFactory(args) {
         constructor: BitFlags,
         has: function(flag) { return !!(binToDec(this._flags) & flag); },
         set: function(flag) { return this._flags = pad(decToBin(binToDec(this._flags) | flag)); },
-        unset: function(flag) { return this._flags = pad(decToBin(binToDec(this._flags) & ~flag)); }
+        unset: function(flag) { return this._flags = pad(decToBin(binToDec(this._flags) & ~flag)); },
+        toJSON: function() { return { _flags: this._flags }; }
     };
 
     BitFlags.withDefaults = function(defaults) { return new BitFlags(defaults); };
