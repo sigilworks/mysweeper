@@ -1,6 +1,6 @@
 
 var Constants = {
-    Version: 'beta3',
+    Version: 'beta4',
 
     DefaultConfig: {
         dimensions: 9,

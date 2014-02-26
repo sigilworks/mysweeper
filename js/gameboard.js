@@ -52,6 +52,8 @@ function Gameboard(options) {
     this._loadBoard();
     // render the HTML to match the board in memory
     this._renderGrid();
+    // trigger event for game to begin...
+    this.emitter.trigger('gb:start', this.board, this.$el.selector);
 }
 
 
@@ -132,13 +134,16 @@ Gameboard.prototype = {
             }, 'td, td > span');
         }
 
+        // TODO: remove after development ends...for debug use only!
+        // INDIVIDUAL SQUARE EVENTS
         this.emitter.on('sq:open', function(square, cell) { $log("Opening square at (%o, %o).", square.getRow(), square.getCell()); });
-        this.emitter.on('gb:start', function(event, ename, gameboard, $el) { $log("Let the game begin!", arguments); });
-        this.emitter.on('gb:end:win', function(event, ename, gameboard, $el) { $log("Game over! You win!"); });
-        this.emitter.on('gb:end:over', function(event, ename, gameboard, $el) { $log("Game over! You're dead!"); });
-        // TODO: move this! (probably to last line inside constructor?)
-        // trigger event for game to begin...
-        this.emitter.trigger(null, 'gb:start', this.board, this.$el.selector);
+        this.emitter.on('sq:close', function(square, cell) { $log("Closing square at (%o, %o).", square.getRow(), square.getCell()); });
+        this.emitter.on('sq:flag', function(square, cell) { $log("Flagging square at (%o, %o).", square.getRow(), square.getCell()); });
+        this.emitter.on('sq:unflag', function(square, cell) { $log("Unflagging square at (%o, %o).", square.getRow(), square.getCell()); });
+        // GAMEBOARD-WIDE EVENTS
+        this.emitter.on('gb:start', function(ename, gameboard, $el) { $log("Let the game begin!", arguments); });
+        this.emitter.on('gb:end:win', function(ename, gameboard, $el) { $log("Game over! You win!"); });
+        this.emitter.on('gb:end:over', function(ename, gameboard, $el) { $log("Game over! You're dead!"); });
     },
     _removeEventListeners: function() {
         this.$el.off();
@@ -150,30 +155,24 @@ Gameboard.prototype = {
             $cell = $target.prop('tagName').toLowerCase() === 'span' ? $target.parent() : $target,
             square = $cell.data('square');
 
-        this.emitter.trigger(event, "sq:open", square, $cell);
-
         // TODO: also handle first-click-can't-be-mine (if we're following that rule)
         // here, if userMoves === 0... :message => :mulligan?
         this.userMoves++;
-        var curr_open = this._getOpenSquaresCount();
+        var curr_open = this._getOpenedSquaresCount();
 
         if (square.isClosed() && !square.isMined() && !square.isFlagged()) {
-            square.open();
-            $cell.removeClass('closed').addClass('open');
+            this._openSquare(square);
             if (!square.getDanger() > 0)
                 this._recursiveReveal(square);
 
-        } else if (square.isFlagged()) {} // no-op right now
-
-        else if (square.isMined()) {
+        } else if (square.isMined()) {
             $cell.addClass('killer-mine');
             return this._gameOver();
         }
 
-        if ($(".square:not(.mined)").length === $(".open").length)
-            return this._gameWin();
+        this._evaluateForGameWin();
 
-        var opened_squares = this._getOpenSquaresCount() - curr_open;
+        var opened_squares = this._getOpenedSquaresCount() - curr_open;
         $log("Just opened %o squares...telling scorer.\nUser moves: %o.", opened_squares, this.userMoves);
         this.scorekeeper.up(opened_squares);
     },
@@ -187,21 +186,14 @@ Gameboard.prototype = {
 
         this.userMoves++;
 
-        if (square.isClosed() && !square.isFlagged()) {
-            square.flag();
-            this._renderSquare(square);
-            $cell.removeClass('closed').addClass('flagged');
-            this.emitter.trigger(event, "sq:flag", square, $cell);
-        } else if (square.isFlagged()) {
-            square.close();
-            square.unflag();
-            this._renderSquare(square);
-            $cell.removeClass('flagged').addClass('closed');
-            this.emitter.trigger(event, "sq:unflag", square, $cell);
+        if (square.isClosed() && !square.isFlagged())
+            this._flagSquare(square);
+        else if (square.isFlagged()) {
+            this._unflagSquare(square);
+            this._closeSquare(square);
         }
 
-        if ($(".square:not(.mined)").length === $(".open").length)
-            return this._gameWin();
+        this._evaluateForGameWin();
 
         return false;
     },
@@ -219,15 +211,44 @@ Gameboard.prototype = {
                 neighbor = _this.getSquareAt(row + vert, cell + horiz);
 
             if (neighbor && !neighbor.isMined() && !neighbor.isFlagged() && neighbor.isClosed()) {
-                neighbor.open();
-                _this.getGridCell(neighbor).removeClass('closed').addClass('open');
+                _this._openSquare(neighbor);
 
                 if (!neighbor.getDanger() || !neighbor.getDanger() > 0)
                     _this._recursiveReveal(neighbor);
             }
         });
     },
-    _getOpenSquaresCount: function() { return $(".square.open").length; },
+    _openSquare: function(square, fireEvent) {
+        square.open();
+        this._renderSquare(square);
+        fireEvent = (fireEvent == null) ? true : fireEvent;
+        fireEvent && this.emitter.trigger("sq:open", square, this.getGridCell(square));
+    },
+    _closeSquare: function(square, fireEvent) {
+        square.close();
+        this._renderSquare(square);
+        fireEvent = (fireEvent == null) ? true : fireEvent;
+        fireEvent && this.emitter.trigger("sq:close", square, this.getGridCell(square));
+    },
+    _flagSquare: function(square, fireEvent) {
+        square.flag();
+        this._renderSquare(square);
+        fireEvent = (fireEvent == null) ? true : fireEvent;
+        this.getGridCell(square).removeClass('closed');
+        fireEvent && this.emitter.trigger("sq:flag", square, this.getGridCell(square));
+    },
+    _unflagSquare: function(square, fireEvent) {
+        square.unflag();
+        this._renderSquare(square);
+        fireEvent = (fireEvent == null) ? true : fireEvent;
+        fireEvent && this.emitter.trigger("sq:unflag", square, this.getGridCell(square));
+    },
+    _getOpenedSquaresCount: function() { return this.getSquares().filter(function(sq) { return sq.isOpen(); }).length; },
+    _evaluateForGameWin: function() {
+        var notMined = this.getSquares().filter(function(sq) { return !sq.isMined(); }).length;
+        if (notMined === this._getOpenedSquaresCount())
+            return this._gameWin();
+    },
     _flashMsg: function(msg, isAlert) {
         this.flashContainer
                 .addClass(isAlert ? 'game-over' : 'game-win')
@@ -240,8 +261,7 @@ Gameboard.prototype = {
             .filter(function(sq) { return sq.isFlagged(); })
             .forEach(function(f) {
                 _this.getGridCell(f).find('.danger').html(f.getDanger());
-                f.unflag();
-                _this._renderSquare(f);
+                _this._unflagSquare(f, false);
             });
         this._removeEventListeners();
         this.clock.stop();
@@ -259,7 +279,7 @@ Gameboard.prototype = {
         $log("---  GAME WIN!  ---");
         $log("User moves: %o", this.userMoves)
         this._flashMsg('<span>Game Over!</span><a href="#" class="replay">Click here to play again...</a>');
-        this.emitter.trigger(null, 'gb:end:win', this.board, this.$el.selector);
+        this.emitter.trigger('gb:end:win', this.board, this.$el.selector);
     },
     _gameOver: function() {
         this._prepareFinalReveal();
@@ -274,14 +294,14 @@ Gameboard.prototype = {
         // put up 'Game Over' banner
         $log('---  GAME OVER!  ---');
         this._flashMsg('<span>Game Over!</span><a href="#" class="replay">Click here to play again...</a>', true);
-        this.emitter.trigger(null, 'gb:end:over', this.board, this.$el.selector);
+        this.emitter.trigger('gb:end:over', this.board, this.$el.selector);
     },
     _renderSquare: function(square) {
         var $cell = this.getGridCell(square),
             getContents = function(sq) {
                 if (sq.isFlagged()) return Glyphs.FLAG;
                 if (sq.isMined()) return Glyphs.MINE;
-                return sq.getDanger() !== 0 ? sq.getDanger() : '';
+                return !!sq.getDanger() ? sq.getDanger() : '';
             },
             $dangerSpan = $('<span />', { 'class': 'danger', html: getContents(square) });
 
@@ -290,6 +310,7 @@ Gameboard.prototype = {
         // decorate <td> with CSS classes appropriate to square's state
         $cell.removeClass()
              .addClass('square')
+             .addClass('cell' + square.getCell())
              .addClass(square.getState().join(' '));
 
         // attach the Square to the data associated with the grid cell
@@ -302,12 +323,14 @@ Gameboard.prototype = {
         // return `this`, so this method can be chained to its initialization call
         return this;
     },
+    // takes a Square instance as a param, returns a jQuery-wrapped DOM node of its cell
     getGridCell: function(square) {
         return this.$el
                 .find('#row' + square.getRow())
                 .find('td')
                 .eq(square.getCell());
     },
+    // takes row and cell coordinates as params, returns the associated Square instance
     getSquareAt: function(row, cell) {
         var row = this.board.get(row);
         return (row && row[0] && row[0][cell]) ? row[0][cell] : null;

@@ -40,7 +40,10 @@ function Scorekeeper(gameboard) {
   this.queue = [];
   this.final = [];
 
+  // TODO: wean this class off dependency on gameboard
+  // should only need to have ctor injected with the gameboard's emitter
   this.gameboard = gameboard;
+  this.emitter = gameboard.emitter;
   this.score = 0;
 
   this.nsu = this._determineSignificantUnit();
@@ -48,6 +51,7 @@ function Scorekeeper(gameboard) {
   this.timer = setInterval(this._tick.bind(_this), this.nsu);
 
   console.log("Scorekeeper initialized.  :score => %o, :timer => %o", this.score, this.timer);
+  this._setupEventListeners();
 
 }
 
@@ -55,6 +59,21 @@ function pos(pts) { return Math.abs(+pts) || 0; }
 function neg(pts) { return -1 * Math.abs(+pts) || 0; }
 
 Scorekeeper.prototype = {
+    _setupEventListeners: function() {
+      var _this = this;
+
+      this.emitter.on('sq:open', function(square, cell) {
+        // check danger index...if not > 1, not `up`s for that!
+
+      });
+      this.emitter.on('sq:close', function(square, cell) {});
+      this.emitter.on('sq:flag', function(square, cell) {});
+      this.emitter.on('sq:unflag', function(square, cell) {});
+
+      this.emitter.on('gb:start', function(ename, gameboard, $el) { /* START THE SCOREKEEPER */ });
+      this.emitter.on('gb:end:win', function(ename, gameboard, $el) { _this.endGame = true; /* STOP THE SCOREKEEPER */ });
+      this.emitter.on('gb:end:over', function(ename, gameboard, $el) { _this.endGame = true; /* STOP THE SCOREKEEPER */ });
+    },
     _determineSignificantUnit: function() {
         var isCustom = this.gameboard.isCustom,
             s = this.gameboard.clock.seconds,
@@ -69,25 +88,25 @@ Scorekeeper.prototype = {
             return 1 * SECONDS;
     },
     _sortedInsert: function(x) {
-      var lo = 0, hi = this.queue.length;
-      while (lo < hi) {
-        var mid = ~~((lo + hi) / 2);
-        if (x.time < this.queue[mid].time)
-          hi = mid;
-        else
-          lo = mid + 1;
-      }
-      return lo;
+        var lo = 0, hi = this.queue.length;
+        while (lo < hi) {
+            var mid = ~~((lo + hi) / 2);
+            if (x.time < this.queue[mid].time)
+                hi = mid;
+            else
+                lo = mid + 1;
+        }
+        return lo;
     },
     _enqueue: function(x) { return this.queue.splice(this._sortedInsert(x), 0, x); },
     _processEvent: function(event) {
-      var fn = this.callbacks[event.type];
-      if (fn != null)
-          return (fn.length > 1)
+        var fn = this.callbacks[event.type];
+        if (fn != null)
+            return (fn.length > 1)
                 ? fn.call(this, event.pts, function(err) { if (!err) return void 0; })
                 : console.log("<score event: %o>: :old [%o]", fn.name, this.score), fn.call(this, event.pts), console.log("...:new => [%o]", this.score);
-      else
-          return console.log("[Scorekeeper] could not find function " + event.type);
+        else
+            return console.log("[Scorekeeper] could not find function " + event.type);
     },
     _processFinalizers: function() {
         for (var visitor in this.finalizers) {
@@ -96,17 +115,17 @@ Scorekeeper.prototype = {
         }
     },
     _tick: function() {
-      var currIdx = this._sortedInsert({ time: new Date().getTime() }), index = 0;
-      while (index < currIdx) {
-        var _this = this;
-            callback = function() { _this._processEvent(_this.queue[index]); return index += 1; };
-        callback();
-      }
-      return this.queue.splice(0, currIdx);
+        var currIdx = this._sortedInsert({ time: new Date().getTime() }), index = 0;
+        while (index < currIdx) {
+            var _this = this,
+                callback = function() { _this._processEvent(_this.queue[index]); return index += 1; };
+            callback();
+        }
+        return this.queue.splice(0, currIdx);
     },
     _updateDisplay: function() {
-        // update the scoreboard on the page here...
-        console.log(":score => %o  @ [%o]", this.score, new Date);
+      // update the scoreboard on the page here...
+      console.log(":score => %o  @ [%o]", this.score, new Date);
     },
     _addScoreToQueue: function(type, pts) { return this._enqueue({ time: ((+new Date) + this.nsu), type: type, pts: pts }); },
 
@@ -119,21 +138,21 @@ Scorekeeper.prototype = {
     getPendingScoreCount: function() { return this.queue.length; },
 
     close: function() {
-        clearInterval(this.timer);
+      clearInterval(this.timer);
 
-        console.log("Clearing out remaining queue!");
-        var _this = this;
-        this.queue.forEach(function(event) { _this._processEvent(event); });
+      console.log("Clearing out remaining queue!");
+      var _this = this;
+      this.queue.forEach(function(event) { _this._processEvent(event); });
 
-        this._processFinalizers();
+      this._processFinalizers();
 
-        console.info("FINAL SCORE: %o", this.score);
+      console.info("FINAL SCORE: %o", this.score);
     },
     clear: function() {
-        clearInterval(this.timer);
-        this.queue.length = 0;
-        this.final.length = 0;
-        this.score = 0;
+      clearInterval(this.timer);
+      this.queue.length = 0;
+      this.final.length = 0;
+      this.score = 0;
     }
 };
 
