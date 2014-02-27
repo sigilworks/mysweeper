@@ -1,8 +1,7 @@
 /*! jQuery plugin for Hammer.JS - v1.0.1 - 2014-02-03
  * http://eightmedia.github.com/hammer.js
  *
- * Copyright (c) 2014 Jorik Tangelder <j.tangelder@gmail.com>;
- * Licensed under the MIT license *//*! Hammer.JS - v1.0.6 - 2014-01-02
+ * Hammer.JS - v1.0.7dev - 2014-02-18
  * http://eightmedia.github.com/hammer.js
  *
  * Copyright (c) 2014 Jorik Tangelder <j.tangelder@gmail.com>;
@@ -69,6 +68,9 @@ Hammer.POINTER_MOUSE = 'mouse';
 Hammer.POINTER_TOUCH = 'touch';
 Hammer.POINTER_PEN = 'pen';
 
+// interval in which Hammer recalculates current velocity in ms
+Hammer.UPDATE_VELOCITY_INTERVAL = 20;
+
 // touch event defines
 Hammer.EVENT_START = 'start';
 Hammer.EVENT_MOVE = 'move';
@@ -80,6 +82,7 @@ Hammer.DOCUMENT = window.document;
 // plugins and gestures namespaces
 Hammer.plugins = Hammer.plugins || {};
 Hammer.gestures = Hammer.gestures || {};
+
 
 // if the window events are set...
 Hammer.READY = false;
@@ -311,14 +314,14 @@ Hammer.utils = {
 
     // with css properties for modern browsers
     Hammer.utils.each(['webkit', 'khtml', 'moz', 'Moz', 'ms', 'o', ''], function(vendor) {
-      Hammer.utils.each(css_props, function(prop) {
+      Hammer.utils.each(css_props, function(value, prop) {
           // vender prefix at the property
           if(vendor) {
             prop = vendor + prop.substring(0, 1).toUpperCase() + prop.substring(1);
           }
           // set the style
           if(prop in element.style) {
-            element.style[prop] = prop;
+            element.style[prop] = value;
           }
       });
     });
@@ -335,6 +338,42 @@ Hammer.utils = {
       element.ondragstart = function() {
         return false;
       };
+    }
+  },
+
+
+  /**
+   * reverts all changes made by 'stopDefaultBrowserBehavior'
+   * @param   {HtmlElement}   element
+   * @param   {Object}        css_props
+   */
+  startDefaultBrowserBehavior: function startDefaultBrowserBehavior(element, css_props) {
+    if(!css_props || !element || !element.style) {
+      return;
+    }
+
+    // with css properties for modern browsers
+    Hammer.utils.each(['webkit', 'khtml', 'moz', 'Moz', 'ms', 'o', ''], function(vendor) {
+      Hammer.utils.each(css_props, function(value, prop) {
+          // vender prefix at the property
+          if(vendor) {
+            prop = vendor + prop.substring(0, 1).toUpperCase() + prop.substring(1);
+          }
+          // reset the style
+          if(prop in element.style) {
+            element.style[prop] = '';
+          }
+      });
+    });
+
+    // also the enable onselectstart
+    if(css_props.userSelect == 'none') {
+      element.onselectstart = null;
+    }
+
+    // and enable ondragstart
+    if(css_props.userDrag == 'none') {
+      element.ondragstart = null;
     }
   }
 };
@@ -371,11 +410,14 @@ Hammer.Instance = function(element, options) {
   }
 
   // start detection on touchstart
-  Hammer.event.onTouch(element, Hammer.EVENT_START, function(ev) {
+  this._eventStartHandler = Hammer.event.onTouch(element, Hammer.EVENT_START, function(ev) {
     if(self.enabled) {
       Hammer.detection.startDetect(self, ev);
     }
   });
+
+  // keep a list of user event handlers which needs to be removed when calling 'dispose'
+  this._eventHandler = [];
 
   // return instance
   return this;
@@ -393,6 +435,7 @@ Hammer.Instance.prototype = {
     var gestures = gesture.split(' ');
     Hammer.utils.each(gestures, function(gesture) {
       this.element.addEventListener(gesture, handler, false);
+      this._eventHandler.push({ gesture: gesture, handler: handler });
     }, this);
     return this;
   },
@@ -408,6 +451,18 @@ Hammer.Instance.prototype = {
     var gestures = gesture.split(' ');
     Hammer.utils.each(gestures, function(gesture) {
       this.element.removeEventListener(gesture, handler, false);
+
+      // remove the event handler from the internal list
+      var index = -1;
+      Hammer.utils.each(this._eventHandler, function(eventHandler, i) {
+        if (index === -1 && eventHandler.gesture === gesture && eventHandler.handler === handler) {
+          index = i;
+        }
+      }, this);
+
+      if (index > -1) {
+        this._eventHandler.splice(index, 1);
+      }
     }, this);
     return this;
   },
@@ -449,6 +504,29 @@ Hammer.Instance.prototype = {
    */
   enable: function enable(state) {
     this.enabled = state;
+    return this;
+  },
+
+
+  /**
+   * dispose this hammer instance
+   * @returns {Hammer.Instance}
+   */
+  dispose: function dispose() {
+
+    // undo all changes made by stop_browser_behavior
+    if(this.options.stop_browser_behavior) {
+      Hammer.utils.startDefaultBrowserBehavior(this.element, this.options.stop_browser_behavior);
+    }
+
+    // unbind all custom event handlers
+    Hammer.utils.each(this._eventHandler, function(eventHandler) {
+      this.element.removeEventListener(eventHandler.gesture, eventHandler.handler, false);
+    }, this);
+    this._eventHandler.length = 0;
+
+    // unbind the start event listener
+    Hammer.event.unbindDom(this.element, Hammer.EVENT_TYPES[Hammer.EVENT_START], this._eventStartHandler);
     return this;
   }
 };
@@ -493,6 +571,20 @@ Hammer.event = {
 
 
   /**
+   * simple removeEventListener
+   * @param   {HTMLElement}   element
+   * @param   {String}        type
+   * @param   {Function}      handler
+   */
+  unbindDom: function(element, type, handler) {
+    var types = type.split(' ');
+    Hammer.utils.each(types, function(type){
+      element.removeEventListener(type, handler, false);
+    });
+  },
+
+
+  /**
    * touch events with mouse fallback
    * @param   {HTMLElement}   element
    * @param   {String}        eventType        like Hammer.EVENT_MOVE
@@ -501,7 +593,7 @@ Hammer.event = {
   onTouch: function onTouch(element, eventType, handler) {
     var self = this;
 
-    this.bindDom(element, Hammer.EVENT_TYPES[eventType], function bindDomOnTouch(ev) {
+    var fn = function bindDomOnTouch(ev) {
       var sourceEventType = ev.type.toLowerCase();
 
       // onmouseup, but when touchend has been fired we do nothing.
@@ -580,8 +672,13 @@ Hammer.event = {
         touch_triggered = false;
         Hammer.PointerEvent.reset();
       }
-    });
-  },
+    };
+
+    this.bindDom(element, Hammer.EVENT_TYPES[eventType], fn);
+
+    // return the bound function to be able to unbind it later
+    return fn;
+    },
 
 
   /**
@@ -725,7 +822,7 @@ Hammer.PointerEvent = {
    */
   updatePointer: function(type, pointerEvent) {
     if(type == Hammer.EVENT_END) {
-      this.pointers = {};
+      delete this.pointers[pointerEvent.pointerId];
     }
     else {
       pointerEvent.identifier = pointerEvent.pointerId;
@@ -806,6 +903,8 @@ Hammer.detection = {
       inst      : inst, // reference to HammerInstance we're working for
       startEvent: Hammer.utils.extend({}, eventData), // start eventData for distances, timing etc
       lastEvent : false, // last eventData
+      lastVEvent: false, // last eventData for velocity.
+      velocity  : false, // current velocity
       name      : '' // current gesture we're in/detected, can be 'tap', 'hold' etc
     };
 
@@ -878,7 +977,8 @@ Hammer.detection = {
    * @returns {Object}   ev
    */
   extendEventData: function extendEventData(ev) {
-    var startEv = this.current.startEvent;
+    var startEv = this.current.startEvent,
+        lastVEv = this.current.lastVEvent;
 
     // if the touches change, set the new touches over the startEvent touches
     // this because touchevents don't have all the touches on touchstart, or the
@@ -895,9 +995,24 @@ Hammer.detection = {
     var delta_time = ev.timeStamp - startEv.timeStamp
       , delta_x = ev.center.pageX - startEv.center.pageX
       , delta_y = ev.center.pageY - startEv.center.pageY
-      , velocity = Hammer.utils.getVelocity(delta_time, delta_x, delta_y)
       , interimAngle
-      , interimDirection;
+      , interimDirection
+      , velocity = this.current.velocity;
+
+    if (lastVEv !== false && ev.timeStamp - lastVEv.timeStamp > Hammer.UPDATE_VELOCITY_INTERVAL) {
+
+        velocity =  Hammer.utils.getVelocity(ev.timeStamp - lastVEv.timeStamp, ev.center.pageX - lastVEv.center.pageX, ev.center.pageY - lastVEv.center.pageY);
+        this.current.lastVEvent = ev;
+
+        if (velocity.x > 0 && velocity.y > 0) {
+            this.current.velocity = velocity;
+        }
+
+    } else if(this.current.velocity === false) {
+        velocity = Hammer.utils.getVelocity(delta_time, delta_x, delta_y);
+        this.current.velocity = velocity;
+        this.current.lastVEvent = ev;
+    }
 
     // end events (e.g. dragend) don't have useful values for interimDirection & interimAngle
     // because the previous event has exactly the same coordinates
@@ -1211,15 +1326,17 @@ Hammer.gestures.Tap = {
     doubletap_interval: 300
   },
   handler : function tapGesture(ev, inst) {
-    if(ev.eventType == Hammer.EVENT_END && ev.srcEvent.type != 'touchcancel') {
+    if(ev.eventType == Hammer.EVENT_MOVE && !Hammer.detection.current.reachedTapMaxDistance) {
+      //Track the distance we've moved. If it's above the max ONCE, remember that (fixes #406).
+      Hammer.detection.current.reachedTapMaxDistance = (ev.distance > inst.options.tap_max_distance);
+    } else if(ev.eventType == Hammer.EVENT_END && ev.srcEvent.type != 'touchcancel') {
       // previous gesture, for the double tap since these are two different gesture detections
       var prev = Hammer.detection.previous,
         did_doubletap = false;
 
       // when the touchtime is higher then the max touch time
       // or when the moving distance is too much
-      if(ev.deltaTime > inst.options.tap_max_touchtime ||
-        ev.distance > inst.options.tap_max_distance) {
+      if(Hammer.detection.current.reachedTapMaxDistance || ev.deltaTime > inst.options.tap_max_touchtime) {
         return;
       }
 
@@ -1274,6 +1391,7 @@ Hammer.gestures.Touch = {
     }
   }
 };
+
 
 /**
  * Transform
@@ -1366,20 +1484,21 @@ Hammer.gestures.Transform = {
 
   // Based off Lo-Dash's excellent UMD wrapper (slightly modified) - https://github.com/bestiejs/lodash/blob/master/lodash.js#L5515-L5543
   // some AMD build optimizers, like r.js, check for specific condition patterns like the following:
-  if(typeof define == 'function' && typeof define.amd == 'object' && define.amd) {
+  if(typeof define == 'function' && define.amd) {
     // define as an anonymous module
-    define(function() {
-      return Hammer;
-    });
-    // check for `exports` after `define` in case a build optimizer adds an `exports` object
+    define(function() { return Hammer; });
   }
-  else if(typeof module === 'object' && typeof module.exports === 'object') {
+
+  // check for `exports` after `define` in case a build optimizer adds an `exports` object
+  else if(typeof module === 'object' && module.exports) {
     module.exports = Hammer;
   }
+
   else {
     window.Hammer = Hammer;
   }
-})(this);
+
+})(window);
 
 /*! jQuery plugin for Hammer.JS - v1.0.1 - 2014-02-03
  * http://eightmedia.github.com/hammer.js
@@ -1493,4 +1612,4 @@ function setup(Hammer, $) {
   else {
     setup(window.Hammer, window.jQuery || window.Zepto);
   }
-})(this);
+})(window);
