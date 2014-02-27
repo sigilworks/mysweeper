@@ -1,6 +1,8 @@
 
 var Constants = {
-    Version: 'beta4',
+
+    VERSION: 'beta4',
+    MAX_GRID_DIMENSIONS: 25,
 
     DefaultConfig: {
         dimensions: 9,
@@ -31,7 +33,8 @@ var Constants = {
 
     MessageOverlay: '#flash',
 
-    MobileDeviceRegex: /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/
+    MobileDeviceRegex: /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/,
+
 };
 
 module.exports = Constants;

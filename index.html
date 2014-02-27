@@ -11,6 +11,7 @@
 <body>
 
   <section id="options-card" class="card">
+    <div id='validation-warnings'></div>
     <form>
       <div id="preset-container" class="container">
 
@@ -60,7 +61,7 @@
             <input type="text" id="dimensions" placeholder="9" />
             <strong> x </strong>
             <input type="text" id="dimensions-mirror" placeholder="9" disabled />
-            <span class="advice">Please do not exceed 25 x 25.</span>
+            <span class="advice">Please do not exceed <span>.</span>
           </li>
 
           <li>
@@ -84,16 +85,34 @@
   </section>
 
   <section id="board-card" class="card">
+    <!-- HEADER MENU -->
     <header>
+      <!-- DISPLAYED MINE COUNT -->
       <span id="mines-display">Mines: <span class="minecounter">0</span></span>
-      <h1 class="banner"><i>Ä</i><span>my</span>sweeper</h1><span class="version"></span>
-      <span id="countdown">
-        <span id="m1" class="timer minutes">0</span><span id="m2" class="timer minutes">0</span><span class="colon">:</span>
-        <span id="s1" class="timer seconds">0</span><span id="s2" class="timer seconds">0</span>
+      <!-- SCOREBOARD -->
+      <span id="score-display">Score:
+          <span id="sc1" class="scores">0</span>
+          <span id="sc2" class="scores">0</span>
+          <span id="sc3" class="scores">0</span>
       </span>
+      <!-- CENTER/LOGO -->
+      <h1 class="banner"><i>Ä</i><span>my</span>sweeper</h1><span class="version"></span>
+      <!-- CLOCK -->
+      <span id="countdown">
+        <span id="m1" class="timer minutes">0</span>
+        <span id="m2" class="timer minutes">0</span>
+        <span class="colon">:</span>
+        <span id="s1" class="timer seconds">0</span>
+        <span id="s2" class="timer seconds">0</span>
+      </span>
+
     </header>
+
+    <!-- FLASH MESSAGE PANEL -->
     <div id="flash"></div>
+    <!-- GAMEBOARD -->
     <table id="board"></table>
+
   </section>
 
 </body>

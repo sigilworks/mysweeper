@@ -2,7 +2,10 @@ var Gameboard = require('./gameboard'),
     Modes = require('./constants').Modes,
     PresetLevels = require('./constants').PresetLevels,
     PresetSetups = require('./constants').PresetSetups,
-    VERSION = require('./constants').Version,
+    DimValidator = require('./validators').BoardDimensions,
+    MineValidator = require('./validators').MineCount,
+    VERSION = require('./constants').VERSION,
+    MAX_GRID_DIMENSIONS = require('./constants').MAX_GRID_DIMENSIONS,
 
     mineableSpaces = function(dim) { return ~~(Math.pow(dim, 2) * 0.5); },
     disableOption = function($el, undo) {
@@ -20,6 +23,7 @@ $(function(){
 
     // setting initial value
     $possibleMines.html(mineableSpaces($("#dimensions").attr("placeholder")));
+    $("#dimensions").siblings(".advice").find("span").html(MAX_GRID_DIMENSIONS + " x " + MAX_GRID_DIMENSIONS);
 
     $("#preset-mode").on('click', function() { enableOption($(PRESET_PANEL_SELECTOR)); disableOption($(CUSTOM_PANEL_SELECTOR)); }).click();
     $("#custom-mode").on('click', function() { enableOption($(CUSTOM_PANEL_SELECTOR)); disableOption($(PRESET_PANEL_SELECTOR)); });
@@ -60,12 +64,21 @@ $(function(){
         } else {
             // Modes.CUSTOM...
             gameOptions.isCustom = true;
-            gameOptions.dimensions = $("#dimensions").val() || +$("#dimensions").attr("placeholder");
-            gameOptions.mines = $("#mine-count").val() || +$("#mine-count").attr("placeholder");
+
+            var d = $("#dimensions").val() || +$("#dimensions").attr("placeholder"),
+                m = $("#mine-count").val() || +$("#mine-count").attr("placeholder");
+
+            try {
+                gameOptions.dimensions = DimValidator.validate(d) ? +d : 9;
+                gameOptions.mines = MineValidator.validate(m, mineableSpaces(gameOptions.dimensions)) ? m : 1;
+            } catch (e) {
+                console.log("e: %o", e);
+                $("#validation-warnings").html(e.message).show();
+                return false;
+            }
             // set the desired color theme...
             gameOptions.theme = $("#color-theme").val();
         }
-
 
         // set up <header> content...
         $("#mines-display").find("span").html(gameOptions.mines);
@@ -73,6 +86,7 @@ $(function(){
 
         window.gameboard = new Gameboard(gameOptions).render();
 
+        $("#validation-warnings").hide();
         $("#options-card").hide();
         $("#board-card").fadeIn();
 
