@@ -62,8 +62,7 @@ Gameboard.prototype = {
     // "PRIVATE" METHODS:
     _loadBoard: function() {
         // prefill squares to required dimensions...
-        var _this = this,
-            dimensions = this.dimensions,
+        var dimensions = this.dimensions,
             mines = this.mines,
             populateRow = function(row, squares) {
                 var ret = [];
