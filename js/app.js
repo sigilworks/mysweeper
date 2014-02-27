@@ -14,12 +14,14 @@ var Gameboard = require('./gameboard'),
 
 $(function(){
 
-    var $possibleMines = $("#mine-count").siblings(".advice").find("span");
+    var $possibleMines = $("#mine-count").siblings(".advice").find("span"),
+        PRESET_PANEL_SELECTOR = "ul.preset > li:not(:has(label[for$='-mode']))",
+        CUSTOM_PANEL_SELECTOR = "ul.custom > li:not(:has(label[for$='-mode']))";
     // setting initial value
     $possibleMines.html(mineableSpaces($("#dimensions").attr("placeholder")));
 
-    $("#preset-mode").on('click', function() { enableOption($("ul.preset")); disableOption($("ul.custom")); }).click();
-    $("#custom-mode").on('click', function() { enableOption($("ul.custom")); disableOption($("ul.preset")); });
+    $("#preset-mode").on('click', function() { enableOption($(PRESET_PANEL_SELECTOR)); disableOption($(CUSTOM_PANEL_SELECTOR)); }).click();
+    $("#custom-mode").on('click', function() { enableOption($(CUSTOM_PANEL_SELECTOR)); disableOption($(PRESET_PANEL_SELECTOR)); });
 
     $.each($("label[for=level-beginner],label[for=level-intermediate],label[for=level-expert]"), function(_, label) {
         var level = $(label).attr('for').substring('level-'.length).toUpperCase(),
