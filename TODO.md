@@ -19,4 +19,3 @@
 
 ## Bugs To Fix
  - move private methods out of prototype objects -- take advantage of modules' privacy!
- - add scoreboard panel (3 digits)...autoupdates from scorer events?
