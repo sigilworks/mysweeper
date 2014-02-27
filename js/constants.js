@@ -8,7 +8,7 @@ var Constants = {
         board: '#board',
         timer: 500,
         debug_mode: true, /*false*/
-        theme: 'light'
+        theme: 'LIGHT'
     },
 
     Symbols: { CLOSED: 'x', OPEN: '_', FLAGGED: 'f', MINED: '*' },
