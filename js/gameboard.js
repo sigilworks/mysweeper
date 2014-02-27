@@ -11,7 +11,8 @@ var Multimap = require('./lib/multimap'),
     ThemeStyler = require('./theme-styler'),
     ConsoleRenderer = require('./console-renderer'),
     MineLayer = require('./minelayer'),
-    Scorekeeper = require('./scorekeeper');
+    Scorekeeper = require('./scorekeeper'),
+    Scoreboard = require('./scoreboard');
 
 // wrapper around `$log`, to toggle dev mode debugging
 var $log = function $log() { if ($log.debug_mode || false) console.log.apply(console, arguments); }
@@ -47,6 +48,8 @@ function Gameboard(options) {
     this.clock.start();
     // create the scorekeeping object
     this.scorekeeper = new Scorekeeper(this);
+    // create the actual scoreboard view
+    this.scoreboard = new Scoreboard(0, "#score-display");
 
     // create the board in memory and assign values to the squares
     this._loadBoard();
@@ -143,6 +146,11 @@ Gameboard.prototype = {
         this.emitter.on('gb:start', function(ename, gameboard, $el) { $log("Let the game begin!", arguments); });
         this.emitter.on('gb:end:win', function(ename, gameboard, $el) { $log("Game over! You win!"); });
         this.emitter.on('gb:end:over', function(ename, gameboard, $el) { $log("Game over! You're dead!"); });
+
+        // --- THESE EVENTS ARE FOR REAL, TO STAY!
+        var _this = this;
+        // wires up the scoreboard view object to the events received from the scorekeeper
+        this.emitter.on('score:change', function() { _this.scoreboard.update(_this.scorekeeper.score); });
     },
     _removeEventListeners: function() {
         this.$el.off();

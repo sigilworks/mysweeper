@@ -101,10 +101,13 @@ Scorekeeper.prototype = {
     _enqueue: function(x) { return this.queue.splice(this._sortedInsert(x), 0, x); },
     _processEvent: function(event) {
         var fn = this.callbacks[event.type];
+        this.emitter.trigger("score:change", this.score);
         if (fn != null)
             return (fn.length > 1)
                 ? fn.call(this, event.pts, function(err) { if (!err) return void 0; })
-                : console.log("<score event: %o>: :old [%o]", fn.name, this.score), fn.call(this, event.pts), console.log("...:new => [%o]", this.score);
+                : console.log("<score event: %o>: :old [%o]", fn.name, this.score),
+                  fn.call(this, event.pts),
+                  console.log("...:new => [%o]", this.score);
         else
             return console.log("[Scorekeeper] could not find function " + event.type);
     },
