@@ -16,6 +16,7 @@
  - 'card flip' effect when revealing squares, and 'killer mine' flare.
  - complete serialization/deserialization process
  - clean up flash message strings and refactor from raw strings of HTML.
+ - Move emitter switch statement to a TranscriptionStrategy class (exports.TranscriptionStrategy, DefaultTranscriptionStrategy)
 
 ## Bugs To Fix
  - move private methods out of prototype objects -- take advantage of modules' privacy!

@@ -2,21 +2,33 @@ function Scoreboard(score, el) {
     this.score = score || 0;
     this.initial = score;
     this.el = document.getElementById(el.charAt(0) === '#' ? el.substring(1) : el);
+    this.$el = $(el);
 
-    this.H = this.el.querySelector('#sc1');
-    this.T = this.el.querySelector('#sc2');
-    this.O = this.el.querySelector('#sc3');
+    this.$L = this.$el.find('#sc1');
+    this.$M = this.$el.find('#sc2');
+    this.$R = this.$el.find('#sc3');
 
     this.update(this.initial);
 }
 
 Scoreboard.prototype = {
     constructor: Scoreboard,
+    _increment: function($chip, newval) {
+        var FX_DURATION = 800;
+
+        $chip.wrapInner("<span/>")
+             .find("span")
+             .slideUp({
+                duration: FX_DURATION,
+                queue: 'scoreboard',
+                done: function() { $(this).parent().html(newval).delay(400, 'scoreboard'); }
+             });
+    },
     update: function(points) {
         var pts = toStringArray(points);
-        this.H.innerHTML = pts[0];
-        this.T.innerHTML = pts[1];
-        this.O.innerHTML = pts[2];
+        this._increment(this.$R, pts[2]);
+        this._increment(this.$M, pts[1]);
+        this._increment(this.$L, pts[0]);
     }
 };
 
