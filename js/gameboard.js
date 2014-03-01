@@ -8,6 +8,7 @@ var Multimap = require('./lib/multimap'),
     rgx_mobile_devices = require('./constants').MobileDeviceRegex,
     Countdown = require('./countdown'),
     TranscribingEmitter = require('./transcribing-emitter'),
+    TranscriptionStrategy = require('./transcription-strategy'),
     ThemeStyler = require('./theme-styler'),
     ConsoleRenderer = require('./console-renderer'),
     MineLayer = require('./minelayer'),
@@ -29,7 +30,7 @@ function Gameboard(options) {
     // is custom or preset game?
     this.isCustom = options.isCustom || false;
     // the event transcriber for playback and persistence
-    this.emitter = new TranscribingEmitter;
+    this.emitter = new TranscribingEmitter(TranscriptionStrategy);
     // selectively enable debug mode for console visualizations and notifications
     this.debug_mode = options.debug_mode || DEFAULT_GAME_OPTIONS.debug_mode;
     $log.debug_mode = this.debug_mode;
