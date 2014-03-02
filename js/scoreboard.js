@@ -20,11 +20,11 @@ Scoreboard.prototype = {
              .find("span")
              .slideUp({
                 duration: FX_DURATION,
-                queue: 'scoreboard',
-                done: function() { $(this).parent().html(newval).delay(400, 'scoreboard'); }
+                done: function() { $(this).parent().html(newval); }
              });
     },
     update: function(points) {
+        if (!points) return;
         var pts = toStringArray(points);
         this._increment(this.$R, pts[2]);
         this._increment(this.$M, pts[1]);
@@ -34,12 +34,17 @@ Scoreboard.prototype = {
 
 module.exports = Scoreboard;
 
-function toStringArray(num) {
-    var num = String(num),
+function toStringArray(n) {
+    var num = String(n),
         len = num.length,
         DIGITS_MAX = 3,
         OUT_OF_RANGE = "999";
+    
     // too big for *this* scoreboard...
-    if (len > DIGITS_MAX) num = OUT_OF_RANGE, len = OUT_OF_RANGE.length;
+    if (len > DIGITS_MAX) {
+        num = OUT_OF_RANGE; 
+        len = OUT_OF_RANGE.length; 
+    }
+    
     return [ num[len - 3] || "0", num[len - 2] || "0", num[len - 1] || "0" ];
 }

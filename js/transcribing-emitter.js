@@ -14,7 +14,6 @@ TranscribingEmitter.prototype.__trigger__ = TranscribingEmitter.prototype.trigge
 TranscribingEmitter.prototype.trigger = function(/* data... [varargs] */) {
     var args = [].slice.call(arguments);
     // send original params to the subscribers...
-    console.warn("ARGS: %o", args);
     this.__trigger__.apply(this, args);
     // ...then alter the params for the transcript's records
     this._transcripts.push(this._strategy.apply(args));

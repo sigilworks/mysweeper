@@ -151,7 +151,7 @@ Gameboard.prototype = {
         // --- THESE EVENTS ARE FOR REAL, TO STAY!
         var _this = this;
         // wires up the scoreboard view object to the events received from the scorekeeper
-        this.emitter.on('score:change', function() { _this.scoreboard.update(_this.scorekeeper.score); });
+        this.emitter.on('score:change score:change:final', function() { _this.scoreboard.update(_this.scorekeeper.score); });
     },
     _removeEventListeners: function() {
         this.$el.off();
@@ -166,23 +166,18 @@ Gameboard.prototype = {
         // TODO: also handle first-click-can't-be-mine (if we're following that rule)
         // here, if userMoves === 0... :message => :mulligan?
         this.userMoves++;
-        var curr_open = this._getOpenedSquaresCount();
 
         if (square.isClosed() && !square.isMined() && !square.isFlagged()) {
             this._openSquare(square);
             if (!square.getDanger() > 0)
                 this._recursiveReveal(square);
 
-        } else if (square.isMined()) {
+        } else if (square.isMined() && !square.isFlagged()) {
             $cell.addClass('killer-mine');
             return this._gameOver();
         }
 
         this._evaluateForGameWin();
-
-        var opened_squares = this._getOpenedSquaresCount() - curr_open;
-        $log("Just opened %o squares...telling scorer.\nUser moves: %o.", opened_squares, this.userMoves);
-        this.scorekeeper.up(opened_squares);
     },
     _handleRightClick: function(event) {
         var $target = $(event.target),

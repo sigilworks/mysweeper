@@ -6,12 +6,18 @@ function Emitter() {
 Emitter.prototype = {
     constructor: Emitter,
     on: function(event, fn) {
-        this._events[event] = this._events[event] || [];
-        this._events[event].push(fn);
+        var _this = this;
+        event.split(/\s+/g).forEach(function(e) {
+            _this._events[e] = _this._events[e] || [];
+            _this._events[e].push(fn);
+        });
     },
     off: function(event, fn) {
-        if (this._events[event] !== false)
-            this._events[event].splice(this._events[event].indexOf(fn), 1);
+        var _this = this;
+        event.split(/\s+/g).forEach(function(e) {
+            if (_this._events[e] !== false)
+                _this._events[e].splice(_this._events[e].indexOf(fn), 1);
+        });
     },
     trigger: function(event /*, data... [varargs] */) {
         if (this._events[event] !== false)

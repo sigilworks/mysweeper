@@ -17,6 +17,7 @@
  - complete serialization/deserialization process
  - clean up flash message strings and refactor from raw strings of HTML.
  - Move emitter switch statement to a TranscriptionStrategy class (exports.TranscriptionStrategy, DefaultTranscriptionStrategy)
+ - extract point values for scoring into Constants file
 
 ## Bugs To Fix
  - move private methods out of prototype objects -- take advantage of modules' privacy!

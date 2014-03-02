@@ -52,7 +52,6 @@ function Scorekeeper(gameboard) {
 
   console.log("Scorekeeper initialized.  :score => %o, :timer => %o", this.score, this.timer);
   this._setupEventListeners();
-
 }
 
 function pos(pts) { return Math.abs(+pts) || 0; }
@@ -61,10 +60,10 @@ function neg(pts) { return -1 * Math.abs(+pts) || 0; }
 Scorekeeper.prototype = {
     _setupEventListeners: function() {
       var _this = this;
-
       this.emitter.on('sq:open', function(square, cell) {
         // check danger index...if not > 1, not `up`s for that!
-
+        if (square.getDanger() > 0)
+          _this.up(square.getDanger());
       });
       this.emitter.on('sq:close', function(square, cell) {});
       this.emitter.on('sq:flag', function(square, cell) {});
@@ -101,7 +100,6 @@ Scorekeeper.prototype = {
     _enqueue: function(x) { return this.queue.splice(this._sortedInsert(x), 0, x); },
     _processEvent: function(event) {
         var fn = this.callbacks[event.type];
-        this.emitter.trigger("score:change", this.score);
         if (fn != null)
             return (fn.length > 1)
                 ? fn.call(this, event.pts, function(err) { if (!err) return void 0; })
@@ -110,12 +108,16 @@ Scorekeeper.prototype = {
                   console.log("...:new => [%o]", this.score);
         else
             return console.log("[Scorekeeper] could not find function " + event.type);
+        
+        this.emitter.trigger("score:change", this.score);
     },
     _processFinalizers: function() {
         for (var visitor in this.finalizers) {
             console.log("<finalizer: %o>: :old [%o] => :new [%o]... ", visitor, this.score, (this.score += this.finalizers[visitor](this.gameboard)));
             // this.score += visitor(this.gameboard);
         }
+        // final update of the score
+        this.emitter.trigger("score:change:final", this.score);
     },
     _tick: function() {
         var currIdx = this._sortedInsert({ time: new Date().getTime() }), index = 0;
@@ -125,10 +127,6 @@ Scorekeeper.prototype = {
             callback();
         }
         return this.queue.splice(0, currIdx);
-    },
-    _updateDisplay: function() {
-      // update the scoreboard on the page here...
-      console.log(":score => %o  @ [%o]", this.score, new Date);
     },
     _addScoreToQueue: function(type, pts) { return this._enqueue({ time: ((+new Date) + this.nsu), type: type, pts: pts }); },
 
