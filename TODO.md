@@ -1,7 +1,7 @@
 # Things Left To Do
 
 ## Features or Components To Add
- - Unit tests on Gameboard, Countdown, and Scorer
+ - Unit tests on Gameboard, Countdown, Scorekeeper, Scoreboard, TranscriptionStrategy, &c.
  - Mines cannot number more than 1/3rd.
  - Use events transcript to replay?
  - Easter eggs: "hinting" for mine locations on key combo
@@ -16,7 +16,6 @@
  - 'card flip' effect when revealing squares, and 'killer mine' flare.
  - complete serialization/deserialization process
  - clean up flash message strings and refactor from raw strings of HTML.
- - Move emitter switch statement to a TranscriptionStrategy class (exports.TranscriptionStrategy, DefaultTranscriptionStrategy)
  - extract point values for scoring into Constants file
 
 ## Bugs To Fix

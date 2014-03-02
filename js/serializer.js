@@ -3,7 +3,7 @@ var Serializer = {
         return {
             _meta: {
                 timestamp: +new Date,
-                score: null,
+                score: gameboard.scorekeeper.score,
                 timer: gameboard.clock.seconds,
                 transcripts: gameboard.emitter._transcripts || [],
                 user: {}
@@ -11,7 +11,7 @@ var Serializer = {
             options: {
                 $el: gameboard.$el.selector,
                 board: gameboard.board._table,
-                scorekeeper: null,
+                scorekeeper: { queue: gameboard.scorekeeper.queue, final: gameboard.scorekeeper.final },
                 flashContainer: gameboard.flashContainer.selector,
                 theme: gameboard.theme,
                 debug_mode: gameboard.debug_mode,
