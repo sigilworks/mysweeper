@@ -322,7 +322,7 @@ Gameboard.prototype = {
 
     // "PUBLIC" METHODS
     render: function() {
-        this.getSquares().forEach(this._renderSquare.bind(this));
+        this.getSquares().forEach(this._renderSquare, this);
         // return `this`, so this method can be chained to its initialization call
         return this;
     },
