@@ -86,10 +86,10 @@ Scorekeeper.prototype = {
         else
             return 1 * SECONDS;
     },
-    _sortedInsert: function(x) {
+    _binarySearch: function(x) {
         var lo = 0, hi = this.queue.length;
         while (lo < hi) {
-            var mid = ~~((lo + hi) / 2);
+            var mid = ~~((lo + hi) >> 1);
             if (x.time < this.queue[mid].time)
                 hi = mid;
             else
@@ -97,7 +97,7 @@ Scorekeeper.prototype = {
         }
         return lo;
     },
-    _enqueue: function(x) { return this.queue.splice(this._sortedInsert(x), 0, x); },
+    _enqueue: function(x) { return this.queue.splice(this._binarySearch(x), 0, x); },
     _processEvent: function(event) {
         var fn = this.callbacks[event.type];
         if (fn != null)
@@ -108,7 +108,7 @@ Scorekeeper.prototype = {
                   console.log("...:new => [%o]", this.score);
         else
             return console.log("[Scorekeeper] could not find function " + event.type);
-        
+
         this.emitter.trigger("score:change", this.score);
     },
     _processFinalizers: function() {
@@ -120,7 +120,7 @@ Scorekeeper.prototype = {
         this.emitter.trigger("score:change:final", this.score);
     },
     _tick: function() {
-        var currIdx = this._sortedInsert({ time: new Date().getTime() }), index = 0;
+        var currIdx = this._binarySearch({ time: new Date().getTime() }), index = 0;
         while (index < currIdx) {
             var _this = this,
                 callback = function() { _this._processEvent(_this.queue[index]); return index += 1; };
