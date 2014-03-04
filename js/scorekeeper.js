@@ -66,8 +66,12 @@ Scorekeeper.prototype = {
           _this.up(square.getDanger());
       });
       this.emitter.on('sq:close', function(square, cell) {});
-      this.emitter.on('sq:flag', function(square, cell) {});
-      this.emitter.on('sq:unflag', function(square, cell) {});
+      this.emitter.on('sq:flag', function(square, cell) {
+        // use `deferredUp`...
+      });
+      this.emitter.on('sq:unflag', function(square, cell) {
+        // use `deferredDown`...
+      });
 
       this.emitter.on('gb:start', function(ename, gameboard, $el) { /* START THE SCOREKEEPER */ });
       this.emitter.on('gb:end:win', function(ename, gameboard, $el) { _this.endGame = true; /* STOP THE SCOREKEEPER */ });
@@ -130,8 +134,11 @@ Scorekeeper.prototype = {
     },
     _addScoreToQueue: function(type, pts) { return this._enqueue({ time: ((+new Date) + this.nsu), type: type, pts: pts }); },
 
-    up: function(pts) { console.log("Queueing `up` score event of %o", pos(pts)); this._addScoreToQueue("up", pos(pts)); },
-    down: function(pts) { console.log("Queueing `down` score event of %o", neg(pts)); this._addScoreToQueue("down", neg(pts)); },
+    up: function(pts) { this.score += pos(pts); },
+    down: function(pts) { this.score -= neg(pts); },
+
+    deferredUp: function(pts) { console.log("Queueing `up` score event of %o", pos(pts)); this._addScoreToQueue("up", pos(pts)); },
+    deferredDown: function(pts) { console.log("Queueing `down` score event of %o", neg(pts)); this._addScoreToQueue("down", neg(pts)); },
 
     finalUp: function(pts) { this.final.push(pos(pts)); },
     finalDown: function(pts) { this.final.push(neg(pts)); },
