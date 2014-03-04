@@ -1,3 +1,7 @@
+var FX_DURATION = require('./constants').Scoreboard.FX_DURATION,
+    DIGITS_MAX = require('./constants').Scoreboard.DIGITS,
+    OUT_OF_RANGE = require('./constants').Scoreboard.OUT_OF_RANGE;
+
 function Scoreboard(score, el) {
     this.score = score || 0;
     this.initial = score;
@@ -14,7 +18,6 @@ function Scoreboard(score, el) {
 Scoreboard.prototype = {
     constructor: Scoreboard,
     _increment: function(chips) {
-        var FX_DURATION = 800;
 
         chips.forEach(function(chip) {
             var $chip = chip[0], pts = chip[1];
@@ -38,9 +41,7 @@ module.exports = Scoreboard;
 
 function toStringArray(n) {
     var num = String(n),
-        len = num.length,
-        DIGITS_MAX = 3,
-        OUT_OF_RANGE = "MAX";
+        len = num.length;
 
     // too big for *this* scoreboard...
     if (len > DIGITS_MAX) {

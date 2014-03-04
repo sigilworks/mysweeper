@@ -35,6 +35,8 @@ var Constants = {
 
     MobileDeviceRegex: /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/,
 
+    Scoreboard: { DIGITS: 3, FX_DURATION: 800, OUT_OF_RANGE: "MAX" }
+
 };
 
 module.exports = Constants;
