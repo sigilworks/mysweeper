@@ -2,8 +2,12 @@ function Scorekeeper(gameboard) {
   var _this = this;
 
   this.callbacks = {
-    up: function up(pts) { this.score += pts; },
-    down: function down(pts) { this.score = (this.score - pts <= 0) ? 0 : this.score - pts; }
+    up: function up(pts) { 
+      this.score += pos(pts); 
+      this.emitter.trigger("score:change", this.score); }.bind(this),
+    down: function down(pts) { 
+      this.score = (this.score - neg(pts) <= 0) ? 0 : this.score - neg(pts); 
+      this.emitter.trigger("score:change", this.score); }.bind(this)
   };
 
   this.finalizers = {
@@ -59,23 +63,42 @@ function neg(pts) { return -1 * Math.abs(+pts) || 0; }
 
 Scorekeeper.prototype = {
     _setupEventListeners: function() {
-      var _this = this;
-      this.emitter.on('sq:open', function(square, cell) {
-        // check danger index...if not > 1, not `up`s for that!
-        if (square.getDanger() > 0)
-          _this.up(square.getDanger());
-      });
-      this.emitter.on('sq:close', function(square, cell) {});
-      this.emitter.on('sq:flag', function(square, cell) {
-        // use `deferredUp`...
-      });
-      this.emitter.on('sq:unflag', function(square, cell) {
-        // use `deferredDown`...
-      });
+      var EVENTS = {
+        'sq:open': function(square, cell) {
+                    // check danger index...if not > 1, not `up`s for that!
+                    if (square.getDanger() > 0)
+                      this.up(square.getDanger());
+                  },
+        'sq:close': function(square, cell) {}, // ...is this even possible?
+        'sq:flag': function(square, cell) {
+                    if (square.isMined())
+                      this.deferredUp( 25 ); // TODO: Make a constant here!
+                    else
+                      this.deferredDown( 10 ); // TODO: Make a constant here!
+                  },
+        'sq:unflag': function(square, cell) {
+                    if (square.isMined())
+                      this.deferredDown( 25 ); // TODO: Make a constant here!
+                    else
+                      this.deferredUp( 10 ); // TODO: Make a constant here!
+                  },
 
-      this.emitter.on('gb:start', function(ename, gameboard, $el) { /* START THE SCOREKEEPER */ });
-      this.emitter.on('gb:end:win', function(ename, gameboard, $el) { _this.endGame = true; /* STOP THE SCOREKEEPER */ });
-      this.emitter.on('gb:end:over', function(ename, gameboard, $el) { _this.endGame = true; /* STOP THE SCOREKEEPER */ });
+        'gb:start': function(ename, gameboard, $el) {
+                      this.endGame = false;
+                      /* START THE SCOREKEEPER */ 
+                    },
+        'gb:end:win': function(ename, gameboard, $el) { 
+                      this.endGame = true; 
+                      /* STOP THE SCOREKEEPER */ 
+                    },
+        'gb:end:over': function(ename, gameboard, $el) { 
+                      this.endGame = true; 
+                      /* STOP THE SCOREKEEPER */ 
+                    }
+      };
+
+      for (var event in EVENTS) 
+        this.emitter.on(event, EVENTS[event].bind(this));
     },
     _determineSignificantUnit: function() {
         var isCustom = this.gameboard.isCustom,
@@ -134,8 +157,8 @@ Scorekeeper.prototype = {
     },
     _addScoreToQueue: function(type, pts) { return this._enqueue({ time: ((+new Date) + this.nsu), type: type, pts: pts }); },
 
-    up: function(pts) { this.score += pos(pts); },
-    down: function(pts) { this.score -= neg(pts); },
+    up: function(pts) { console.log("up: %o", pts); this.callbacks.up(pts); },
+    down: function(pts) { console.log("down: %o", pts); this.callbacks.down(pts); },
 
     deferredUp: function(pts) { console.log("Queueing `up` score event of %o", pos(pts)); this._addScoreToQueue("up", pos(pts)); },
     deferredDown: function(pts) { console.log("Queueing `down` score event of %o", neg(pts)); this._addScoreToQueue("down", neg(pts)); },
