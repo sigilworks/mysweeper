@@ -1,3 +1,5 @@
+var Points = require('./constants').ScoringRules;
+
 function Scorekeeper(gameboard) {
   var _this = this;
 
@@ -23,13 +25,13 @@ function Scorekeeper(gameboard) {
     forFewestMoves: function(gameboard) {
         // experimental: sqrt(x^2 - x) * 10
         var dims = Math.pow(gameboard.dimensions, 2);
-        return ~~(Math.sqrt(dims - gameboard.userMoves) * 10);
+        return ~~(Math.sqrt(dims - gameboard.userMoves) * Points.USERMOVES_MULTIPLIER);
     },
     forFinalMisflaggings: function(gameboard) {
         var squares = gameboard.getSquares(),
             flagged = squares.filter(function(sq) { return sq.isFlagged(); }),
             misflagged = flagged.filter(function(sq) { return !sq.isMined(); });
-        return (misflagged.length * 10) || 0;
+        return (misflagged.length * Points.MISFLAGGED_MULTIPLIER) || 0;
     },
     forCorrectFlagging: function(gameboard) {
         var mines = gameboard.mines,
@@ -37,7 +39,7 @@ function Scorekeeper(gameboard) {
             flagged = squares.filter(function(sq) { return sq.isFlagged(); }),
             flaggedMines = squares.filter(function(sq) { return sq.isMined(); }),
             pct = ~~(flaggedMines.length / mines);
-        return Math.ceil((mines * 10) * pct);
+        return Math.ceil((mines * Points.FLAGGED_MINES_MULTIPLIER) * pct);
     }
   };
 
@@ -65,22 +67,23 @@ Scorekeeper.prototype = {
     _setupEventListeners: function() {
       var EVENTS = {
         'sq:open': function(square, cell) {
-                    // check danger index...if not > 1, not `up`s for that!
                     if (square.getDanger() > 0)
-                      this.up(square.getDanger());
+                      this.up(square.getDanger() * Points.DANGER_IDX_MULTIPLIER);
+                    else
+                      this.up(Points.BLANK_SQUARE_PTS)
                   },
         'sq:close': function(square, cell) {}, // ...is this even possible?
         'sq:flag': function(square, cell) {
                     if (square.isMined())
-                      this.deferredUp( 25 ); // TODO: Make a constant here!
+                      this.deferredUp(Points.FLAG_MINED);
                     else
-                      this.deferredDown( 10 ); // TODO: Make a constant here!
+                      this.deferredDown(Points.MISFLAG_UNMINED);
                   },
         'sq:unflag': function(square, cell) {
                     if (square.isMined())
-                      this.deferredDown( 25 ); // TODO: Make a constant here!
+                      this.deferredDown(Points.UNFLAG_MINED);
                     else
-                      this.deferredUp( 10 ); // TODO: Make a constant here!
+                      this.deferredUp(Points.MISUNFLAG_MINED);
                   },
 
         'gb:start': function(ename, gameboard, $el) {
