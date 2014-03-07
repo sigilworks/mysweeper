@@ -55,7 +55,7 @@ Countdown.prototype = {
     },
     start: function() { this.freeze = false; this._countdown(); },
     stop: function() { this.freeze = true; },
-    reset: function() { this._setDisplay(0, 0); }
+    reset: function() { this.seconds = 0; this._setDisplay(0, 0); }
 };
 
 module.exports = Countdown;

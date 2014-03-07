@@ -30,6 +30,20 @@ describe("Countdown",function(){
   });
 
   // TODO: test #start, #stop async here
+  it("should be able to be started and stopped like a stopwatch", function(done){
+    clock.reset();
+    clock._renderInitial();
+    var scs = 0;
+    clock.start();
+
+    setTimeout(function() {
+      clock.stop();
+      expect(clock.seconds).to.equal(2);
+      done();
+    }, 2000);
+
+    // expect(getDisplay(clock)).to.equal(TIME_DISPLAY);
+  });
 
   it("should be able to reset its display", function() {
     clock._renderInitial();
