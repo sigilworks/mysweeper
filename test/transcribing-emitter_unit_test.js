@@ -7,7 +7,7 @@ describe("TranscribingEmitter",function(){
   var emitter,
       MOCK_EVENT = { target: { nodeName: "TD" } },
       MOCK_SQUARE = new Square(1, 2, 3),
-      MOCK_TRANSCRIPT_ENTRY = '["click",{"target":{"nodeName":"TD"}},"$cell",{"row":1,"cell":2,"state":{"_flags":"0000"},"danger":3}]',
+      MOCK_TRANSCRIPT_ENTRY = '["click",{"target":{"nodeName":"TD"}},"$cell",{"row":1,"cell":2,"state":{"_flags":"1000"},"danger":3}]',
       CALLBACK = function(event, name, cell, square) { return this; };
 
   before(function(done){

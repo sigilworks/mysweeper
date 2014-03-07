@@ -66,13 +66,13 @@ describe("Square",function(){
   });
 
   it("#isIndexed returns whether or not the square has a danger index", function(){
-    expect(square.isIndexed()).to.be.false;
-    square.state.set(square.state.F_INDEXED);
     expect(square.isIndexed()).to.be.true;
+    square.state.unset(square.state.F_INDEXED);
+    expect(square.isIndexed()).to.be.false;
   });
 
   it("#toJSON returns a JSON representation of the square's state", function(){
-    var obj = { row: ROW, cell: CELL, state: { _flags: square.state.DEFAULT_STATE }, danger: DANGER },
+    var obj = { row: ROW, cell: CELL, state: { _flags: "1000" }, danger: DANGER },
         JSON_STRING = JSON.stringify(obj);
     expect(JSON.stringify(square.toJSON())).to.equal(JSON_STRING);
   });
@@ -89,7 +89,7 @@ describe("Square",function(){
     expect(square.isMined()).to.be.true;
     expect(square.isFlagged()).to.be.true;
     expect(square.isOpen()).to.be.false;
-    expect(square.isIndexed()).to.be.false;
+    expect(square.isIndexed()).to.be.true;
   });
 
 });
