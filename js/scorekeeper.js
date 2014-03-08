@@ -146,6 +146,7 @@ Scorekeeper.prototype = {
             console.log("<finalizer: %o>: :old [%o] => :new [%o]... ", visitor, this.score, (this.score += this.finalizers[visitor](this.gameboard)));
             // this.score += visitor(this.gameboard);
         }
+        this.final.forEach(function(f) { this.score += f; }, this);
         // final update of the score
         this.emitter.trigger("score:change:final", this.score);
     },
