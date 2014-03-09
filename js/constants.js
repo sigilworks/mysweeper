@@ -1,5 +1,5 @@
 
-var Constants = {
+var Constants = Object.freeze({
 
     VERSION: 'beta4',
     MAX_GRID_DIMENSIONS: 25,
@@ -49,6 +49,6 @@ var Constants = {
         FLAGGED_MINES_MULTIPLIER: 10
     }
 
-};
+});
 
 module.exports = Constants;
