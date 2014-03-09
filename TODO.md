@@ -17,7 +17,7 @@
  - complete serialization/deserialization process
  - clean up flash message strings and refactor from raw strings of HTML.
  - extract point values for scoring into Constants file
- - extract :flippable mixin from scoreboard to timer and mine count
+ - refactor scoreboard, countdown, mine counter to use :flippable mixin (e.g., Flippable(800, "span").call(Scoreboard.prototype);)
 
 ## Bugs To Fix
  - move private methods out of prototype objects -- take advantage of modules' privacy!
