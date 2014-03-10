@@ -21,7 +21,6 @@
  - alter :flippable to take an options hash
  - extract a Timer class from Countdown, add it to "./lib", and use Countdown like Scoreboard—both implementing :flippable interface. 
  - Timer class should have option to count up vs. down
- - clean this up BitFlagFactory#pad. Take out that DEFAULT_STATE comment, move all var declarations into first 1/3 of for-comprehension. 
 
 ## Bugs To Fix
  - move private methods out of prototype objects -- take advantage of modules' privacy!
