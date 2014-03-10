@@ -1,3 +1,5 @@
+"use strict;"
+
 var Gameboard = require('./gameboard'),
     Modes = require('./constants').Modes,
     PresetLevels = require('./constants').PresetLevels,

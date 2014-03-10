@@ -1,6 +1,7 @@
 // Linear Congruential Generator: variant of a Lehman Generator
 // based on LCG found here: https://gist.github.com/Protonk?page=4
 var LinearCongruentialGenerator = (function(){
+  "use strict;"
   // Set to values from http://en.wikipedia.org/wiki/Numerical_Recipes
   // m is basically chosen to be large (as it is the max period)
   // and for its relationships to a and c

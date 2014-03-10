@@ -1,3 +1,5 @@
+"use strict;"
+
 var Multimap = require('./lib/multimap'),
     DangerCalculator = require('./danger-calculator'),
     Square = require('./square'),

@@ -1,4 +1,4 @@
-
+"use strict;"
 // ERRORS AND EXCEPTIONS
 
 function MysweeperError() {

@@ -1,3 +1,5 @@
+"use strict;"
+
 var $C = require('./constants'),
     ValidationError = require('./errors').ValidationError,
     // validation helper fns

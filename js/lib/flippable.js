@@ -1,3 +1,4 @@
+"use strict;"
 
 var Flippable = function(duration, wrapper) {
     if (!(this instanceof Flippable))

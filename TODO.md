@@ -20,7 +20,6 @@
  - refactor scoreboard, countdown, mine counter to use :flippable mixin (e.g., Flippable(800, "span").call(Scoreboard.prototype);)
  - alter :flippable to take an options hash
  - extract MINEABLE_SPACES_MULTIPLIER from apps.js into constants.js, and lower it to 0.33
- - use the pragma "use strict;" everywhere
  - extract a Timer class from Countdown, add it to "./lib", and use Countdown like Scoreboard—both implementing :flippable interface. 
  - Timer class should have option to count up vs. down
  - clean this up BitFlagFactory#pad. Take out that DEFAULT_STATE comment, move all var declarations into first 1/3 of for-comprehension. 

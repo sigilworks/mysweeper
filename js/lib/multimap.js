@@ -1,3 +1,4 @@
+"use strict;"
 
 function Multimap() {
     this._table = [];

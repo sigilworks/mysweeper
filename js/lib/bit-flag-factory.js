@@ -1,3 +1,4 @@
+"use strict;"
 
 // @usage var BitFlags = new BitFlagFactory(['F_OPEN', 'F_MINED', 'F_FLAGGED', 'F_INDEXED']); bf = new BitFlags;
 function BitFlagFactory(args) {

@@ -1,3 +1,5 @@
+"use strict;"
+
 var FX_DURATION = require('./constants').Scoreboard.FX_DURATION,
     DIGITS_MAX = require('./constants').Scoreboard.DIGITS,
     OUT_OF_RANGE = require('./constants').Scoreboard.OUT_OF_RANGE;

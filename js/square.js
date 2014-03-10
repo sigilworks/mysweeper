@@ -1,3 +1,5 @@
+"use strict;"
+
 var BitFlagFactory = require('./lib/bit-flag-factory'),
     Symbols = require('./constants').Symbols,
     Flags = require('./constants').Flags,

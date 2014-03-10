@@ -1,3 +1,5 @@
+"use strict;"
+
 var Emitter = require('./lib/emitter'),
     TranscriptionStrategy = require('./transcription-strategy');
 

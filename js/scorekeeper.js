@@ -1,3 +1,5 @@
+"use strict;"
+
 var Points = require('./constants').ScoringRules;
 
 function Scorekeeper(gameboard) {
