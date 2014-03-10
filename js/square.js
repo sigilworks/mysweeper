@@ -35,6 +35,7 @@ Square.prototype = {
     flag: function() { this.state.set(this.state.F_FLAGGED); },
     unflag: function() { this.state.unset(this.state.F_FLAGGED); },
     mine: function() { this.state.set(this.state.F_MINED); },
+    unmine: function() { this.state.unset(this.state.F_MINED); },
     index: function() { this.state.set(this.state.F_INDEXED); },
 
     isClosed: function() { return !this.state.isOpen(); },

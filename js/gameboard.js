@@ -167,6 +167,16 @@ Gameboard.prototype = {
 
         // TODO: also handle first-click-can't-be-mine (if we're following that rule)
         // here, if userMoves === 0... :message => :mulligan?
+        if (square.isMined() && this.userMoves === 0) {
+            this.getSquares().forEach(function(sq) { sq.unmine(); });
+            this._determineMineLocations(this.dimensions, this.mines);
+            this._precalcDangerIndices();
+            if (this.debug_mode) {
+                this.toConsole();
+                this.toConsole(true);
+            }
+        }
+
         this.userMoves++;
 
         if (square.isClosed() && !square.isMined() && !square.isFlagged()) {
