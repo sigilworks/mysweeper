@@ -15,6 +15,7 @@
  - 'card flip' effect when revealing squares, and 'killer mine' flare.
  - complete serialization/deserialization process
  - consider use of Fisher-Yates shuffler to distribute mines
+
  - alter :flippable to take an options hash
  - add uglify, compression, gzip to build process
  - clean up flash message strings and refactor from raw strings of HTML.

@@ -13,7 +13,7 @@ module.exports = function(grunt) {
 
     watch: {
       files: ['js/**/*.js'],
-      tasks: ['browserify', 'uglify']
+      tasks: ['browserify', 'uglify', 'cssmin']
     },
 
     uglify: {
@@ -26,7 +26,15 @@ module.exports = function(grunt) {
           'dist/<%= pkg.name %>.min.js': ['dist/mysweeper.js']
         }
       }
-    }
+    },
+
+    cssmin: {
+      combine: {
+        files: {
+          'dist/mysweeper.min.css': ['css/**/*.css']
+        }
+      }
+    },
 
 
   });
@@ -34,6 +42,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-browserify');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-cssmin');
 
   grunt.registerTask('default', ['browserify','uglify']);
 };
