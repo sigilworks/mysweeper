@@ -10,3 +10,4 @@
 
 # Hide all metafiles from SublimeText
 *.sublime-*
+npm-debug.log

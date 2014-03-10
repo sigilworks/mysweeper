@@ -13,13 +13,27 @@ module.exports = function(grunt) {
 
     watch: {
       files: ['js/**/*.js'],
-      tasks: ['browserify']
+      tasks: ['browserify', 'uglify']
+    },
+
+    uglify: {
+      options: {
+        // the banner is inserted at the top of the output
+        // banner: '/*! <%= pkg.name %> <%= grunt.template.today("dd-mm-yyyy") %> */\n'
+      },
+      dist: {
+        files: {
+          'dist/<%= pkg.name %>.min.js': ['dist/mysweeper.js']
+        }
+      }
     }
+
 
   });
 
   grunt.loadNpmTasks('grunt-browserify');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
 
-  grunt.registerTask('default', ['browserify']);
+  grunt.registerTask('default', ['browserify','uglify']);
 };
