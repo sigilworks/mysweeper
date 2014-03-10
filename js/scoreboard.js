@@ -2,7 +2,8 @@
 
 var FX_DURATION = require('./constants').Scoreboard.FX_DURATION,
     DIGITS_MAX = require('./constants').Scoreboard.DIGITS,
-    OUT_OF_RANGE = require('./constants').Scoreboard.OUT_OF_RANGE;
+    OUT_OF_RANGE = require('./constants').Scoreboard.OUT_OF_RANGE,
+    Flippable = require('./lib/flippable');
 
 function Scoreboard(score, el) {
     this.score = score || 0;
@@ -20,17 +21,7 @@ function Scoreboard(score, el) {
 Scoreboard.prototype = {
     constructor: Scoreboard,
     _increment: function(chips) {
-
-        chips.forEach(function(chip) {
-            var $chip = chip[0], pts = chip[1];
-
-            if ($chip.html() !== pts)
-                $chip
-                    .wrapInner("<span/>")
-                    .find("span")
-                    .delay(FX_DURATION)
-                    .slideUp(FX_DURATION, function() { $(this).parent().html(pts) });
-        }, this);
+        chips.forEach(function(chip) { this._flip(chip[0], chip[1]); }, this);
     },
     update: function(points) {
         if (!points) return;
@@ -38,6 +29,8 @@ Scoreboard.prototype = {
         this._increment([[this.$R, pts[2]], [this.$M, pts[1]], [this.$L, pts[0]]]);
     }
 };
+
+Flippable(FX_DURATION).call(Scoreboard.prototype);
 
 module.exports = Scoreboard;
 

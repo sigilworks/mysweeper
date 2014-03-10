@@ -16,11 +16,8 @@
  - 'card flip' effect when revealing squares, and 'killer mine' flare.
  - complete serialization/deserialization process
  - clean up flash message strings and refactor from raw strings of HTML.
- 
- - refactor scoreboard, countdown, mine counter to use :flippable mixin (e.g., Flippable(800, "span").call(Scoreboard.prototype);)
+
  - alter :flippable to take an options hash
- - extract a Timer class from Countdown, add it to "./lib", and use Countdown like Scoreboard—both implementing :flippable interface. 
- - Timer class should have option to count up vs. down
 
 ## Bugs To Fix
  - move private methods out of prototype objects -- take advantage of modules' privacy!

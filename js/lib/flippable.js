@@ -3,8 +3,8 @@
 var Flippable = function(duration, wrapper) {
     if (!(this instanceof Flippable))
         return new Flippable(duration, wrapper);
-    
-    var nodeNameToTag = function(node) { return "<" + node + "/>"; },
+
+    var nodeNameToTag = function(node) { return "<" + node + " />"; },
         verifyDOMNode = function(str) {
             var tags = "a,abbr,acronym,address,applet,area,article,aside,audio,"
                 + "b,base,basefont,bdi,bdo,bgsound,big,blink,blockquote,body,br,button,"
@@ -16,20 +16,21 @@ var Flippable = function(duration, wrapper) {
                 + "ol,optgroup,option,output,p,param,plaintext,pre,progress,q,rp,rt,ruby,s,samp,script,"
                 + "section,select,shadow,small,source,spacer,span,strike,strong,style,sub,summary,sup,"
                 + "table,tbody,td,template,textarea,tfoot,th,thead,time,title,tr,track,tt,u,ul,var,video,wbr,xmp";
-            if (str = String(str).toLowerCase(), str && !!~tags.indexOf(str)) 
-                return str;
+            return (str = String(str).toLowerCase(), str && !!~tags.indexOf(str)) ? str : 'span';
         };
-    
+
     return function() {
-        this._flipDuration = +duration || 800,
-        this._flipWrapper = verifyDOMNode(wrapper) || 'span';
+        this._flipDuration = +duration || (duration == null) ? 800 : 0,
+        this._flipWrapper = verifyDOMNode(wrapper);
 
         this._flip = function($el, content) {
-            $el
-                .wrapInner($(nodeNameToTag(this._flipWrapper)))
-                .find(this.wrapper)
-                .delay(this._flipDuration)
-                .slideUp(this._flipDuration, function() { $(this).parent().html(content) });
+            if ($el.html() !== content) {
+                $el
+                    .wrapInner($(nodeNameToTag(this._flipWrapper)))
+                    .find(this._flipWrapper)
+                    .delay(this._flipDuration)
+                    .slideUp(this._flipDuration, function() { $(this).parent().html(content) });
+            }
         }
     };
 };

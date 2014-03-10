@@ -7,7 +7,8 @@ var Multimap = require('./lib/multimap'),
     Glyphs = require('./constants').Glyphs,
     MessageOverlay = require('./constants').MessageOverlay,
     DEFAULT_GAME_OPTIONS = require('./constants').DefaultConfig,
-    rgx_mobile_devices = require('./constants').MobileDeviceRegex,
+    RGX_MOBILE_DEVICES = require('./constants').MobileDeviceRegex,
+    Timer = require('./timer'),
     Countdown = require('./countdown'),
     TranscribingEmitter = require('./transcribing-emitter'),
     TranscriptionStrategy = require('./transcription-strategy'),
@@ -47,8 +48,9 @@ function Gameboard(options) {
     // the object that calculates the number of surrounding mines at any square
     this.dangerCalc = new DangerCalculator(this);
     // add in the countdown clock...
-    this.clock = new Countdown(+options.timer || DEFAULT_GAME_OPTIONS.timer, '#countdown');
-    this.clock.start();
+    this.clock = new Timer(0, +options.timer || DEFAULT_GAME_OPTIONS.timer,
+        options.isCountdown || DEFAULT_GAME_OPTIONS.isCountdown, this.emitter);
+    this.countdown = new Countdown("#countdown");
     // create the scorekeeping object
     this.scorekeeper = new Scorekeeper(this);
     // create the actual scoreboard view
@@ -60,8 +62,8 @@ function Gameboard(options) {
     this._renderGrid();
     // trigger event for game to begin...
     this.emitter.trigger('gb:start', this.board, this.$el.selector);
+    this.clock.start();
 }
-
 
 Gameboard.prototype = {
     constructor: Gameboard,
@@ -123,7 +125,7 @@ Gameboard.prototype = {
         ThemeStyler.set(theme, this.$el);
         return theme;
     },
-    _checkForMobile: function() { return rgx_mobile_devices.test(navigator.userAgent.toLowerCase()); },
+    _checkForMobile: function() { return RGX_MOBILE_DEVICES.test(navigator.userAgent.toLowerCase()); },
     _setupEventListeners: function() {
 
         if (this.isMobile) {
@@ -154,6 +156,7 @@ Gameboard.prototype = {
         var _this = this;
         // wires up the scoreboard view object to the events received from the scorekeeper
         this.emitter.on('score:change score:change:final', function() { _this.scoreboard.update(_this.scorekeeper.score); });
+        this.emitter.on('timer:start timer:stop timer:change timer:reset', function(mins, secs) { _this.countdown.update(mins, secs); });
     },
     _removeEventListeners: function() {
         this.$el.off();
