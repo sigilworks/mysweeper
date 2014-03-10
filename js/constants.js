@@ -2,8 +2,10 @@
 
 var Constants = Object.freeze({
 
-    VERSION: 'beta4',
+    VERSION: 'beta5',
+
     MAX_GRID_DIMENSIONS: 25,
+    MINEABLE_SPACES_MULTIPLIER: 0.33,
 
     DefaultConfig: {
         dimensions: 9,

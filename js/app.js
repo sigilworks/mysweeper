@@ -8,8 +8,9 @@ var Gameboard = require('./gameboard'),
     MineValidator = require('./validators').MineCount,
     VERSION = require('./constants').VERSION,
     MAX_GRID_DIMENSIONS = require('./constants').MAX_GRID_DIMENSIONS,
+    MINEABLE_SPACES_MULTIPLIER = require('./constants').MINEABLE_SPACES_MULTIPLIER,
 
-    mineableSpaces = function(dim) { return ~~(Math.pow(dim, 2) * 0.5); },
+    mineableSpaces = function(dim) { return ~~(Math.pow(dim, 2) * MINEABLE_SPACES_MULTIPLIER); },
     disableOption = function($el, undo) {
         if (undo == null) undo = false;
         $el[undo ? 'removeClass' : 'addClass']('disabled');
