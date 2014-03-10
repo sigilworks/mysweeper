@@ -72,7 +72,7 @@ h1.banner > i                           { font-style: normal; font-family: "Raph
 
 #flash                                  { display: none; margin: 0 auto 10px; text-align: center; padding: 10px 25px; text-shadow: 1px 2px 12px #333;
                                           box-shadow: 1px 3px 10px #555; font-size: 36px; font-weight: bold; letter-spacing: 3px; color: #F0F0F0;
-                                          top: 35%; left: 0; position: absolute; width: 100%; }
+                                          top: 35%; left: 0; position: absolute; width: 100%; z-index: 5000; }
 #flash.game-over                        { background: rgba(136,0,0, 0.75); border: none; box-shadow: none; }
 #flash.game-win                         { background: rgba(0,150,0, 0.75); border: none; box-shadow: none; }
 #flash > a                              { color: #F0F0F0; display: block; text-decoration: none; font-size: 16px; font-weight: normal;
