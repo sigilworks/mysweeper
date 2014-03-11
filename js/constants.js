@@ -6,12 +6,14 @@ var Constants = Object.freeze({
 
     MAX_GRID_DIMENSIONS: 25,
     MINEABLE_SPACES_MULTIPLIER: 0.33,
+    // for calculating clock, defaults
+    // to 1.25s for every mined square
+    TIME_AVG_ALLOC_PER_OPEN_SQUARE: 1.25,
 
     DefaultConfig: {
         dimensions: 9,
         mines: 1,
         board: '#board',
-        timer: 500,
         isCountdown: true,
         debug_mode: true, /*false*/
         theme: 'LIGHT'
@@ -28,9 +30,9 @@ var Constants = Object.freeze({
     PresetLevels: { BEGINNER: "B", INTERMEDIATE: "I", EXPERT: "E" },
 
     PresetSetups: {
-        BEGINNER:       { dimensions:  9, mines:  9, timer: 300 },
-        INTERMEDIATE:   { dimensions: 12, mines: 21, timer: 420 },
-        EXPERT:         { dimensions: 15, mines: 67, timer: 540 }
+        BEGINNER:       { dimensions:  9, mines:  9, timer:  90 },
+        INTERMEDIATE:   { dimensions: 12, mines: 21, timer: 150 },
+        EXPERT:         { dimensions: 15, mines: 67, timer: 200 }
     },
 
     Themes: { LIGHT: 'light', DARK: 'dark' },

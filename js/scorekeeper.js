@@ -6,11 +6,11 @@ function Scorekeeper(gameboard) {
   var _this = this;
 
   this.callbacks = {
-    up: function up(pts) { 
-      this.score += pos(pts); 
+    up: function up(pts) {
+      this.score += pos(pts);
       this.emitter.trigger("score:change", this.score); }.bind(this),
-    down: function down(pts) { 
-      this.score = (this.score - neg(pts) <= 0) ? 0 : this.score - neg(pts); 
+    down: function down(pts) {
+      this.score = (this.score - neg(pts) <= 0) ? 0 : this.score - neg(pts);
       this.emitter.trigger("score:change", this.score); }.bind(this)
   };
 
@@ -79,7 +79,7 @@ Scorekeeper.prototype = {
                     if (square.isMined())
                       this.deferredUp(Points.FLAG_MINED);
                     else
-                      this.deferredDown(Points.MISFLAG_UNMINED);
+                      this.deferredDown(Points.MISFLAG_UNMINED + (square.getDanger() || 0));
                   },
         'sq:unflag': function(square, cell) {
                     if (square.isMined())
@@ -90,19 +90,23 @@ Scorekeeper.prototype = {
 
         'gb:start': function(ename, gameboard, $el) {
                       this.endGame = false;
-                      /* START THE SCOREKEEPER */ 
+                      /* START THE SCOREKEEPER */
                     },
-        'gb:end:win': function(ename, gameboard, $el) { 
-                      this.endGame = true; 
-                      /* STOP THE SCOREKEEPER */ 
+        'gb:end:win': function(ename, gameboard, $el) {
+                      this.endGame = true;
+                      /* STOP THE SCOREKEEPER */
                     },
-        'gb:end:over': function(ename, gameboard, $el) { 
-                      this.endGame = true; 
-                      /* STOP THE SCOREKEEPER */ 
+        'gb:end:over': function(ename, gameboard, $el) {
+                      this.endGame = true;
+                      /* STOP THE SCOREKEEPER */
+                    },
+        'gb:end:timedout': function(ename, gameboard, $el) {
+                      this.endGame = true;
+                      /* STOP THE SCOREKEEPER */
                     }
       };
 
-      for (var event in EVENTS) 
+      for (var event in EVENTS)
         this.emitter.on(event, EVENTS[event].bind(this));
     },
     _determineSignificantUnit: function() {

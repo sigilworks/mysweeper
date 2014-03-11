@@ -50,4 +50,5 @@ body.dark                                     { font-family: 'Droid Sans Regular
 .dark .mined.open .danger                     { color: #FFF; font-size: 48px; text-shadow: 1px 1px 15px #F00; font-family: 'RaphaelIcons'; font-weight: normal; }
 
 .dark .game-win                               { box-shadow: 1px 2px 45px rgba(0, 150, 0, 0.75); border: 3px solid rgb(0, 150, 0); }
+.dark .game-timedout,
 .dark .game-over                              { box-shadow: 1px 2px 45px #DC0000; border: 3px solid #800; }

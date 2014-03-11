@@ -19,13 +19,28 @@ var DefaultTranscriptionStrategy = {
                     case "gb:start":
                     case "gb:end:win":
                     case "gb:end:over":
+                    case "gb:end:timedout":
                         // standard Gameboard-based event
                         if (data[1].constructor.name === "Multimap")
                             data[1] = JSON.stringify(data[1]);
                         break;
+
+                    case "score:change":
+                    case "score:change:final":
+                        data = null;
+                        break;
+                    case "timer:start":
+                    case "timer:stop":
+                    case "timer:change":
+                    case "timer:reset":
+                    case "timer:end":
+                        break; // no-op
+                    default:
+                        data = null;
+                        break;
                 }
                 // prefix array contents with the current timestamp as its key
-                data.unshift(+new Date);
+                data && data.unshift(+new Date);
                 return data;
             }
         }

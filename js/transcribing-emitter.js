@@ -18,7 +18,8 @@ TranscribingEmitter.prototype.trigger = function(/* data... [varargs] */) {
     // send original params to the subscribers...
     this.__trigger__.apply(this, args);
     // ...then alter the params for the transcript's records
-    this._transcripts.push(this._strategy.apply(args));
+    var tscript = this._strategy.apply(args);
+    tscript && this._transcripts.push(tscript);
 };
 
 module.exports = TranscribingEmitter;

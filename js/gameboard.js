@@ -7,6 +7,7 @@ var Multimap = require('./lib/multimap'),
     Glyphs = require('./constants').Glyphs,
     MessageOverlay = require('./constants').MessageOverlay,
     DEFAULT_GAME_OPTIONS = require('./constants').DefaultConfig,
+    TIME_AVG_ALLOC_PER_OPEN_SQUARE = require('./constants').TIME_AVG_ALLOC_PER_OPEN_SQUARE,
     RGX_MOBILE_DEVICES = require('./constants').MobileDeviceRegex,
     Timer = require('./timer'),
     Countdown = require('./countdown'),
@@ -48,7 +49,7 @@ function Gameboard(options) {
     // the object that calculates the number of surrounding mines at any square
     this.dangerCalc = new DangerCalculator(this);
     // add in the countdown clock...
-    this.clock = new Timer(0, +options.timer || DEFAULT_GAME_OPTIONS.timer,
+    this.clock = new Timer(0, +options.timer || this._determineTimer(),
         options.isCountdown || DEFAULT_GAME_OPTIONS.isCountdown, this.emitter);
     this.countdown = new Countdown("#countdown");
     // create the scorekeeping object
@@ -125,6 +126,7 @@ Gameboard.prototype = {
         ThemeStyler.set(theme, this.$el);
         return theme;
     },
+    _determineTimer: function() { return TIME_AVG_ALLOC_PER_OPEN_SQUARE * (Math.pow(this.dimensions, 2) - this.mines); },
     _checkForMobile: function() { return RGX_MOBILE_DEVICES.test(navigator.userAgent.toLowerCase()); },
     _setupEventListeners: function() {
 
@@ -151,12 +153,14 @@ Gameboard.prototype = {
         this.emitter.on('gb:start', function(ename, gameboard, $el) { $log("Let the game begin!", arguments); });
         this.emitter.on('gb:end:win', function(ename, gameboard, $el) { $log("Game over! You win!"); });
         this.emitter.on('gb:end:over', function(ename, gameboard, $el) { $log("Game over! You're dead!"); });
+        this.emitter.on('gb:end:timedout', function(ename, gameboard, $el) { $log("Game over! You're outta time!"); });
 
         // --- THESE EVENTS ARE FOR REAL, TO STAY!
         var _this = this;
         // wires up the scoreboard view object to the events received from the scorekeeper
         this.emitter.on('score:change score:change:final', function() { _this.scoreboard.update(_this.scorekeeper.score); });
-        this.emitter.on('timer:start timer:stop timer:change timer:reset', function(mins, secs) { _this.countdown.update(mins, secs); });
+        this.emitter.on('timer:start timer:stop timer:change timer:reset timer:end', function(mins, secs) { _this.countdown.update(mins, secs); });
+        this.emitter.on('timer:end', function() { _this._gameTimedOut(); });
     },
     _removeEventListeners: function() {
         this.$el.off();
@@ -275,12 +279,22 @@ Gameboard.prototype = {
     },
     _prepareFinalReveal: function() {
         var _this = this;
+        // for all flagged squares, remove flag icon
+        // and replace with original danger index instead
+        // for when it's opened
         this.getSquares()
             .filter(function(sq) { return sq.isFlagged(); })
             .forEach(function(f) {
                 _this.getGridCell(f).find('.danger').html(f.getDanger());
                 _this._unflagSquare(f, false);
             });
+
+        // open/reveal all squares
+        this.$el
+            .find('.square')
+            .removeClass('closed flagged')
+            .addClass('open');
+
         this._removeEventListeners();
         this.clock.stop();
         this.scorekeeper.close();
@@ -289,10 +303,7 @@ Gameboard.prototype = {
         this._prepareFinalReveal();
 
         this.$el.addClass('game-win');
-        this.$el
-            .find('.square')
-            .removeClass('closed flagged')
-            .addClass('open');
+
 
         $log("---  GAME WIN!  ---");
         $log("User moves: %o", this.userMoves)
@@ -303,16 +314,23 @@ Gameboard.prototype = {
         this._prepareFinalReveal();
 
         this.$el.addClass('game-over');
-        // open/reveal all squares
-        this.$el
-            .find('.square')
-            .removeClass('closed flagged')
-            .addClass('open');
+
 
         // put up 'Game Over' banner
         $log('---  GAME OVER!  ---');
         this._flashMsg('<span>Game Over!</span><a href="#" class="replay">Click here to play again...</a>', true);
         this.emitter.trigger('gb:end:over', this.board, this.$el.selector);
+    },
+    _gameTimedOut: function() {
+        this._prepareFinalReveal();
+
+        this.$el.addClass('game-timedout');
+
+
+        // put up 'Game Over' banner
+        $log('---  GAME OVER!  ---');
+        this._flashMsg('<span>Game Over! You\'re out of time!</span><a href="#" class="replay">Click here to play again...</a>', true);
+        this.emitter.trigger('gb:end:timedout', this.board, this.$el.selector);
     },
     _renderSquare: function(square) {
         var $cell = this.getGridCell(square),
