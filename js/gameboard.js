@@ -277,6 +277,10 @@ Gameboard.prototype = {
                 .html(msg)
                 .show();
     },
+    _gameEndMsg: function(msg, isAlert) {
+        var REPLAY_LINK = "<a href='#' class='replay'>Click here to play again...</a>";
+        this._flashMsg("<span>" + msg + "</span>" + REPLAY_LINK, isAlert);
+    },
     _prepareFinalReveal: function() {
         var _this = this;
         // for all flagged squares, remove flag icon
@@ -288,48 +292,37 @@ Gameboard.prototype = {
                 _this.getGridCell(f).find('.danger').html(f.getDanger());
                 _this._unflagSquare(f, false);
             });
-
         // open/reveal all squares
         this.$el
             .find('.square')
             .removeClass('closed flagged')
             .addClass('open');
-
         this._removeEventListeners();
         this.clock.stop();
         this.scorekeeper.close();
     },
     _gameWin: function () {
         this._prepareFinalReveal();
-
         this.$el.addClass('game-win');
-
-
         $log("---  GAME WIN!  ---");
         $log("User moves: %o", this.userMoves)
-        this._flashMsg('<span>Game Over!</span><a href="#" class="replay">Click here to play again...</a>');
+        this._gameEndMsg("Game Over! You win!");
         this.emitter.trigger('gb:end:win', this.board, this.$el.selector);
     },
     _gameOver: function() {
         this._prepareFinalReveal();
-
         this.$el.addClass('game-over');
-
-
         // put up 'Game Over' banner
         $log('---  GAME OVER!  ---');
-        this._flashMsg('<span>Game Over!</span><a href="#" class="replay">Click here to play again...</a>', true);
+        this._gameEndMsg("Game Over!", true);
         this.emitter.trigger('gb:end:over', this.board, this.$el.selector);
     },
     _gameTimedOut: function() {
         this._prepareFinalReveal();
-
         this.$el.addClass('game-timedout');
-
-
         // put up 'Game Over' banner
         $log('---  GAME OVER!  ---');
-        this._flashMsg('<span>Game Over! You\'re out of time!</span><a href="#" class="replay">Click here to play again...</a>', true);
+        this._gameEndMsg("Game Over! You're out of time!", true);
         this.emitter.trigger('gb:end:timedout', this.board, this.$el.selector);
     },
     _renderSquare: function(square) {
