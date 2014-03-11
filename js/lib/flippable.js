@@ -1,8 +1,13 @@
 "use strict;"
 
-var Flippable = function(duration, wrapper) {
+var Flippable = function(settings) {
     if (!(this instanceof Flippable))
-        return new Flippable(duration, wrapper);
+        return new Flippable(settings);
+
+    var options = { duration: 0, wrapper: 'span' };
+    for (var s in settings)
+        if (settings.hasOwnProperty(s))
+            options[s] = settings[s];
 
     var nodeNameToTag = function(node) { return "<" + node + " />"; },
         verifyDOMNode = function(str) {
@@ -20,8 +25,8 @@ var Flippable = function(duration, wrapper) {
         };
 
     return function() {
-        this._flipDuration = +duration || (duration == null) ? 800 : 0,
-        this._flipWrapper = verifyDOMNode(wrapper);
+        this._flipDuration = +options.duration,
+        this._flipWrapper = verifyDOMNode(options.wrapper);
 
         this._flip = function($el, content) {
             if ($el.html() !== content) {

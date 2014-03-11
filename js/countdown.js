@@ -36,6 +36,6 @@ Countdown.prototype = {
     }
 };
 
-Flippable(0, 'span').call(Countdown.prototype);
+Flippable().call(Countdown.prototype);
 
 module.exports = Countdown;

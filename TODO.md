@@ -15,7 +15,6 @@
  - consider use of Fisher-Yates shuffler to distribute mines
 
  - 'card flip' effect when revealing squares, and 'killer mine' flare.
- - alter :flippable to take an options hash
  - clean up flash message strings and refactor from raw strings of HTML.
 
 ## Bugs To Fix

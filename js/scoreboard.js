@@ -30,7 +30,7 @@ Scoreboard.prototype = {
     }
 };
 
-Flippable(FX_DURATION).call(Scoreboard.prototype);
+Flippable({ duration: FX_DURATION }).call(Scoreboard.prototype);
 
 module.exports = Scoreboard;
 
