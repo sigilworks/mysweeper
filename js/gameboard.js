@@ -116,7 +116,7 @@ Gameboard.prototype = {
     _createHTMLGrid: function(dimensions) {
         var grid = '';
         for (var i=0; i < dimensions; ++i) {
-            grid += "<tr id='row" + i + "'>"
+            grid += "<tr id='row" + i + "' class='-row'>"
                  +  [].join.call({ length: dimensions + 1 }, "<td></td>")
                  +  "</tr>";
         }

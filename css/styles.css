@@ -118,3 +118,20 @@ h1.banner > i                           { display: inline-block; vertical-align:
 
 .game-win                               {}
 .game-over                              {}
+.game-timedout							{}
+
+/*  CSS TEMPLATE FOR 'CARD-FLIP' EFFECT  */
+/* on click event: $cell.css('webkitTransform', 'rotateY(180deg)'); */
+/*
+.-row 						{ height: 150px; perspective: 600; position: relative; width: 150px; }
+.square 					{ height: 100%; position: absolute; transform-style: preserve-3d; transition: all 1s ease-in-out; width: 100%; }
+.square .side 				{ backface-visibility: hidden; height: 100%; position: absolute; width: 100%; }
+.square .back 				{ transform: rotateY(180deg); }
+*/
+/*.square:hover 			{ transform: rotateY(180deg); } */
+
+/*.-row 						{ perspective: 600; position: relative; width: 150px; }
+.square 					{ position: relative; transform-style: preserve-3d; transition: all 1s ease-in-out; }
+.square .danger 			{ backface-visibility: hidden; height: 100%; width: 100%; }
+.square .back 				{ transform: rotateY(180deg); height: 100%; width: 100%; }
+.square:hover 				{ transform: rotateY(180deg); }*/
