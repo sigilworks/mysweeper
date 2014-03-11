@@ -8,6 +8,11 @@ var ThemeStyler = {
 		$el || ($el = $($C.DefaultConfig.board));
 
 		var themeFile = $C.Themes[theme],
+			$body = $el.parents("body");
+
+		$body.removeClass().addClass(themeFile);
+
+		/* ,
 			$head = $el.parents("body").siblings("head"),
 			$styles = $head.find("link"),
 
@@ -27,7 +32,7 @@ var ThemeStyler = {
 		// it out for `theme`.
 		// Add $link iff it doesn't already exist!
 		if (!hasPreExisting($styles))
-			$styles.after($link);
+			$styles.after($link);*/
 	}
 };
 

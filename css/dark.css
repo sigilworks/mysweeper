@@ -1,2 +1,53 @@
 
-body                                    { /*border: 3px solid indianred;*/ }
+body.dark                                     { font-family: 'Droid Sans Regular'; font-size: 14px; color: #F8F8F8; background: #333; }
+
+.dark h1.banner                               { font-weight: normal; font-size: 28px; color: #777; letter-spacing: -1px; }
+.dark h1.banner > span                        { font-weight: bold; }
+.dark h1.banner > i                           { font-style: normal; font-family: "RaphaelIcons"; font-size: 65px; color: #E4E4E4; }
+
+.dark #validation-warnings                    { font-size: 16px; font-weight: bold; color: #F0F0F0; border: 3px solid #AC0000;
+                                                 background: rgba(186,0,0,0.75); text-shadow: -1px 1px 2px #333; letter-spacing: 0.5px; }
+
+.dark #preset-container                       { border-right: 1px dotted #CCC; }
+
+.dark #dimensions,
+.dark #mine-count                             { border: 2px solid #DDD; color: #333; }
+
+.dark .advice                                 { color: #AAA; }
+
+.dark .disabled                               { opacity: 0.25; }
+
+.dark #submit                                 { font-size: 14px; font-weight: bold; color: #333; word-spacing: 4px; }
+
+.dark #flash                                  { text-shadow: 1px 2px 12px #333; box-shadow: 1px 3px 10px #555; font-size: 36px; font-weight: bold;
+                                                 letter-spacing: 3px; color: #F0F0F0; }
+.dark #flash.game-over                        { background: rgba(136,0,0, 0.75); border: none; box-shadow: none; }
+.dark #flash.game-win                         { background: rgba(0,150,0, 0.75); border: none; box-shadow: none; }
+.dark #flash > a                              { color: #F0F0F0; font-size: 16px; font-weight: normal;
+                                                 letter-spacing: 1px; }
+
+.dark #board-card > header                    { border-bottom: 1px solid #DDD; }
+
+.dark .scores,
+.dark .minecounter,
+.dark .timer                                  { background: #555; color: #FFF; }
+.dark .colon                                  { font-weight: bold; }
+
+.dark .version                                { font-weight: bold; color: #800; }
+
+.dark .square                                 { background: #F0F0F0; border: 3px solid #555; }
+.dark .square .danger                         { color: #777; font-weight: bold; font-size: 20px; }
+
+.dark .closed                                 { background: #555; }
+
+.dark .open                                   { border: 3px solid rgba(51, 51, 51, 0.50); }
+
+.dark .flagged                                { background: #FFE68C; }
+.dark .flagged .danger                        { color: #333; font-size: 40px; text-shadow: 1px 1px 2px rgba(0,0,0, 0.45); font-family: 'RaphaelIcons'; }
+
+.dark .mined.closed                           { background: #555; }
+.dark .mined.open                             { background: #800; }
+.dark .mined.open .danger                     { color: #FFF; font-size: 48px; text-shadow: 1px 1px 15px #F00; font-family: 'RaphaelIcons'; font-weight: normal; }
+
+.dark .game-win                               { box-shadow: 1px 2px 45px rgba(0, 150, 0, 0.75); border: 3px solid rgb(0, 150, 0); }
+.dark .game-over                              { box-shadow: 1px 2px 45px #DC0000; border: 3px solid #800; }

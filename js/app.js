@@ -7,6 +7,7 @@ var Gameboard = require('./gameboard'),
     DimValidator = require('./validators').BoardDimensions,
     MineValidator = require('./validators').MineCount,
     VERSION = require('./constants').VERSION,
+    DEFAULT_CONFIG = require('./constants').DefaultConfig,
     MAX_GRID_DIMENSIONS = require('./constants').MAX_GRID_DIMENSIONS,
     MINEABLE_SPACES_MULTIPLIER = require('./constants').MINEABLE_SPACES_MULTIPLIER,
 
@@ -19,6 +20,7 @@ var Gameboard = require('./gameboard'),
     enableOption = function($el) { return disableOption($el, true); };
 
 $(function(){
+    $(document.body).addClass(DEFAULT_CONFIG.theme.toLowerCase());
 
     var $possibleMines = $("#mine-count").siblings(".advice").find("span"),
         PRESET_PANEL_SELECTOR = "ul.preset > li:not(:has(label[for$='-mode']))",

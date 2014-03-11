@@ -1,2 +1,53 @@
 
-body                                    { /*border: 3px solid yellow;*/ }
+body.light                                     { font-family: 'Droid Sans Regular'; font-size: 14px; color: #333; background: #F8F8F8; }
+
+.light h1.banner                               { font-weight: normal; font-size: 28px; color: #777; letter-spacing: -1px; }
+.light h1.banner > span                        { font-weight: bold; }
+.light h1.banner > i                           { font-style: normal; font-family: "RaphaelIcons"; font-size: 65px; color: #E4E4E4; }
+
+.light #validation-warnings                    { font-size: 16px; font-weight: bold; color: #F0F0F0; border: 3px solid #AC0000;
+                                                 background: rgba(186,0,0,0.75); text-shadow: -1px 1px 2px #333; letter-spacing: 0.5px; }
+
+.light #preset-container                       { border-right: 1px dotted #CCC; }
+
+.light #dimensions,
+.light #mine-count                             { border: 2px solid #DDD; color: #333; }
+
+.light .advice                                 { color: #AAA; }
+
+.light .disabled                               { opacity: 0.25; }
+
+.light #submit                                 { font-size: 14px; font-weight: bold; color: #333; word-spacing: 4px; }
+
+.light #flash                                  { text-shadow: 1px 2px 12px #333; box-shadow: 1px 3px 10px #555; font-size: 36px; font-weight: bold;
+                                                 letter-spacing: 3px; color: #F0F0F0; }
+.light #flash.game-over                        { background: rgba(136,0,0, 0.75); border: none; box-shadow: none; }
+.light #flash.game-win                         { background: rgba(0,150,0, 0.75); border: none; box-shadow: none; }
+.light #flash > a                              { color: #F0F0F0; font-size: 16px; font-weight: normal;
+                                                 letter-spacing: 1px; }
+
+.light #board-card > header                    { border-bottom: 1px solid #DDD; }
+
+.light .scores,
+.light .minecounter,
+.light .timer                                  { background: #555; color: #FFF; }
+.light .colon                                  { font-weight: bold; }
+
+.light .version                                { font-weight: bold; color: #800; }
+
+.light .square                                 { background: #F0F0F0; border: 3px solid #555; }
+.light .square .danger                         { color: #777; font-weight: bold; font-size: 20px; }
+
+.light .closed                                 { background: #555; }
+
+.light .open                                   { border: 3px solid rgba(51, 51, 51, 0.50); }
+
+.light .flagged                                { background: #FFE68C; }
+.light .flagged .danger                        { color: #333; font-size: 40px; text-shadow: 1px 1px 2px rgba(0,0,0, 0.45); font-family: 'RaphaelIcons'; }
+
+.light .mined.closed                           { background: #555; }
+.light .mined.open                             { background: #800; }
+.light .mined.open .danger                     { color: #FFF; font-size: 48px; text-shadow: 1px 1px 15px #F00; font-family: 'RaphaelIcons'; font-weight: normal; }
+
+.light .game-win                               { box-shadow: 1px 2px 45px rgba(0, 150, 0, 0.75); border: 3px solid rgb(0, 150, 0); }
+.light .game-over                              { box-shadow: 1px 2px 45px #DC0000; border: 3px solid #800; }

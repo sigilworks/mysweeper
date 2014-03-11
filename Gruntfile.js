@@ -6,21 +6,17 @@ module.exports = function(grunt) {
 
     browserify: {
       dist: {
-        files: { 'dist/mysweeper.js': [ 'js/**/*.js' ], },
+        files: { 'dist/<%= pkg.name %>.js': ['js/**/*.js', '!js/vendor/**/*.js'], },
         options: { debug: true }
       }
     },
 
     watch: {
-      files: ['js/**/*.js'],
+      files: ['js/**/*.js','css/**/*.css'],
       tasks: ['browserify', 'uglify', 'cssmin']
     },
 
     uglify: {
-      options: {
-        // the banner is inserted at the top of the output
-        // banner: '/*! <%= pkg.name %> <%= grunt.template.today("dd-mm-yyyy") %> */\n'
-      },
       dist: {
         files: {
           'dist/<%= pkg.name %>.min.js': ['dist/mysweeper.js']
@@ -31,7 +27,7 @@ module.exports = function(grunt) {
     cssmin: {
       combine: {
         files: {
-          'dist/mysweeper.min.css': ['css/**/*.css']
+          'dist/<%= pkg.name %>.min.css': ['css/**/*.css']
         }
       }
     },

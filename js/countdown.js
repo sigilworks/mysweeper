@@ -10,8 +10,6 @@ function Countdown(el) {
     this.$m2 = this.$el.find('#m2');
     this.$s1 = this.$el.find('#s1');
     this.$s2 = this.$el.find('#s2');
-
-    this.freeze = false;
 }
 
 Countdown.prototype = {
