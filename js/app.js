@@ -77,7 +77,6 @@ $(function(){
                 gameOptions.dimensions = DimValidator.validate(d) ? +d : 9;
                 gameOptions.mines = MineValidator.validate(m, mineableSpaces(gameOptions.dimensions)) ? m : 1;
             } catch (e) {
-                console.log("e: %o", e);
                 $("#validation-warnings").html(e.message).show();
                 return false;
             }
