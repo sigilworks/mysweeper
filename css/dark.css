@@ -1,9 +1,9 @@
 
 body.dark                                     { font-family: 'Droid Sans Regular'; font-size: 14px; color: #F8F8F8; background: #333; }
 
-.dark h1.banner                               { font-weight: normal; font-size: 28px; color: #777; letter-spacing: -1px; }
+.dark h1.banner                               { font-weight: normal; font-size: 28px; color: #E4E4E4; letter-spacing: -1px; }
 .dark h1.banner > span                        { font-weight: bold; }
-.dark h1.banner > i                           { font-style: normal; font-family: "RaphaelIcons"; font-size: 65px; color: #E4E4E4; }
+.dark h1.banner > i                           { font-style: normal; font-family: "RaphaelIcons"; font-size: 65px; color: #777; }
 
 .dark #validation-warnings                    { font-size: 16px; font-weight: bold; color: #F0F0F0; border: 3px solid #AC0000;
                                                  background: rgba(186,0,0,0.75); text-shadow: -1px 1px 2px #333; letter-spacing: 0.5px; }
@@ -35,12 +35,12 @@ body.dark                                     { font-family: 'Droid Sans Regular
 
 .dark .version                                { font-weight: bold; color: #800; }
 
-.dark .square                                 { background: #F0F0F0; border: 3px solid #555; }
-.dark .square .danger                         { color: #777; font-weight: bold; font-size: 20px; }
+.dark .square                                 { background: #555; border: 3px solid #444; }
+.dark .square .danger                         { color: #F0F0F0; font-weight: bold; font-size: 20px; text-shadow: -2px 1px 1px #333; }
 
 .dark .closed                                 { background: #555; }
 
-.dark .open                                   { border: 3px solid rgba(51, 51, 51, 0.50); }
+.dark .open                                   { 3px solid rgba(154, 154, 154, 0.5); }
 
 .dark .flagged                                { background: #FFE68C; }
 .dark .flagged .danger                        { color: #333; font-size: 40px; text-shadow: 1px 1px 2px rgba(0,0,0, 0.45); font-family: 'RaphaelIcons'; }
