@@ -7,7 +7,7 @@ function BitFlagFactory(args) {
         decToBin = function(num) { return num.toString(2); },
         buildState = function(arr) { return pad(arr.map(function(param) { return String(+param); }).reverse().join('')); },
         pad = function (str, max) {
-          for (var acc=[], max = max || 4, diff = max - str.length; diff > 0; acc[--diff] = '0') {}
+          for (var acc=[], max = max || 4, diff = max - str.length; diff > 0; acc[--diff] = '0');
           return acc.join('') + str;
         },
         createQueryMethod = function(name) { return function() { return this.has(this[name]); } },
