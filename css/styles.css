@@ -120,6 +120,8 @@ h1.banner > i                           { display: inline-block; vertical-align:
 .game-over                              {}
 .game-timedout							{}
 
+/*----------------------------------*/
+
 /*  CSS TEMPLATE FOR 'CARD-FLIP' EFFECT  */
 /* on click event: $cell.css('webkitTransform', 'rotateY(180deg)'); */
 /*
