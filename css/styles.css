@@ -123,17 +123,10 @@ h1.banner > i                           { display: inline-block; vertical-align:
 /*----------------------------------*/
 
 /*  CSS TEMPLATE FOR 'CARD-FLIP' EFFECT  */
-/* on click event: $cell.css('webkitTransform', 'rotateY(180deg)'); */
-/*
-.-row 						{ height: 150px; perspective: 600; position: relative; width: 150px; }
-.square 					{ height: 100%; position: absolute; transform-style: preserve-3d; transition: all 1s ease-in-out; width: 100%; }
-.square .side 				{ backface-visibility: hidden; height: 100%; position: absolute; width: 100%; }
-.square .back 				{ transform: rotateY(180deg); }
-*/
-/*.square:hover 			{ transform: rotateY(180deg); } */
-
-/*.-row 						{ perspective: 600; position: relative; width: 150px; }
-.square 					{ position: relative; transform-style: preserve-3d; transition: all 1s ease-in-out; }
-.square .danger 			{ backface-visibility: hidden; height: 100%; width: 100%; }
-.square .back 				{ transform: rotateY(180deg); height: 100%; width: 100%; }
-.square:hover 				{ transform: rotateY(180deg); }*/
+.container              { height: 75px; perspective: 600; position: relative; width: 75px; }
+.sq                     { height: 100%; position: absolute; -webkit-transform-style: preserve-3d;
+                      	  -webkit-transition: all 1s ease-in-out; width: 100%;
+                      	  border: 3px solid rgba(51,51,51,0.75); }
+.sq .face               { backface-visibility: hidden; height: 100%; position: absolute;
+                      	  width: 100%; background: #777; }
+.sq .danger             { -webkit-transform: rotateY(180deg); background: #FCE9A5; }

@@ -20,6 +20,7 @@ var Gameboard = require('./gameboard'),
     enableOption = function($el) { return disableOption($el, true); };
 
 $(function(){
+
     $(document.body).addClass(DEFAULT_CONFIG.theme.toLowerCase());
 
     var $possibleMines = $("#mine-count").siblings(".advice").find("span"),
@@ -77,6 +78,8 @@ $(function(){
                 gameOptions.dimensions = DimValidator.validate(d) ? +d : 9;
                 gameOptions.mines = MineValidator.validate(m, mineableSpaces(gameOptions.dimensions)) ? m : 1;
             } catch (e) {
+                console.warn("Error: %o", e);
+
                 $("#validation-warnings").html(e.message).show();
                 return false;
             }
@@ -101,6 +104,14 @@ $(function(){
         // temporary, brute-force fix...
         // TODO: reset form and toggle visibility on the sections...
         window.location.reload();
+    });
+
+    // TODO: FOR DEV USE ONLY -- DELETE ME!
+    $(".sq").on('click', function() {
+        $(this).css({
+            'webkitTransform': 'rotateY(180deg)',
+            'webkitTransition': 'background-color 2s ease, 1s ease-in-out'
+        });
     });
 
 });
