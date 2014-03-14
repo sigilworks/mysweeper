@@ -9,7 +9,7 @@ function MysweeperError() {
       };
   this.message = extendMessage(args[0], args.slice(1));
   Error.call(this, this.message);
-  Error.captureStackTrace(this, arguments.callee);
+  // Error.captureStackTrace(this, arguments.callee);
   this.stack = Error().stack;
 }
 MysweeperError.prototype = new Error();
