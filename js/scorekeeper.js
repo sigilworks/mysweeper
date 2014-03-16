@@ -25,7 +25,7 @@ function Scorekeeper(gameboard) {
         return 100 - ~~(elapsed / total * 100);
     },
     forFewestMoves: function(gameboard) {
-        // experimental: sqrt(x^2 - x) * 10
+        // experimental: sqrt(x^2 - y) * 10
         var dims = Math.pow(gameboard.dimensions, 2);
         return ~~(Math.sqrt(dims - gameboard.userMoves) * Points.USERMOVES_MULTIPLIER);
     },
