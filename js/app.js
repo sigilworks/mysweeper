@@ -105,13 +105,5 @@ $(function(){
         // TODO: reset form and toggle visibility on the sections...
         window.location.reload();
     });
-
-    // TODO: FOR DEV USE ONLY -- DELETE ME!
-    $(".sq").on('click', function() {
-        $(this).css({
-            'webkitTransform': 'rotateY(180deg)',
-            'webkitTransition': 'background-color 2s ease, 1s ease-in-out'
-        });
-    });
-
+    
 });

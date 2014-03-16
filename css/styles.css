@@ -118,15 +118,4 @@ h1.banner > i                           { display: inline-block; vertical-align:
 
 .game-win                               {}
 .game-over                              {}
-.game-timedout							{}
-
-/*----------------------------------*/
-
-/*  CSS TEMPLATE FOR 'CARD-FLIP' EFFECT  */
-.container              { height: 75px; perspective: 600; position: relative; width: 75px; }
-.sq                     { height: 100%; position: absolute; -webkit-transform-style: preserve-3d;
-                      	  -webkit-transition: all 1s ease-in-out; width: 100%;
-                      	  border: 3px solid rgba(51,51,51,0.75); }
-.sq .face               { backface-visibility: hidden; height: 100%; position: absolute;
-                      	  width: 100%; background: #777; }
-.sq .danger             { -webkit-transform: rotateY(180deg); background: #FCE9A5; }
+.game-timedout							            {}
