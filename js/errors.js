@@ -17,6 +17,7 @@ MysweeperError.prototype.constructor = MysweeperError;
 MysweeperError.prototype.getTrace = function() { return this.stack.replace(/↵\s+/g, '\n  '); };
 MysweeperError.prototype.name = 'MysweeperError';
 
+/*  -------------------------------------------------------------------------------------------  */
 
 function ValidationError() {
   MysweeperError.apply(this, arguments);
@@ -25,8 +26,14 @@ ValidationError.prototype = new MysweeperError();
 ValidationError.prototype.constructor = ValidationError;
 ValidationError.prototype.name = 'ValidationError';
 
+function ScoreEventHandlerMissingError() {
+  MysweeperError.apply(this, arguments);
+}
+ScoreEventHandlerMissingError.prototype = new MysweeperError();
+ScoreEventHandlerMissingError.prototype.constructor = ScoreEventHandlerMissingError;
+ScoreEventHandlerMissingError.prototype.name = 'ScoreEventHandlerMissingError';
+
+
 module.exports.MysweeperError = MysweeperError;
 module.exports.ValidationError = ValidationError;
-
-
-/*  -------------------------------------------------------------------------------------------  */
+module.exports.ScoreEventHandlerMissingError = ScoreEventHandlerMissingError;

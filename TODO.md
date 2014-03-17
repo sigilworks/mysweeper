@@ -13,7 +13,7 @@
  - replace bespoke mocks with Sinon equivs in tests for Countdown and TranscribingEmitter.
  - complete serialization/deserialization process
  - consider use of Fisher-Yates shuffler to distribute mines
- - 'card flip' effect when revealing squares, and 'killer mine' flare.
+ - 'killer mine' flare effect.
 
 ## Bugs To Fix
  - move private methods out of prototype objects -- take advantage of modules' privacy!

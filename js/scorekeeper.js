@@ -1,6 +1,7 @@
 "use strict;"
 
-var Points = require('./constants').ScoringRules;
+var Points = require('./constants').ScoringRules,
+    ScoreEventHandlerMissingError = require('./errors').ScoreEventHandlerMissingError;
 
 function Scorekeeper(gameboard) {
   var _this = this;
@@ -21,15 +22,16 @@ function Scorekeeper(gameboard) {
         return 1 - (~~(moves / unmined) * 10);
     },
     forTimePassed: function(gameboard) {
-        var total = gameboard.clock.initial, elapsed = gameboard.clock.seconds;
+        var total = gameboard.clock.max, elapsed = gameboard.clock.seconds;
         return 100 - ~~(elapsed / total * 100);
     },
     forFewestMoves: function(gameboard) {
         // experimental: sqrt(x^2 - y) * 10
         var dims = Math.pow(gameboard.dimensions, 2);
         return ~~(Math.sqrt(dims - gameboard.userMoves) * Points.USERMOVES_MULTIPLIER);
-    },
-    forFinalMisflaggings: function(gameboard) {
+    }
+    // TODO: test if these are needed anymore...they might be calculated on-the-spot now:
+/* ,   forFinalMisflaggings: function(gameboard) {
         var squares = gameboard.getSquares(),
             flagged = squares.filter(function(sq) { return sq.isFlagged(); }),
             misflagged = flagged.filter(function(sq) { return !sq.isMined(); });
@@ -42,7 +44,7 @@ function Scorekeeper(gameboard) {
             flaggedMines = squares.filter(function(sq) { return sq.isMined(); }),
             pct = ~~(flaggedMines.length / mines);
         return Math.ceil((mines * Points.FLAGGED_MINES_MULTIPLIER) * pct);
-    }
+    }*/
   };
 
   this.queue = [];
@@ -58,7 +60,6 @@ function Scorekeeper(gameboard) {
   this.endGame = false; // if game is now over, flush queues
   this.timer = setInterval(this._tick.bind(_this), this.nsu);
 
-  console.log("Scorekeeper initialized.  :score => %o, :timer => %o", this.score, this.timer);
   this._setupEventListeners();
 }
 
@@ -143,7 +144,7 @@ Scorekeeper.prototype = {
                   fn.call(this, event.pts),
                   console.log("...:new => [%o]", this.score);
         else
-            return console.log("[Scorekeeper] could not find function " + event.type);
+            return new ScoreEventHandlerMissingError("Scorekeeper could not find function {0}", event.type);
 
         this.emitter.trigger("score:change", this.score);
     },
@@ -167,11 +168,11 @@ Scorekeeper.prototype = {
     },
     _addScoreToQueue: function(type, pts) { return this._enqueue({ time: ((+new Date) + this.nsu), type: type, pts: pts }); },
 
-    up: function(pts) { console.log("up: %o", pts); this.callbacks.up(pts); },
-    down: function(pts) { console.log("down: %o", pts); this.callbacks.down(pts); },
+    up: function(pts) { this.callbacks.up(pts); },
+    down: function(pts) { this.callbacks.down(pts); },
 
-    deferredUp: function(pts) { console.log("Queueing `up` score event of %o", pos(pts)); this._addScoreToQueue("up", pos(pts)); },
-    deferredDown: function(pts) { console.log("Queueing `down` score event of %o", neg(pts)); this._addScoreToQueue("down", neg(pts)); },
+    deferredUp: function(pts) { this._addScoreToQueue("up", pos(pts)); },
+    deferredDown: function(pts) { this._addScoreToQueue("down", neg(pts)); },
 
     finalUp: function(pts) { this.final.push(pos(pts)); },
     finalDown: function(pts) { this.final.push(neg(pts)); },

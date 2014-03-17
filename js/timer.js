@@ -26,7 +26,6 @@ Timer.prototype = {
         var _this = this,
             timer = setInterval(function() {
                 if (!_this.freeze) {
-                    // if (_this.seconds !== (_this.isCountdown ? 0 : _this.max)) {
                     if ((_this.isCountdown && _this.seconds > 0) || (!_this.isCountdown && _this.seconds < _this.max)) {
                         var arr = _this._toMinsSecs(_this.seconds);
                         _this._publish("change", arr[0], arr[1]);
