@@ -8,11 +8,15 @@ module.exports = function(grunt) {
       dist: {
         files: { 'dist/<%= pkg.name %>.js': ['js/**/*.js', '!js/vendor/**/*.js'], },
         options: { debug: true }
+      },
+      test: {
+        files: { 'test/bundle.js': [ 'test/**/*-unit_test.js' ] },
+        options: { debug: true }
       }
     },
 
     watch: {
-      files: ['js/**/*.js','css/**/*.css'],
+      files: ['js/**/*.js','css/**/*.css','test/**/*-unit_test.js'],
       tasks: ['browserify', 'uglify', 'cssmin']
     },
 
