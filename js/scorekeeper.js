@@ -4,15 +4,17 @@ var Points = require('./constants').ScoringRules,
     ScoreEventHandlerMissingError = require('./errors').ScoreEventHandlerMissingError;
 
 function Scorekeeper(gameboard) {
-  var _this = this;
+
 
   this.callbacks = {
-    up: function up(pts) {
+    up: function(pts) {
       this.score += pos(pts);
-      this.emitter.trigger("score:change", this.score); }.bind(this),
-    down: function down(pts) {
+      this.emitter.trigger("score:change", this.score);
+    },
+    down: function(pts) {
       this.score = (this.score - neg(pts) <= 0) ? 0 : this.score - neg(pts);
-      this.emitter.trigger("score:change", this.score); }.bind(this)
+      this.emitter.trigger("score:change", this.score);
+    }
   };
 
   this.finalizers = {
@@ -30,21 +32,6 @@ function Scorekeeper(gameboard) {
         var dims = Math.pow(gameboard.dimensions, 2);
         return ~~(Math.sqrt(dims - gameboard.userMoves) * Points.USERMOVES_MULTIPLIER);
     }
-    // TODO: test if these are needed anymore...they might be calculated on-the-spot now:
-/* ,   forFinalMisflaggings: function(gameboard) {
-        var squares = gameboard.getSquares(),
-            flagged = squares.filter(function(sq) { return sq.isFlagged(); }),
-            misflagged = flagged.filter(function(sq) { return !sq.isMined(); });
-        return (misflagged.length * Points.MISFLAGGED_MULTIPLIER) || 0;
-    },
-    forCorrectFlagging: function(gameboard) {
-        var mines = gameboard.mines,
-            squares = gameboard.getSquares(),
-            flagged = squares.filter(function(sq) { return sq.isFlagged(); }),
-            flaggedMines = squares.filter(function(sq) { return sq.isMined(); }),
-            pct = ~~(flaggedMines.length / mines);
-        return Math.ceil((mines * Points.FLAGGED_MINES_MULTIPLIER) * pct);
-    }*/
   };
 
   this.queue = [];
@@ -58,7 +45,7 @@ function Scorekeeper(gameboard) {
 
   this.nsu = this._determineSignificantUnit();
   this.endGame = false; // if game is now over, flush queues
-  this.timer = setInterval(this._tick.bind(_this), this.nsu);
+  this.timer = setInterval(this._tick.bind(this), this.nsu);
 
   this._setupEventListeners();
 }
@@ -73,9 +60,8 @@ Scorekeeper.prototype = {
                     if (square.getDanger() > 0)
                       this.up(square.getDanger() * Points.DANGER_IDX_MULTIPLIER);
                     else
-                      this.up(Points.BLANK_SQUARE_PTS)
+                      this.up(Points.BLANK_SQUARE_PTS);
                   },
-        'sq:close': function(square, cell) {}, // ...is this even possible?
         'sq:flag': function(square, cell) {
                     if (square.isMined())
                       this.deferredUp(Points.FLAG_MINED);
@@ -88,23 +74,10 @@ Scorekeeper.prototype = {
                     else
                       this.deferredUp(Points.MISUNFLAG_MINED);
                   },
-
-        'gb:start': function(ename, gameboard, $el) {
-                      this.endGame = false;
-                      /* START THE SCOREKEEPER */
-                    },
-        'gb:end:win': function(ename, gameboard, $el) {
-                      this.endGame = true;
-                      /* STOP THE SCOREKEEPER */
-                    },
-        'gb:end:over': function(ename, gameboard, $el) {
-                      this.endGame = true;
-                      /* STOP THE SCOREKEEPER */
-                    },
-        'gb:end:timedout': function(ename, gameboard, $el) {
-                      this.endGame = true;
-                      /* STOP THE SCOREKEEPER */
-                    }
+        'gb:start': function(ename, gameboard, $el) { this.endGame = false; },
+        'gb:end:win': function(ename, gameboard, $el) { this.endGame = true; },
+        'gb:end:over': function(ename, gameboard, $el) { this.endGame = true; },
+        'gb:end:timedout': function(ename, gameboard, $el) { this.endGame = true; }
       };
 
       for (var event in EVENTS)
@@ -140,7 +113,7 @@ Scorekeeper.prototype = {
         if (fn != null)
             return (fn.length > 1)
                 ? fn.call(this, event.pts, function(err) { if (!err) return void 0; })
-                : console.log("<score event: %o>: :old [%o]", fn.name, this.score),
+                : console.log("<deferred score event: %o> :old => [%o]", event.type, this.score),
                   fn.call(this, event.pts),
                   console.log("...:new => [%o]", this.score);
         else
@@ -150,7 +123,7 @@ Scorekeeper.prototype = {
     },
     _processFinalizers: function() {
         for (var visitor in this.finalizers) {
-            console.log("<finalizer: %o>: :old [%o] => :new [%o]... ", visitor, this.score, (this.score += this.finalizers[visitor](this.gameboard)));
+            console.log("<finalizer: %o> :old [%o] => :new [%o]... ", visitor, this.score, (this.score += this.finalizers[visitor](this.gameboard)));
             // this.score += visitor(this.gameboard);
         }
         this.final.forEach(function(f) { this.score += f; }, this);
@@ -160,16 +133,15 @@ Scorekeeper.prototype = {
     _tick: function() {
         var currIdx = this._binarySearch({ time: new Date().getTime() }), index = 0;
         while (index < currIdx) {
-            var _this = this,
-                callback = function() { _this._processEvent(_this.queue[index]); return index += 1; };
+            var callback = function() { this._processEvent(this.queue[index]); return index += 1; }.bind(this);
             callback();
         }
         return this.queue.splice(0, currIdx);
     },
     _addScoreToQueue: function(type, pts) { return this._enqueue({ time: ((+new Date) + this.nsu), type: type, pts: pts }); },
 
-    up: function(pts) { this.callbacks.up(pts); },
-    down: function(pts) { this.callbacks.down(pts); },
+    up: function(pts) { this.callbacks.up.call(this, pts); },
+    down: function(pts) { this.callbacks.down.call(this, pts); },
 
     deferredUp: function(pts) { this._addScoreToQueue("up", pos(pts)); },
     deferredDown: function(pts) { this._addScoreToQueue("down", neg(pts)); },
@@ -183,8 +155,7 @@ Scorekeeper.prototype = {
       clearInterval(this.timer);
 
       console.log("Clearing out remaining queue!");
-      var _this = this;
-      this.queue.forEach(function(event) { _this._processEvent(event); });
+      this.queue.forEach(function(event) { this._processEvent(event); }, this);
 
       this._processFinalizers();
 

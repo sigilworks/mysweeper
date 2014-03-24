@@ -151,10 +151,9 @@ Gameboard.prototype = {
 
         // TODO: remove after development ends...for debug use only!
         // INDIVIDUAL SQUARE EVENTS
-        this.emitter.on('sq:open', function(square, cell) { $log("Opening square at (%o, %o).", square.getRow(), square.getCell()); });
-        this.emitter.on('sq:close', function(square, cell) { $log("Closing square at (%o, %o).", square.getRow(), square.getCell()); });
+        /*this.emitter.on('sq:open', function(square, cell) { $log("Opening square at (%o, %o).", square.getRow(), square.getCell()); });
         this.emitter.on('sq:flag', function(square, cell) { $log("Flagging square at (%o, %o).", square.getRow(), square.getCell()); });
-        this.emitter.on('sq:unflag', function(square, cell) { $log("Unflagging square at (%o, %o).", square.getRow(), square.getCell()); });
+        this.emitter.on('sq:unflag', function(square, cell) { $log("Unflagging square at (%o, %o).", square.getRow(), square.getCell()); });*/
         // GAMEBOARD-WIDE EVENTS
         this.emitter.on('gb:start', function(ename, gameboard, $el) { $log("Let the game begin!", arguments); });
         this.emitter.on('gb:end:win', function(ename, gameboard, $el) { $log("Game over! You win!"); });

@@ -23,20 +23,19 @@ Timer.prototype = {
         return [mins, secs];
     },
     _countdown: function() {
-        var _this = this,
-            timer = setInterval(function() {
-                if (!_this.freeze) {
-                    if ((_this.isCountdown && _this.seconds > 0) || (!_this.isCountdown && _this.seconds < _this.max)) {
-                        var arr = _this._toMinsSecs(_this.seconds);
-                        _this._publish("change", arr[0], arr[1]);
-                        _this.isCountdown ? _this.seconds-- : _this.seconds++;
+        var timer = setInterval(function() {
+                if (!this.freeze) {
+                    if ((this.isCountdown && this.seconds > 0) || (!this.isCountdown && this.seconds < this.max)) {
+                        var arr = this._toMinsSecs(this.seconds);
+                        this._publish("change", arr[0], arr[1]);
+                        this.isCountdown ? this.seconds-- : this.seconds++;
                     } else {
                         clearInterval(timer);
-                        _this._publish("end", 0, 0);
+                        this._publish("end", 0, 0);
                     }
                 } else
                     clearInterval(timer);
-            }, 1000);
+            }.bind(this), 1000);
     },
     _publish: function(event, mins, secs) { this.emitter.trigger("timer:" + event, mins, secs); },
     getMinutes: function() { return +this._toMinsSecs(this.seconds)[0]; },
