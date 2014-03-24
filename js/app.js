@@ -6,7 +6,6 @@ var Gameboard = require('./gameboard'),
     PresetSetups = require('./constants').PresetSetups,
     DimValidator = require('./validators').BoardDimensions,
     MineValidator = require('./validators').MineCount,
-    VERSION = require('./constants').VERSION,
     DEFAULT_CONFIG = require('./constants').DefaultConfig,
     MAX_GRID_DIMENSIONS = require('./constants').MAX_GRID_DIMENSIONS,
     MINEABLE_SPACES_MULTIPLIER = require('./constants').MINEABLE_SPACES_MULTIPLIER,
@@ -87,10 +86,6 @@ $(function(){
             gameOptions.theme = $("#color-theme").val();
         }
 
-        // set up <header> content...
-        $("#mines-display").find("span").html(gameOptions.mines);
-        $(".version").html(VERSION);
-
         window.gameboard = new Gameboard(gameOptions).render();
 
         $("#validation-warnings").hide();
@@ -105,5 +100,5 @@ $(function(){
         // TODO: reset form and toggle visibility on the sections...
         window.location.reload();
     });
-    
+
 });

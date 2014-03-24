@@ -9,8 +9,10 @@ var Multimap = require('./lib/multimap'),
     DEFAULT_GAME_OPTIONS = require('./constants').DefaultConfig,
     TIME_AVG_ALLOC_PER_OPEN_SQUARE = require('./constants').TIME_AVG_ALLOC_PER_OPEN_SQUARE,
     RGX_MOBILE_DEVICES = require('./constants').MobileDeviceRegex,
+    VERSION = require('./constants').VERSION,
     Timer = require('./timer'),
     Countdown = require('./countdown'),
+    MinesDisplay = require('./mines-display'),
     TranscribingEmitter = require('./transcribing-emitter'),
     TranscriptionStrategy = require('./transcription-strategy'),
     ThemeStyler = require('./theme-styler'),
@@ -48,6 +50,10 @@ function Gameboard(options) {
     this.userMoves = 0;
     // the object that calculates the number of surrounding mines at any square
     this.dangerCalc = new DangerCalculator(this);
+    // the display object for the number of mines
+    this.minesDisplay = new MinesDisplay(this.mines, "#mines-display");
+    // display the current version of the game:
+    $(".version").html(VERSION);
     // add in the countdown clock...
     this.clock = new Timer(0, +options.timer || this._determineTimer(),
         options.isCountdown || DEFAULT_GAME_OPTIONS.isCountdown, this.emitter);
