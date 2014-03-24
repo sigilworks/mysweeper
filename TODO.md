@@ -18,4 +18,3 @@
 ## Bugs To Fix
  - move private methods out of prototype objects -- take advantage of modules' privacy!
  - fix broken unit tests on Scoreboard and Countdown
- - mine count display should have separate chips for each digit like score and timer.
