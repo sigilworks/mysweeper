@@ -172,12 +172,13 @@ Gameboard.prototype = {
             $cell = $target.prop('tagName').toLowerCase() === 'span' ? $target.parent() : $target,
             square = $cell.data('square');
 
-        // TODO: also handle first-click-can't-be-mine (if we're following that rule)
-        // here, if userMoves === 0... :message => :mulligan?
+        // as a courtesy to the user, their first click
+        // will never be mined (can't lose game on first user move)
         if (square.isMined() && this.userMoves === 0) {
             this.getSquares().forEach(function(sq) { sq.unmine(); });
             this._determineMineLocations(this.dimensions, this.mines);
             this._precalcDangerIndices();
+            this.render();
             if (this.debug_mode) {
                 this.toConsole();
                 this.toConsole(true);
