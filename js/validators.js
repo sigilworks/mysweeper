@@ -26,7 +26,6 @@ var $C = require('./constants'),
         },
         MineCount: {
             validate: function(mines, maxPossible) {
-                console.log("mines: %o, maxPossible: %o", mines, maxPossible)
                 // is numeric input
                 if (!isNumeric(mines)) {
                     throw new ValidationError("User entered {0}, which is not a number, and an invalid number of mines.", mines);
@@ -35,6 +34,11 @@ var $C = require('./constants'),
                 // is not greater than maxPossible for this configuration
                 if (mines > maxPossible) {
                     throw new ValidationError("User entered {0}, which is greater than the possible number of mines ({1}).", +mines, maxPossible);
+                    return false;
+                }
+                // must have at least one mine!
+                if (mines < 1) {
+                    throw new ValidationError("Invalid mine count: please choose a value between {0} and {1}.", 1, maxPossible);
                     return false;
                 }
                 // else...
