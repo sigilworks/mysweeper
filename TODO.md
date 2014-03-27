@@ -15,6 +15,9 @@
  - consider use of Fisher-Yates shuffler to distribute mines
  - 'killer mine' flare effect.
 
+ - separate grunt `watch` tasks, game code from test code (taking too long to bundle!)
+ - create grunt :dist task to includes minification (but not normal `watch`)
+
 ## Bugs To Fix
  - move private methods out of prototype objects -- take advantage of modules' privacy!
  - fix broken unit tests on Scoreboard and Countdown

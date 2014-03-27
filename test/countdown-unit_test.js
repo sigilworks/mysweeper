@@ -1,5 +1,4 @@
 var expect = require('chai').expect,
-    sinon = require('sinon'),
     Countdown = require('../js/countdown');
 
 
