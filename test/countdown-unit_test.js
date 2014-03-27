@@ -28,4 +28,8 @@ describe("Countdown",function(){
     expect(getDisplay(clock)).to.equal(TIME_DISPLAY);
   });
 
+  it("implements the Flippable interface", function() {
+    expect(clock).to.respondTo('_flip');
+  });
+
 });
