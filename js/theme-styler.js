@@ -8,10 +8,12 @@ var ThemeStyler = {
 		$el || ($el = $($C.DefaultConfig.board));
 
 		var themeFile = $C.Themes[theme],
-			$body = $el.parents("body");
+			$body = $el.parents("body").length ? $el.parents("body") : $(document.body);
+
+		console.log("theme: %o\nthemeFile: %o\n$body: %o", theme, themeFile, $body);
 
 		$body.removeClass().addClass(themeFile);
-
+		console.log("TS => %o", ($(document.body).attr('class')))
 		/* ,
 			$head = $el.parents("body").siblings("head"),
 			$styles = $head.find("link"),
