@@ -9,16 +9,14 @@ describe("MinesDisplay",function(){
 
   var md,
       MINES = 123,
-      el = { charAt: function(){}, querySelector: function(){} },
-      getDisplay = function(c) { return [ c.m1.innerHTML, c.m2.innerHTML, ':', c.s1.innerHTML, c.s2.innerHTML ].join(''); };
+      el = "<div><span class='minecounter'>1</span><span class='minecounter'>2</span><span class='minecounter'>3</span></div>",
+      getDisplay = function(md) { return [ md.$L[0].innerHTML, md.$M[0].innerHTML, md.$R[0].innerHTML ].join(''); };
 
   beforeEach(function(done){
     md = new MinesDisplay(MINES, el);
     done();
   });
 
-  it("should render the number of mines", function(){
-    expect(getDisplay(md)).to.equal("123");
-  });
+  it("should render the number of mines", function(){ expect(getDisplay(md)).to.equal("123"); });
 
 });
