@@ -17,7 +17,7 @@ module.exports = function(grunt) {
 
     watch: {
       files: ['js/**/*.js','css/**/*.css','test/**/*-unit_test.js'],
-      tasks: ['browserify', 'uglify', 'cssmin']
+      tasks: ['browserify']
     },
 
     uglify: {
@@ -44,4 +44,5 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-cssmin');
 
   grunt.registerTask('default', ['browserify','uglify']);
+  grunt.registerTask('dist', ['browserify','uglify','cssmin']);
 };
