@@ -1,3 +1,3 @@
 var expect = require('chai').expect,
-    sinon = require('sinon'),
+    // cheerio = require('cheerio'),
     Scoreboard = require('../js/scoreboard');
