@@ -1,7 +1,7 @@
 # Things Left To Do
 
 ## Features or Components To Add
- - Unit tests on Gameboard, Scorekeeper, Scoreboard, TranscriptionStrategy, Timer, ConsoleRendered, &c.
+ - Unit tests on Gameboard, Scorekeeper, Scoreboard, Timer, ConsoleRenderer, &c.
  - Use events transcript to replay?
  - Easter eggs: "hinting" for mine locations on key combo
  - Autosize squares based on browser display:

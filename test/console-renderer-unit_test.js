@@ -1,2 +1,7 @@
 var expect = require('chai').expect,
-    Scorekeeper = require('../js/console-renderer');
+    ConsoleRenderer = require('../js/console-renderer');
+/*
+    toConsole: function(withDanger) {
+        var renderer = ConsoleRenderer.to($log).withValues(this.board.values());
+        return (withDanger) ? renderer.viewGame() : renderer.viewMines();
+    }*/
