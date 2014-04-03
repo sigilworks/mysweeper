@@ -24,9 +24,8 @@ Square.prototype = {
     getDanger: function() { return this.danger; },
     setDanger: function(idx) { if (idx == +idx) { this.danger = +idx; this.danger > 0 && this.index(); } },
     getState: function() {
-        var _this = this;
         return Object.keys(Symbols)
-                     .filter(function(key) { return _this[ 'is' + key.charAt(0) + key.substring(1).toLowerCase() ](); })
+                     .filter(function(key) { return this[ 'is' + key.charAt(0) + key.substring(1).toLowerCase() ](); }, this)
                      .map(function(key) { return key.toLowerCase(); });
     },
 

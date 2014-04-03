@@ -1,5 +1,7 @@
 "use strict;"
 
+// TODO: refactor to not need the `gameboard` dependency,
+//       can just export a map of danger indices
 function DangerCalculator(gameboard) {
     return {
         board: gameboard,
@@ -17,17 +19,16 @@ function DangerCalculator(gameboard) {
         },
         forSquare: function(row, cell) {
             if (+row >= 0 && +cell >= 0) {
-                var _this = this,
-                    totalMines = 0,
+                var totalMines = 0,
                     directions = Object.keys(this.neighborhood);
 
                 directions.forEach(function(direction) {
-                    var vert = _this.neighborhood[direction][0],
-                        horiz = _this.neighborhood[direction][1],
-                        neighbor = _this.board.getSquareAt(row + vert, cell + horiz);
+                    var vert = this.neighborhood[direction][0],
+                        horiz = this.neighborhood[direction][1],
+                        neighbor = this.board.getSquareAt(row + vert, cell + horiz);
 
                     if (neighbor && neighbor.isMined()) totalMines++;
-                });
+                }, this);
                 return totalMines || '';
             } else
                 return null;

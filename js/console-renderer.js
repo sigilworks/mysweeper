@@ -11,10 +11,9 @@ var ConsoleRenderer = {
     _makeTitle: function(str) { return str.split('').join(' ').toUpperCase(); },
     _displayRowNum: function(num) { return "       [" + num + "]\n" },
     _toSymbols: function(values, fn) {
-        var _this = this;
         return values.reduce(function(str, row, idx) {
-            return str += fn(row).join(_this.COL_SPACING).toLowerCase() + _this._displayRowNum(idx)
-        }, '\n');
+            return str += fn(row).join(this.COL_SPACING).toLowerCase() + this._displayRowNum(idx)
+        }.bind(this), '\n');
     },
     _validate: function(values) {
         if (Array.isArray(values) && values.length)
@@ -33,12 +32,12 @@ var ConsoleRenderer = {
     },
 
     viewGame: function() {
-        var _this = this,
+        var ctx = this,
             transformer = function(row) {
                 return row.map(function(sq) {
                     return (sq.isMined())
-                        ? _this.MINED_SQUARE : sq.getDanger() === 0
-                            ? _this.BLANK_SQUARE : sq.getDanger(); })
+                        ? this.MINED_SQUARE : sq.getDanger() === 0
+                            ? this.BLANK_SQUARE : sq.getDanger(); }, ctx)
             };
         this.$log([ this._makeTitle("gameboard"), this.RENDERED_MAP ]
             .join('\n'),

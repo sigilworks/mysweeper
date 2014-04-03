@@ -47,7 +47,6 @@ function Gameboard(options) {
         this.emitter = new TranscribingEmitter(TranscriptionStrategy);
         // selectively enable debug mode for console visualizations and notifications
         this.debug_mode = this.settings.debug_mode;
-        $log.debug_mode = this.debug_mode;
         // specifies the desired color theme or skin
         this.theme = this._setColorTheme(this.settings.theme);
         // container for flash messages, such as win/loss of game
@@ -72,6 +71,8 @@ function Gameboard(options) {
         this.import(this.settings);
     }
 
+    // turn on dev logger, if needed
+    $log.debug_mode = this.debug_mode;
     // create the board in memory and assign values to the squares
     this._loadBoard();
     // render the HTML to match the board in memory
