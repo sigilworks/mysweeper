@@ -17,6 +17,8 @@ var DefaultTranscriptionStrategy = {
                             data[2] = buildDOMString(data[2]);
                         break;
                     case "gb:start":
+                    case "gb:resume":
+                    case "gb:pause":
                     case "gb:end:win":
                     case "gb:end:over":
                     case "gb:end:timedout":

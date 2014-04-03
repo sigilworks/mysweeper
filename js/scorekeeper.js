@@ -75,6 +75,8 @@ Scorekeeper.prototype = {
                       this.deferredUp(Points.MISUNFLAG_MINED);
                   },
         'gb:start': function(ename, gameboard, $el) { this.endGame = false; },
+        'gb:resume': function(ename, gameboard, $el) { this.endGame = false; },
+        'gb:pause': function(ename, gameboard, $el) { this.endGame = true; },
         'gb:end:win': function(ename, gameboard, $el) { this.endGame = true; },
         'gb:end:over': function(ename, gameboard, $el) { this.endGame = true; },
         'gb:end:timedout': function(ename, gameboard, $el) { this.endGame = true; }

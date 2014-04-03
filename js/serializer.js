@@ -20,12 +20,17 @@ var Serializer = {
                 dimensions: gameboard.dimensions,
                 mines: gameboard.mines,
                 userMoves: gameboard.userMoves,
-                isMobile: gameboard.isMobile
+                isMobile: gameboard.isMobile,
+                // this flag alerts Gameboard constructor to
+                // alter usual initialization process...
+                isPersisted: true
             }
         };
     },
     import: function(exported) {
-        // 1. new Gameboard object (defaults is ok)
+
+        // 1. in this context, `this` is the newly-instantiated,
+        //    but not-yet-set-up Gameboard instance.
         // 2. replace `board` with new Multimap:
         //     - count arrays at first level in board for num rows
         //          [[[{"row":0,"cell":0,"state":{"_flags":"1000"},"danger":0},
