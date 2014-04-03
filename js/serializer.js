@@ -46,6 +46,25 @@ var Serializer = {
         // 10. make new Countdown with exported._meta.timer = seconds, clock.start()
         // 11. instantiate new TranscribingEmitter, loading _meta.transcripts into its _transcripts
         // 12. re-run the internal init() ops: _loadBoard, _renderGrid
+
+/*      this.board = new Multimap;
+        this.dimensions = +this.settings.dimensions;
+        this.mines = +this.settings.mines;
+        this.$el = $(this.settings.board);
+        this.isCustom = this.settings.isCustom || false;
+        this.emitter = new TranscribingEmitter(TranscriptionStrategy);
+        this.debug_mode = this.settings.debug_mode;
+        this.theme = this._setColorTheme(this.settings.theme);
+        this.flashContainer = $(MessageOverlay);
+        this.isMobile = this._checkForMobile();
+        this.userMoves = 0;
+        this.dangerCalc = new DangerCalculator(this);
+        this.minesDisplay = new MinesDisplay(this.mines, "#mines-display");
+        this.clock = new Timer(0, +this.settings.timer || this._determineTimer(), this.settings.isCountdown, this.emitter);
+        this.countdown = new Countdown("#countdown");
+        this.scorekeeper = new Scorekeeper(this);
+        this.scoreboard = new Scoreboard(0, "#score-display");
+*/
     }
 }
 
