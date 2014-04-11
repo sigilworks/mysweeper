@@ -66,6 +66,7 @@ $(function(){
             gameOptions.isCustom = false;
             gameOptions.dimensions = PresetSetups[setup].dimensions;
             gameOptions.mines = PresetSetups[setup].mines;
+            gameOptions.timer = PresetSetups[setup].timer;
         } else {
             // Modes.CUSTOM...
             gameOptions.isCustom = true;
