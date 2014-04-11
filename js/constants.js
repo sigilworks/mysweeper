@@ -30,9 +30,9 @@ var Constants = Object.freeze({
     PresetLevels: { BEGINNER: "B", INTERMEDIATE: "I", EXPERT: "E" },
 
     PresetSetups: {
-        BEGINNER:       { dimensions:  9, mines:  9, timer:  90 },
-        INTERMEDIATE:   { dimensions: 12, mines: 21, timer: 150 },
-        EXPERT:         { dimensions: 15, mines: 67, timer: 200 }
+        BEGINNER:       { dimensions:  9, mines:  9, timer: 100 },
+        INTERMEDIATE:   { dimensions: 12, mines: 21, timer: 300 },
+        EXPERT:         { dimensions: 15, mines: 67, timer: 600 }
     },
 
     Themes: { LIGHT: 'light', DARK: 'dark' },
