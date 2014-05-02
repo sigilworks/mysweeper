@@ -8,29 +8,11 @@ var ConsoleRenderer = {
     RENDERED_MAP: '%o',
     DEFAULT_TRANSFORMER: function(row){ return row; },
 
-    _makeTitle: function(str) { return str.split('').join(' ').toUpperCase(); },
-    _displayRowNum: function(num) { return "       [" + num + "]\n" },
-    _toSymbols: function(values, fn) {
-        return values.reduce(function(str, row, idx) {
-            return str += fn(row).join(this.COL_SPACING).toLowerCase() + this._displayRowNum(idx)
-        }.bind(this), '\n');
-    },
-    _validate: function(values) {
-        if (Array.isArray(values) && values.length)
-            return values;
-        else throw "No values present.";
-    },
-    _getRenderedMap: function(transformer) {
-        var vals = this._validate(this.values);
-        return this._toSymbols(vals, transformer);
-    },
-
     to: function(log) { this.$log = log; return this; },
     withValues: function(values) {
-        this.values = this._validate(values);
+        this.values = validate(values);
         return this;
     },
-
     viewGame: function() {
         var ctx = this,
             transformer = function(row) {
@@ -39,15 +21,32 @@ var ConsoleRenderer = {
                         ? this.MINED_SQUARE : sq.getDanger() === 0
                             ? this.BLANK_SQUARE : sq.getDanger(); }, ctx)
             };
-        this.$log([ this._makeTitle("gameboard"), this.RENDERED_MAP ]
+        this.$log([ makeTitle("gameboard"), this.RENDERED_MAP ]
             .join('\n'),
-            this._getRenderedMap(transformer));
+            getRenderedMap(transformer, this.values));
     },
     viewMines: function() {
-        this.$log([ this._makeTitle("mine placements"), this.RENDERED_MAP ]
+        this.$log([ makeTitle("mine placements"), this.RENDERED_MAP ]
             .join('\n'),
-            this._getRenderedMap(this.DEFAULT_TRANSFORMER));
+            getRenderedMap(this.DEFAULT_TRANSFORMER, this.values));
     }
 };
+
+function makeTitle(str) { return str.split('').join(' ').toUpperCase(); }
+function displayRowNum(num) { return "       [" + num + "]\n" }
+function toSymbols(values, fn) {
+    return values.reduce(function(str, row, idx) {
+        return str += fn(row).join(ConsoleRenderer.COL_SPACING).toLowerCase() + displayRowNum(idx)
+    }.bind(this), '\n');
+}
+function validate(values) {
+    if (Array.isArray(values) && values.length)
+        return values;
+    else throw "No values present.";
+}
+function getRenderedMap(transformer, values) {
+    var vals = validate(values);
+    return toSymbols(vals, transformer);
+}
 
 module.exports = ConsoleRenderer;

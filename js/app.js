@@ -46,11 +46,11 @@ $(function(){
     // and total possible mineable squares (dimensions ^ 2 -1)
     // be filled into a <span> below.
     $("#dimensions").on('keyup', function() {
-        var $this = $(this);
+        var dims = $(this).val();
         // update the 'mirror' <input>...
-        $('#dimensions-mirror').val($this.val());
+        $('#dimensions-mirror').val(dims);
         // ...and the possible number of mines.
-        $possibleMines.html(mineableSpaces($this.val()) + '.');
+        $possibleMines.html(mineableSpaces(dims) + '.');
     });
 
     $("form").on("submit", function() {
@@ -60,13 +60,16 @@ $(function(){
 
         if (mode === Modes.PRESET) {
             var level = $("[name=preset-level]:checked").val(),
-                setup = Object.keys(PresetLevels)
-                              .filter(function(pl) { return PresetLevels[pl] === level; })
-                              .pop();
+                preset;
+
+            for (var p in PresetLevels)
+                if (PresetLevels[p] === level)
+                    preset = PresetSetups[p];
+
+            gameOptions.dimensions = preset.dimensions;
+            gameOptions.mines = preset.mines;
+            gameOptions.timer = preset.timer;
             gameOptions.isCustom = false;
-            gameOptions.dimensions = PresetSetups[setup].dimensions;
-            gameOptions.mines = PresetSetups[setup].mines;
-            gameOptions.timer = PresetSetups[setup].timer;
         } else {
             // Modes.CUSTOM...
             gameOptions.isCustom = true;
