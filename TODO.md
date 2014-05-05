@@ -17,6 +17,8 @@
 
  - separate grunt `watch` tasks, game code from test code (taking too long to bundle!)
  - create grunt :dist task to includes minification (but not normal `watch`)
+ - add visible instructions: click/tap => open, right-click/tap-hold => flag/unflag
+ - ^^ display appropriate instructions based on the `this.mobile` flag
 
 ## Bugs To Fix
  - move private methods out of prototype objects -- take advantage of modules' privacy!
