@@ -8,7 +8,7 @@ var BitFlagFactory = require('./lib/bit-flag-factory'),
 
 function Square(row, cell, danger, flags) {
     if (!(this instanceof Square))
-        return new Square(arguments);
+        return new Square(row, cell, danger, flags);
     this.row = row;
     this.cell = cell;
     this.state = flags ? new BitFlags(flags) : new BitFlags;
