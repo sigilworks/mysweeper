@@ -63,7 +63,7 @@ h1.banner > i                           { display: inline-block; vertical-align:
 
 .disabled                               {}
 
-#submit                                 { padding: 7px 20px; }
+#submit                                 { padding: 7px 20px; display: block; text-align: center; margin: 0 auto; }
 
 #board-card                             { display: none; margin: 25px auto; text-align: center; }
 
